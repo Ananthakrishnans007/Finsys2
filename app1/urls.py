@@ -15,7 +15,7 @@ urlpatterns = [
     re_path(r'^goofflinebank$', views.goofflinebank, name='goofflinebank'),
     re_path(r'^gobankrecon$', views.gobankrecon, name='gobankrecon'),
     re_path(r'^gosalesrecords$', views.gosalesrecords, name='gosalesrecords'),
-    re_path(r'^goinvoices$', views.goinvoices, name='goinvoices'),
+    
     re_path(r'^gocustomers$', views.customers, name='gocustomers'),
 
     re_path(r'^gopands$', views.gopands, name='gopands'),
@@ -58,7 +58,7 @@ urlpatterns = [
     re_path(r'^editrecon1/(?P<expenseid>\d+)$', views.editrecon1, name='editrecon1'),
     re_path(r'^gomyacc$', views.gomyacc, name='gomyacc'),
 
-    re_path(r'^goaddinvoices$', views.goaddinvoices, name='goaddinvoices'),
+    
     re_path(r'^goprintinvoice$', views.goprintinvoice, name='goprintinvoice'),
     re_path(r'^goselectpands$', views.goselectpands, name='goselectpands'),
     re_path(r'^goinv$', views.goinv, name='goinv'),
@@ -130,9 +130,9 @@ urlpatterns = [
     re_path(r'^invindex$', views.invindex, name='invindex'),
     re_path(r'^invcreate$', views.invcreate, name='invcreate'),
     re_path(r'^viewinvoice/(?P<id>\d+)$', views.viewinvoice, name='viewinvoice'),
-    re_path(r'^editinvoice/(?P<id>\d+)$', views.editinvoice, name='editinvoice'),
-    re_path(r'^editinvoice/updateinvoice/(?P<id>\d+)$', views.updateinvoice, name='updateinvoice'),
-    re_path(r'^deleteinvoice/(?P<id>\d+)$', views.deleteinvoice, name='deleteinvoice'),
+    
+    
+    
 
     re_path(r'^gobills$', views.gobills, name='gobills'),
     re_path(r'^billcreate$', views.billcreate, name='billcreate'),
@@ -415,7 +415,28 @@ urlpatterns = [
 
     path('search_sale',views.search_sale,name='search_sale'),
 
-    path('invoice_view',views.invoice_view,name='invoice_view'),
+    path('invoice_view/<int:id>',views.invoice_view,name='invoice_view'),
+
+    path('new_customers3',views.new_customers3,name='new_customers3'),
+
+
+    # invoice
+
+    re_path(r'^goinvoices$', views.goinvoices, name='goinvoices'),
+    re_path(r'^goaddinvoices$', views.goaddinvoices, name='goaddinvoices'),
+    re_path(r'^editinvoice/(?P<id>\d+)$', views.editinvoice, name='editinvoice'),
+    path('deleteinvoice/<int:id>',views.deleteinvoice,name='deleteinvoice'),
+    re_path(r'^editinvoice/updateinvoice/(?P<id>\d+)$', views.updateinvoice, name='updateinvoice'),
+    path('invoice_status/<int:id>',views.invoice_status,name='invoice_status'),
+
+    path('goinvoices1',views.goinvoices1,name='goinvoices1'),
+
+    path('goinvoices2',views.goinvoices2,name='goinvoices2'),
+
+    path('goinvoices3',views.goinvoices3,name='goinvoices3'),
+
+    
+
 
     
 

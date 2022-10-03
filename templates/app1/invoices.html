@@ -12,15 +12,78 @@
         </div>
         <div class="card radius-15">
             <div class="card-body">
+                
+
+
                 <div class="row">
-                    <div class="col-md-10"></div>
-                    <div class="col-md-2">
-                        <a href="{% url 'goaddinvoices' %}">
-                            <button id="myBtn" class="btn btn-outline-info text-grey">&nbsp;Add
-                                Invoices
-                            </button>
+
+                        
+                        
+                        
+                    <div class="col-md-4">
+                        <div class="wrap" style="width: 60%; margin-top: 8px;">
+                            <form action="goinvoices3" method="POST">{% csrf_token %}
+                            <div class="search">
+                                
+                               <input type="text" class="searchTerm" name="search">
+                               <button type="submit" class="searchButton">
+                                 <i class="fa fa-search"></i>
+                              </button>
+                            </div>
+                            
+                          
+                         </div>
+                         
+                    </div>
+                    <div class="col-md-3">
+                      
+                        <select class="form-control btn btn-outline-info dropdown-toggle text-grey" aria-label=".form-select-lg example" style="width: 40%; margin-top: 8px;" name="type">
+                            
+                            <option value="1" selected>All</option>
+                            <option value="2" >Coustomer Name</option>
+                            <option value="3" >Order No</option>
+                            
+                            
+                            
+                          </select>
+
+                          
+
+
+                        </form>
+                        </div>
+                        <div class="col-md-2" style="width: 40%; margin-top: 8px;">
+
+                            <div class="dropdown">
+                                <button type="button" class="btn btn-outline-info dropdown-toggle text-grey"
+                                        data-toggle="dropdown">filter by
+                                </button>
+                                <div class="dropdown-menu" style="background-color: black;">
+                                    <a class="dropdown-item" href="{% url 'goinvoices' %}"
+                                       style="height: 40px; font-size: 15px; color: white; text-align: center;" >All</a>
+                                    <a class="dropdown-item" href="{% url 'goinvoices1' %}"
+                                       style="height: 40px; font-size: 15px; color: white; text-align: center;" >Draft</a>
+                                    <a class="dropdown-item" href="{% url 'goinvoices2' %}"
+                                       style="height: 40px; font-size: 15px; color: white; text-align: center;">Approved</a>
+                                    <!-- <a class="dropdown-item" href="{% url 'sale_filter3' %}"
+                                       style="height: 40px; font-size: 15px; color: white; text-align: center;">Invoice</a> -->
+                                    
+                            </div> 
+                          </div>
+                        </div>
+                        
+                        
+
+                        
+                   
+
+                    <div class="col-md-3" >
+                        <a href="{% url 'goaddinvoices' %}" >
+                            <button id="myBtn" class="btn btn-outline-info text-grey fa fa-plus" style="margin-top: 8px;">&nbsp; Add
+                                Invoices</button>
                         </a>
                     </div>
+
                 </div>
                 <table class="table table-responsive-md mt-3 table-hover">
                     <thead>
@@ -34,14 +97,14 @@
                         <th style="text-align: center;">DUE DATE</th>
                         <th style="text-align: center;">GRAND TOTAL</th>
                         <th style="text-align: center;">BALANCE DUE</th>
-                        <th style="text-align: center;"> ACTION</th>
+                        
                     </tr>
                     </thead>
                     <tbody>
                     {% for invoices in invoice %}
                         {% if invoices.cid_id == cmp1.cid %}
 
-                            <tr tr class="table-row " data-href="{% url 'invoice_view' %}">
+                            <tr tr class="table-row " data-href="{% url 'invoice_view' invoices.invoiceid %}">
                                 <td style="text-align: center;">{{ invoices.invoicedate }}</td>
                                 <th style="text-align: center;">{{ invoices.invoiceno }}</th>
                                 <td style="text-align: center;">{{ invoices.invoice_orderno }}</td>
@@ -50,7 +113,7 @@
                                 <td style="text-align: center;">{{ invoices.duedate }}</td>
                                 <td style="text-align: center;">{{ invoices.grandtotal }}</td>
                                 <td style="text-align: center;">{{ invoices.baldue }}</td>
-                                <td>
+                                <!-- <td>
                                     <div class="dropdown">
                                         <button type="button" class="btn btn-outline-info dropdown-toggle text-grey"
                                                 data-toggle="dropdown">Actions
@@ -66,7 +129,7 @@
                                                     class="bx bxs-eyedropper"><b>VIEW</b></i></a>
                                         </div>
                                     </div>
-                                </td>
+                                </td> -->
 
                             </tr>
                         {% endif %}

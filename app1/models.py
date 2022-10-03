@@ -1,3 +1,4 @@
+from distutils.command.upload import upload
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -277,6 +278,7 @@ class invoice(models.Model):
     duedate = models.CharField(max_length=100)
     bname = models.CharField(max_length=255, default='')
     placosupply = models.CharField(max_length=100, default='')
+
     product = models.CharField(max_length=100)
     hsn = models.CharField(max_length=100)
     description = models.CharField(max_length=100, default='')
@@ -286,6 +288,7 @@ class invoice(models.Model):
     tax = models.CharField(max_length=100)
     subtotal = models.IntegerField(default=0, null=True)
     grandtotal = models.IntegerField(default=0, null=True)
+
     product2 = models.CharField(max_length=100, default='')
     hsn2 = models.CharField(max_length=100, default='')
     description2 = models.CharField(max_length=100, default='')
@@ -293,6 +296,7 @@ class invoice(models.Model):
     price2 = models.CharField(max_length=100, default='')
     total2 = models.IntegerField(default=0, null=True)
     tax2 = models.CharField(max_length=100, default='')
+
     product3 = models.CharField(max_length=100, default='')
     hsn3 = models.CharField(max_length=100, default='')
     description3 = models.CharField(max_length=100, default='')
@@ -300,6 +304,7 @@ class invoice(models.Model):
     price3 = models.CharField(max_length=100, default='')
     total3 = models.IntegerField(default=0, null=True)
     tax3 = models.CharField(max_length=100, default='')
+
     product4 = models.CharField(max_length=100, default='')
     hsn4 = models.CharField(max_length=100, default='')
     description4 = models.CharField(max_length=100, default='')
@@ -307,8 +312,9 @@ class invoice(models.Model):
     price4 = models.CharField(max_length=100, default='')
     total4 = models.IntegerField(default=0, null=True)
     tax4 = models.CharField(max_length=100, default='')
+
     amtrecvd = models.IntegerField(default=0, null=True)
-    taxamount = models.IntegerField(default=0, null=True)
+    # taxamount = models.IntegerField(default=0, null=True)
     baldue = models.CharField(max_length=100, default='')
 
     invoice_orderno = models.CharField(max_length=255, default='', null=True)
@@ -323,9 +329,13 @@ class invoice(models.Model):
     
     status =models.CharField(max_length=150,choices=invoice_status,default='Draft')
 
+    note = models.CharField(max_length=255,default='', null=True)
+    file = models.FileField(upload_to='invoice')
 
-    
-
+    IGST = models.CharField(max_length=100,default=0, null=True)
+    CGST = models.CharField(max_length=100,default=0, null=True)
+    SGST = models.CharField(max_length=100,default=0, null=True)
+    TCS = models.CharField(max_length=100,default=0, null=True)
 
 
 
