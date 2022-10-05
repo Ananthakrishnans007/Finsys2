@@ -490,33 +490,33 @@
                                                     <option value="Miss">Miss</option>
                                                     <option value="Ms">Ms</option>
                                                 </select>
-                                                <div class="valid-feedback">Looks good!</div>
+                                                
                                             </div>
                                             <div class="col-md-3 mt-2">
                                                 <label for="validationCustom02">First name</label>
                                                 <input type="text" class="form-control" id="validationCustom02" name="firstname"
                                                        required>
-                                                <div class="valid-feedback">Looks good!</div>
+                                                
                                             </div>
                                             <div class="col-md-3 mt-2">
                                                 <label for="validationCustom02">Last name</label>
                                                 <input type="text" class="form-control" id="validationCustom02" name="lastname"
-                                                       required >
-                                                <div class="valid-feedback">Looks good!</div>
+                                                >
+                                                
                                             </div>
                                             <div class="col-md-3 mt-2">
                                                 <label for="validationCustom03">Company</label>
                                                 <input type="text" class="form-control" id="validationCustom03" name="company_name"
-                                                       required>
-                                                <div class="valid-feedback">Looks good!</div>
+                                                >
+                                                
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-4 mt-3">
                                                 <label for="validationCustom03">Email</label>
-                                                <input type="email" class="form-control" id="validationCustom03" name="email" required
+                                                <input type="email" class="form-control" id="validationCustom03" name="email"
                                                     placeholder="finsys@mail.com">
-                                                <div class="invalid-feedback">Please provide a valid Email</div>
+                                                
                                             </div>
                                             <div class="col-md-4 mt-3">
                                                 <label for="validationCustom03">Website</label>
@@ -539,7 +539,7 @@
                                             <div class="col-md-4 mt-3">
                                                 <label for="validationCustom04">GST Treatment</label>
                                                 <select class="form-control" id="gsttyp" name="gsttype" onchange="showgsttyp()"
-                                                    onclick="hidinput('hello', this)" required>
+                                                    onclick="hidinput('hello', this)">
                                                     <option selected disabled value="">Choose..</option>
                                                     <option value="Registered Business - Regular">Registered Business - Regular</option>
                                                     <option value="Registered Business - Composition">Registered Business - Composition</option>
@@ -572,17 +572,17 @@
                                                     <div class="text-danger m-2" id="warngst"></div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4 mt-3 hide" id="legal">
+                                            <!-- <div class="col-md-4 mt-3 hide" id="legal">
                                                 <label for="">Business Legal Name</label>
                                                 <input type="text" class="form-control" name="">
                                             </div>
                                             <div class="col-md-4 mt-3 hide" id="trade">
                                                 <label for="">Business Trade Name</label>
                                                  <input type="text" class="form-control" name="">
-                                             </div>
+                                             </div> -->
                                             <div class="col-md-4 mt-3">
                                                 <label for="validationCustom03">PAN NO</label>
-                                                <input type="text" class="form-control" id="validationCustom03" name="panno" required 
+                                                <input type="text" class="form-control" id="validationCustom03" name="panno"
                                                     onchange="checkpan(this)" placeholder="APPCK7465F">
                                                 <div class="text-danger m-2" id="warnpan"></div>
                                             </div>
@@ -593,7 +593,7 @@
                                                <label for="">Place of Supply</label>
                                                 <input type="text" class="form-control" id="" name="sourceofsupply">
                                             </div>
-                                            <div class="col-md-3 mt-2 hide" id="tax">
+                                            <!-- <div class="col-md-3 mt-2 hide" id="tax">
                                                 <label for="">Tax Preference</label><br>
                                                 <div class="form-check form-check-inline">
                                                     <input type="radio" class="form-check-input" value="Taxable" name="taxpref">
@@ -603,17 +603,17 @@
                                                     <input type="radio" class="form-check-input" value="Tax Exempt" name="taxpref">
                                                     <label class="form-check-label">Tax Exempt</label>
                                                 </div>
-                                            </div>
+                                            </div> -->
                                             
                                             <div class="col-md-3 mt-2">
                                                 <label for="">Currency</label>
                                                 <div class="d-flex">
                                                     <input type="text" class="form-control" id="" name="currency" placeholder="INR - Indian Rupee"
-                                                        id="validationCustom02" required>
+                                                        id="validationCustom02">
                                                     <a href="#">
                                                         <button type="button" class="btn btn-outline-secondary ml-1">+</button>
                                                     </a>
-                                                    <div class="valid-feedback">Looks good!</div> 
+                                                    
                                                 </div>   
                                             </div>
                                             
@@ -623,14 +623,14 @@
                                             </div>
                                             <div class="col-md-3 mt-2">
                                                <label for="">Payment Terms</label>
-                                               <select class=" form-control" id="validationCustom02" name="paymentterms" required>
+                                               <select class=" form-control" id="validationCustom02" name="paymentterms">
                                                     <option selected disabled value="">Choose..</option>
                                                     <option value="Due on Receipt">Due on Receipt</option>
                                                     <option value="Net 15">NET15</option>
                                                     <option value="Net 30">NET30</option>
                                                     <option value="Net 60">NET60</option>
                                                 </select>
-                                                <div class="valid-feedback">Looks good!</div>
+                                                
                                             </div>
                                         </div>
                                         <hr>
@@ -645,7 +645,7 @@
                                                     <div class="col-md-12 mt-3">
                                                         <div class="form-row">
                                                             <label for="street">Street</label>
-                                                            <textarea class="form-control street" id="street" name="street" required></textarea>
+                                                            <textarea class="form-control street" id="street" name="street"></textarea>
                                                             <div class="invalid-feedback">Please provide a valid Street</div>
                                                         </div>
                                                     </div>
@@ -656,7 +656,6 @@
                                                             <label for="city">City</label>
                                                             <input type="text" class="form-control" id="city"
                                                                 name="city"
-                                                                required
                                                                 placeholder="City">
                                                             <div class="invalid-feedback">Please provide a valid City</div>
                                                         </div>
@@ -705,7 +704,7 @@
                                                                 <option value="West Bengal">West Bengal</option>
                                                                 <option value="Other Territory">Other Territory</option>
                                                             </select>
-                                                            <div class="invalid-feedback">Please provide a valid State</div>
+                                                            
                                                         </div>
                                                     </div>
                                                 </div>
@@ -714,18 +713,18 @@
                                                         <div class="form-row">
                                                             <label for="pinco">Pin Code</label>
                                                             <input type="text" class="form-control" id="pinco"
-                                                                name="pincode" required maxlength="6"
+                                                                name="pincode" maxlength="6"
                                                                 placeholder="PIN code">
-                                                            <div class="invalid-feedback">Please provide a valid Pin Code</div>
+                                                            
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6 mt-3">
                                                         <div class="form-row">
                                                             <label for="country">Country</label>
                                                             <input type="text" class="form-control" id="country"
-                                                                name="country" required
+                                                                name="country" 
                                                                 placeholder="Country">
-                                                            <div class="invalid-feedback">Please provide a valid Country</div>
+                                                            
                                                         </div>
                                                     </div>
                                                 </div>
@@ -745,8 +744,8 @@
                                                             <label for="shipstreet">Street</label>
                                                             <textarea class="form-control" id="shipstreet"
                                                                 name="shipstreet"
-                                                                required></textarea>
-                                                            <div class="invalid-feedback">Please provide a valid Street</div>
+                                                                ></textarea>
+                                                            
                                                         </div>
                                                     </div>
                                                 </div>
@@ -755,8 +754,8 @@
                                                         <div class="form-row">
                                                             <label for="shipcity">City</label>
                                                             <input type="text" class="form-control" id="shipcity"
-                                                                name="shipcity" required placeholder="City">
-                                                            <div class="invalid-feedback">Please provide a valid City</div>
+                                                                name="shipcity" placeholder="City">
+                                                            
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6 mt-3">
@@ -804,7 +803,7 @@
                                                                 <option value="West Bengal">West Bengal</option>
                                                                 <option value="Other Territory">Other Territory</option>
                                                             </select>
-                                                            <div class="invalid-feedback">Please provide a valid State</div>
+                                                            
                                                         </div>
                                                     </div>
                                                 </div>
@@ -813,18 +812,18 @@
                                                         <div class="form-row">
                                                             <label for="shippinco">Pin Code</label>
                                                             <input type="text" class="form-control" id="shippinco"
-                                                                name="shippincode" required
+                                                                name="shippincode"
                                                                 placeholder="PIN code">
-                                                            <div class="invalid-feedback">Please provide a valid Pin Code</div>
+                                                            
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6 mt-3">
                                                         <div class="form-row">
                                                             <label for="shipcountry">Country</label>
                                                             <input type="text" class="form-control" id="shipcountry"
-                                                                name="shipcountry" required
+                                                                name="shipcountry"
                                                                 placeholder="Country">
-                                                            <div class="invalid-feedback">Please provide a valid Country</div>
+                                                            
                                                         </div>
                                                     </div>
                                                 </div>
@@ -875,20 +874,20 @@
                                                 <label for="validationCustom02">Name</label>
                                                 <input type="text" class="form-control" id="validationCustom02" name="name"
                                                     required>
-                                                <div class="valid-feedback">Looks good!</div>
+                                                
                                             </div>
                                             <div class="col-md-4 mt-2">
                                                 <label for="validationCustom03">Type</label>
-                                                <select name="type" class="form-control" id="validationCustom01" required>
+                                                <select name="type" class="form-control" id="validationCustom01">
                                                     <option >Choose...</option>
                                                     <option value="goods">Goods</option>
                                                     <option value="services">Services</option></select>
-                                                <div class="valid-feedback">Looks good!</div>
+                                                
                                             </div>
                                             <div class="col-md-4 mt-2">
                                                 <label for="validationCustom03">Unit</label>
                                                 <div class="d-flex">
-                                                    <select class="custom-select" name="unit" id="validationCustom04" required>
+                                                    <select class="custom-select" name="unit" id="validationCustom04">
                                                         <option selected disabled value="">Choose...</option>
                                                         {% for a in unit %}
                                                             <option style="text-transform:Uppercase;">{{ a.unit_symbol}}-{{ a.name }}</option>
@@ -943,19 +942,19 @@
                                                         </button>
                                                     </a>
                                                 </div>
-                                                <div class="valid-feedback">Looks good!</div>
+                                                
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-4 mt-2">
                                                 <label for="validationCustom02">HSN Code</label>
                                                 <input type="text" name="hsn" class="form-control" placeholder="Enter a valid HSN code"
-                                                pattern="[0-9]{8}" maxlength="8" title=" Maximum 8 digits, characters not allowed" required>
+                                                pattern="[0-9]{8}" maxlength="8" title=" Maximum 8 digits, characters not allowed">
                                                 <a href="https://www.cbic.gov.in/resources//htdocs-cbec/gst/goods-rates-booklet-03July2017.pdf"
                                                     target="_blank" style="font-style: italic"><h6 class="form-card mt-1" style="color: #3dd5f3">
                                                     Not sure about HSN code..? click here</h6>
                                                 </a>
-                                                <div class="valid-feedback">Looks good!</div>
+                                                
                                             </div>
                                             <div class="col-md-3 mt-5"><label for="">Tax Preference : </label></div>
                                             <div class="col-md-2 mt-5">
@@ -968,7 +967,7 @@
                                                     <input class="form-check-input" name="taxref" type="checkbox" value="Non Taxable" >Non Taxable
                                                 </div>
                                             </div>
-                                            <div class="valid-feedback">Looks good!</div>
+                                            
                                         </div>
                                         <hr>
                                         <div class="row">
@@ -1035,7 +1034,7 @@
                                         <div class="row">
                                             <div class="col-md-4 mt-2">
                                                 <label for="validationCustom02">Tax Rate</label>
-                                                <select class="custom-select" name="tax" id="tax" required>
+                                                <select class="custom-select" name="tax" id="tax">
                                                     <option id="ta1" value=0 text={{ cmp1.state }}>Choose</option>
                                                     <option value=28 text="">28.0% GST(28%)</option>
                                                     <option value=18 text="">18.0% GST(18%)</option>
@@ -1062,7 +1061,7 @@
                                             </div>
                                             <div class="col-md-4 mt-2">
                                                 <label for="">Intra State Tax Rate</label>
-                                                <select name="intra_st" class="form-control" required>
+                                                <select name="intra_st" class="form-control">
                                                     <option selected disabled>Choose...</option>
                                                     <option value=0>GST 0 (0%)</option>
                                                     <option value=5>GST 5 (5%)</option>
@@ -1074,7 +1073,7 @@
                                             </div>
                                             <div class="col-md-4 mt-2">
                                                 <label for="">Inter State Tax Rate</label>
-                                                <select name="inter_st" class="form-control" required>
+                                                <select name="inter_st" class="form-control">
                                                     <option selected disabled>Choose...</option>
                                                     <option value=0>IGST 0 (0%)</option>
                                                     <option value=5>IGST 5 (5%)</option>
@@ -1100,14 +1099,14 @@
                                         <div class="row"  id="inventorytrack" style="display: none">
                                             <div class="col-md-6 mt-2">
                                                 <label for="">Inventory Account</label>
-                                                <select name="invacc" class="form-control" required>
+                                                <select name="invacc" class="form-control">
                                                     <option selected disabled>Choose...</option>
                                                     <option value="Inventory Assets">Inventory Assets</option>
                                                 </select>
                                             </div>
                                             <div class="col-md-6 mt-2">
                                                 <label for="">Stock on hand</label>
-                                                <input type="number" name="stock" class="form-control" required>
+                                                <input type="number" name="stock" class="form-control">
                                             </div>
                                         
                                         </div>

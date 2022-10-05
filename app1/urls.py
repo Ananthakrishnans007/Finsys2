@@ -358,7 +358,17 @@ urlpatterns = [
     
     re_path(r'^gosearch',views.gosearch,name='gosearch'),
 
+    path('gocustomers1',views.gocustomers1,name='gocustomers1'),
+
+    path('gocustomers2',views.gocustomers2,name='gocustomers2'),
+
+    
+
     path('gstverification',views.gstverification,name='gstverification'),
+
+    path('customer_profile/<int:id>',views.customer_profile,name='customer_profile'),
+
+    
 
     path('goestimate',views.goestimate,name='goestimate'),
 
@@ -524,7 +534,6 @@ urlpatterns = [
     re_path(r'^convertapproved/(?P<id>\d+)$',views.convertapproved,name='convertapproved'),
     re_path(r'^convertbilled/(?P<id>\d+)$',views.convertbilled,name='convertbilled'),
 
-    re_path(r'^pdf$',views.pdf,name='pdf'),
     re_path(r'^getdata2$',views.getdata2,name='getdata2'),   
 
     re_path(r'^billing$',views.billing,name='billing'),
@@ -535,9 +544,28 @@ urlpatterns = [
     re_path(r'^billconvert/(?P<id>\d+)$',views.billconvert,name='billconvert'),
     re_path(r'^viewbill/goeditbill/(?P<id>\d+)$',views.goeditbill,name='goeditbill'),
     re_path(r'^viewbill/goeditbill/edit_bill/(?P<id>\d+)$',views.edit_bill,name='edit_bill'),
+
+    re_path(r'^goexpenses$',views.goexpenses,name='goexpenses'),
+    re_path(r'^addexpenses$',views.addexpenses,name='addexpenses'),
+    re_path(r'^create_expense$',views.create_expense,name='create_expense'),
+    re_path(r'^viewexpense/(?P<id>\d+)$',views.viewexpense,name='viewexpense'),
+    re_path(r'^goeditexpense/(?P<id>\d+)$',views.goeditexpense,name='goeditexpense'),
+    re_path(r'^goeditexpense/editexpense/(?P<id>\d+)$',views.editexpense,name='editexpense'),
+    re_path(r'^deleteexpense/(?P<id>\d+)$', views.deleteexpense, name='deleteexpense'),
+
     re_path(r'^bnnk',views.bnnk,name='bnnk'),
     re_path(r'^bnk1/(?P<pk>\d+)$',views.bnk1,name='bnk1'),
 
+
+        
+    #rahnas---------
+
+    
+    re_path(r'^temp_payrec$',views.temp_payrec,name='temp_payrec'),
+    re_path(r'^temp_vendpay$',views.temp_vendpay,name='temp_vendpay'),
+    re_path(r'^temp_custst$',views.temp_custst,name='temp_custst'),
+    re_path(r'^temp_vendst$',views.temp_vendst,name='temp_vendst'),
+    
 
     
 

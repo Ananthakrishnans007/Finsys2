@@ -40,7 +40,7 @@ class company(models.Model):
 class customer(models.Model):
     customerid = models.AutoField(('CUSTID'), primary_key=True)
     cid = models.ForeignKey(company, on_delete=models.CASCADE)
-    title = models.CharField(max_length=10)
+    title= models.CharField(max_length=10)
     firstname = models.CharField(max_length=100)
     lastname = models.CharField(max_length=100)
     company = models.CharField(max_length=100)
@@ -61,6 +61,16 @@ class customer(models.Model):
     shipstate = models.CharField(max_length=100, null=True)
     shippincode = models.CharField(max_length=100, null=True)
     shipcountry = models.CharField(max_length=100, null=True)
+
+    customer_status = (
+        ('Active','Active'),
+        ('Inactive','Inactive'),
+       
+
+    )
+    
+    status =models.CharField(max_length=150,choices=customer_status,default='Active')
+
 
     class meta:
         db_table = "customer"
@@ -1281,13 +1291,13 @@ class currencies(models.Model):
 
 class vendor(models.Model):
     vendorid = models.AutoField(('VENID'), primary_key=True)
-    title = models.CharField(max_length=10)
+    title = models.CharField(max_length=10,null=True)
     firstname = models.CharField(max_length=100)
-    lastname = models.CharField(max_length=100)
-    companyname = models.CharField(max_length=100)
-    email = models.CharField(max_length=100)
+    lastname = models.CharField(max_length=100,null=True)
+    companyname = models.CharField(max_length=100,null=True)
+    email = models.CharField(max_length=100,null=True)
     website = models.CharField(max_length=100, default='')
-    mobile = models.CharField(max_length=10)
+    mobile = models.CharField(max_length=10,null=True)
     gsttype = models.CharField(max_length=100, null=True)
     gstin = models.CharField(max_length=100, default='')
     panno = models.CharField(max_length=100, null=True)
@@ -1295,11 +1305,11 @@ class vendor(models.Model):
     currency = models.CharField(max_length=100, null=True)
     openingbalance = models.CharField(max_length=100, null=True)
     paymentterms = models.CharField(max_length=100, null=True)
-    street = models.CharField(max_length=100)
-    city = models.CharField(max_length=100)
-    state = models.CharField(max_length=100)
-    pincode = models.CharField(max_length=100)
-    country = models.CharField(max_length=100)
+    street = models.CharField(max_length=100,null=True)
+    city = models.CharField(max_length=100,null=True)
+    state = models.CharField(max_length=100,null=True)
+    pincode = models.CharField(max_length=100,null=True)
+    country = models.CharField(max_length=100,null=True)
     shipstreet = models.CharField(max_length=100, null=True)
     shipcity = models.CharField(max_length=100, null=True)
     shipstate = models.CharField(max_length=100, null=True)
@@ -1332,7 +1342,7 @@ class purchaseorder(models.Model):
     tax_amount = models.CharField(max_length=100,null=True)
     grand_total = models.CharField(max_length=100,null=True)
     note = models.CharField(max_length=255,null=True)
-    file = models.FileField(upload_to='purchaseorder',default=None)
+    file = models.FileField(upload_to='purchase/purchaseorder',null=True)
 
     porder_status = (
         ('Draft','Draft'),
@@ -1376,7 +1386,7 @@ class purchasebill(models.Model):
     tax_amount = models.CharField(max_length=100,null=True)
     grand_total = models.CharField(max_length=100,null=True)
     note = models.CharField(max_length=255,null=True)
-    file = models.FileField(upload_to='bill',default=None)
+    file = models.FileField(upload_to='purchase/bill',null=True)
 
     bill_status = (
         ('Draft','Draft'),
@@ -1391,3 +1401,22 @@ class bill_item(models.Model):
     rate = models.CharField(max_length=100,null=True)
     tax = models.CharField(max_length=100,null=True)
     amount = models.CharField(max_length=100,null=True)
+
+class purchase_expense(models.Model):
+    expenseid = models.AutoField(('eid'), primary_key=True)
+    expense_no = models.IntegerField(default=1000)
+    date = models.DateField()
+    expenseaccount = models.CharField(max_length=100,null=True)
+    expensetype = models.CharField(max_length=100,null=True)
+    hsn_sac = models.CharField(max_length=100,null=True)
+    amount = models.IntegerField(null=True)
+    paidthrough = models.CharField(max_length=100,null=True)
+    vendor = models.CharField(max_length=100,null=True)
+    gsttype = models.CharField(max_length=100,null=True)
+    sourceofsupply = models.CharField(max_length=100,null=True)
+    destinofsupply = models.CharField(max_length=100,null=True)
+    customer = models.CharField(max_length=100,null=True)
+    tax = models.CharField(max_length=100,null=True)
+    reference = models.CharField(max_length=100,null=True)
+    note = models.CharField(max_length=255,null=True)
+    file = models.FileField(upload_to='purchase/expense',null=True)

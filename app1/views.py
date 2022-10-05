@@ -9,7 +9,9 @@ from datetime import datetime, date, timedelta
 from .models import advancepayment, paydowncreditcard, salesrecpts, timeact, timeactsale, Cheqs, suplrcredit, addac, \
     bills, invoice, expences, payment, credit, delayedcharge, estimate, service, noninventory, bundle, employee, \
     payslip, inventory, customer, supplier, company, accounts, ProductModel, ItemModel, accountype, \
-    expenseaccount, incomeaccount, accounts1, recon1, recordpay, addtax1, bankstatement, customize
+    expenseaccount, incomeaccount, accounts1, recon1, recordpay, addtax1, bankstatement, customize,\
+    vendor,purchaseorder,porder_item,purchasebill,bill_item,purchase_expense
+
 from django.contrib.auth.models import auth, User
 from django.contrib import messages
 from django.db.models import Sum, Q
@@ -20,7 +22,7 @@ from django.contrib.auth.decorators import login_required
 import itertools
 import requests
 # from .pdf import html2pdf
-
+from num2words import num2words
 import random
 
 
@@ -24888,7 +24890,7 @@ def deletestyle(request, customizeid):
 
 
 # Ananthakrishnan
-
+@login_required(login_url='regcomp')
 def gosearch(request):
     if request.method == "POST":
         cmp1 = company.objects.get(id=request.session["uid"])
@@ -24907,12 +24909,33 @@ def gosearch(request):
                 custo = customer.objects.filter(cid=cmp1,firstname=search).all()
                 context = {'customers': custo, 'cmp1': cmp1}
                 return render(request, 'app1/customers.html', context)
+            
 
    
     else:
         return redirect('gocustomers')
 
+@login_required(login_url='regcomp')
+def gocustomers1(request):
+    try:
+        cmp1 = company.objects.get(id=request.session["uid"])
+        custo = customer.objects.filter(cid=cmp1).all()
+        context = {'customer': custo, 'cmp1': cmp1}
+        return render(request, 'app1/customers.html', context)
+    except:
+        return redirect('godash')
 
+
+
+@login_required(login_url='regcomp')
+def gocustomers2(request):
+    try:
+        cmp1 = company.objects.get(id=request.session["uid"])
+        custo = customer.objects.filter(cid=cmp1).all()
+        context = {'customer': custo, 'cmp1': cmp1}
+        return render(request, 'app1/customers.html', context)
+    except:
+        return redirect('godash')
 
 
 def gstverification(request):
@@ -24928,6 +24951,14 @@ def gstverification(request):
     
     return render(request,'app1/addcust.html',{'response':res})
 
+
+
+
+def customer_profile(request,id):
+    cmp1 = company.objects.get(id=request.session["uid"])
+    custo = customer.objects.get(customerid=id, cid=cmp1)
+    context = {'customer': custo, 'cmp1': cmp1}
+    return render(request, 'app1/customer_view.html', context)
 
 
 def goestimate(request):
@@ -25663,9 +25694,13 @@ def invoice_view(request,id):
     cmp1 = company.objects.get(id=request.session['uid'])
     upd = invoice.objects.get(invoiceid=id, cid=cmp1)
 
+    total = upd.grandtotal
+    words_total = num2words(total)
+
     context ={
         'invoice':upd,
-        'cmp1':cmp1
+        'cmp1':cmp1,
+        'words_total':words_total,
 
     }
 
@@ -27262,16 +27297,6 @@ def getperiod(request):
     list.append(dict)
     return JsonResponse(json.dumps(list), content_type="application/json", safe=False)
 
-def demo(request):
-    if 'uid' in request.session:
-        if request.session.has_key('uid'):
-            uid = request.session['uid']
-        else:
-            return redirect('/')
-        cmp1 = company.objects.get(id=request.session['uid'])
-        return render(request,'app1/demo.html',{'cmp1': cmp1})
-    return redirect('demo') 
-
 def create_item1(request):
     if 'uid' in request.session:
         if request.session.has_key('uid'):
@@ -27311,7 +27336,8 @@ def create_item1(request):
                                 inter_st=iinter,
                                 inventry=iinv,
                                 stock=istock,
-                                status=istatus)
+                                status=istatus,
+                                cid=cmp1)
             item.save()
             return redirect('addpurchaseorder')
         return render(request,'app1/addpurchaseorder.html')
@@ -27536,10 +27562,6 @@ def convertbilled(request,id):
         pordr.save()
         return redirect(viewpurchaseorder,id)
     return redirect('/')
-
-def pdf(request):
-    pdf =html2pdf("app1/pdf.html")
-    return HttpResponse(pdf,content_type="application/pdf")
 
 @login_required(login_url='regcomp')
 def billing(request):
@@ -27797,6 +27819,141 @@ def getdata2(request):
         return JsonResponse(json.dumps(list), content_type="application/json", safe=False)
     return redirect('/')
 
+def goexpenses(request):
+    if 'uid' in request.session:
+        if request.session.has_key('uid'):
+            uid = request.session['uid']
+        else:
+            return redirect('/')
+        cmp1 = company.objects.get(id=request.session['uid'])
+        expnc = purchase_expense.objects.all()
+        return render(request,'app1/goexpenses.html',{'cmp1': cmp1,'expnc':expnc})
+    return redirect('/') 
+
+def addexpenses(request):
+    if 'uid' in request.session:
+        if request.session.has_key('uid'):
+            uid = request.session['uid']
+        else:
+            return redirect('/')
+        cmp1 = company.objects.get(id=request.session['uid'])
+        vndr = vendor.objects.all()
+        cust = customer.objects.all()
+        context = {'cmp1': cmp1, 'vndr': vndr, 'cust': cust}
+        return render(request,'app1/addexpense.html',context)
+    return redirect('/') 
+
+def create_expense(request):
+    if 'uid' in request.session:
+        if request.session.has_key('uid'):
+            uid = request.session['uid']
+        else:
+            return redirect('/')
+        cmp1 = company.objects.get(id=request.session['uid'])
+        if request.method == 'POST':
+            expense_no= '1000'
+            date = request.POST['date']
+            eacc = request.POST['expenseaccount']
+            etyp = request.POST['expensetype']
+            hsnsac = request.POST['hsn_sac']
+            amount = request.POST['amount']
+            paidthrough = request.POST['paidthrough']
+            vendor = request.POST['vendor']
+            gsttype = request.POST['gsttype']
+            supply=request.POST['sourceofsupply']
+            destsupply=request.POST['destinofsupply']
+            customer=request.POST['customer']
+            tax=request.POST['tax']
+            reference=request.POST['reference']
+            note=request.POST['note']
+            file=request.POST['file']
+
+            exp = purchase_expense(date=date,expenseaccount=eacc,expensetype=etyp,hsn_sac=hsnsac,amount=amount,
+                            paidthrough=paidthrough,vendor=vendor,gsttype=gsttype, sourceofsupply=supply, 
+                            destinofsupply=destsupply,customer=customer,tax=tax,reference=reference,note=note,file=file)
+            exp.save()
+            exp.expense_no = int(exp.expense_no) + exp.expenseid
+            exp.save()
+
+            return redirect('goexpenses')
+        return render(request,'app1/goexpenses.html',{'cmp1': cmp1})
+    return redirect('/') 
+
+@login_required(login_url='regcomp')
+def viewexpense(request,id):
+    if 'uid' in request.session:
+        if request.session.has_key('uid'):
+            uid = request.session['uid']
+        else:
+            return redirect('/')
+        cmp1 = company.objects.get(id=request.session['uid'])
+        expnce=purchase_expense.objects.get(expenseid=id)
+        return render(request,'app1/viewexpense.html',{'cmp1': cmp1,'expnce':expnce})
+    return redirect('/')
+
+@login_required(login_url='regcomp')
+def goeditexpense(request,id):
+    if 'uid' in request.session:
+        if request.session.has_key('uid'):
+            uid = request.session['uid']
+        else:
+            return redirect('/')
+        cmp1 = company.objects.get(id=request.session['uid'])
+        expnce=purchase_expense.objects.get(expenseid=id)
+        vndr = vendor.objects.all()
+        cust = customer.objects.all()
+        context = {
+                    'cmp1': cmp1,
+                    'vndr':vndr,
+                    'cust':cust,
+                    'expnce':expnce,       
+                }
+        return render(request,'app1/editexpense.html',context)
+    return redirect('/')
+
+def editexpense(request,id):
+    if 'uid' in request.session:
+        if request.session.has_key('uid'):
+            uid = request.session['uid']
+        else:
+            return redirect('/')
+        cmp1 = company.objects.get(id=request.session['uid'])
+        if request.method == 'POST':
+            expnce=purchase_expense.objects.get(expenseid=id)
+            expnce.date = request.POST['date']
+            expnce.expenseaccount = request.POST['expenseaccount']
+            expnce.expensetype = request.POST['expensetype']
+            expnce.hsn_sac = request.POST['hsn_sac']
+            expnce.amount = request.POST['amount']
+            expnce.paidthrough = request.POST['paidthrough']
+            expnce.vendor = request.POST['vendor']
+            expnce.gsttype = request.POST['gsttype']
+            expnce.sourceofsupply=request.POST['sourceofsupply']
+            expnce.destinofsupply=request.POST['destinofsupply']
+            expnce.customer=request.POST['customer']
+            expnce.tax=request.POST['tax']
+            expnce.reference=request.POST['reference']
+            expnce.note=request.POST['note']
+
+            expnce.save()
+
+            return redirect('goexpenses')
+        return render(request,'app1/goexpenses.html',{'cmp1': cmp1})
+    return redirect('/') 
+
+@login_required(login_url='regcomp')
+def deleteexpense(request, id):
+    if 'uid' in request.session:
+        if request.session.has_key('uid'):
+            uid = request.session['uid']
+        else:
+            return redirect('/')
+        cmp1 = company.objects.get(id=request.session['uid'])
+        expnce=purchase_expense.objects.get(expenseid=id)
+        expnce.delete() 
+        return redirect('goexpenses')
+    return redirect('/')
+
 
 def bnnk(request):
     g=accounts.objects.filter(acctype='Current Liabilities')
@@ -27823,3 +27980,37 @@ def bnk1(request,pk):
     bk=accounts.objects.get(accountsid=pk)
     context={'bk':bk,}
     return render(request,"app1/bnk1.html",context)
+
+# rahnas----------
+
+@login_required(login_url='regcomp')
+def temp_payrec(request):
+    try:
+        cmp1 = company.objects.get(id=request.session['uid'])
+        return render(request,'app1/tem_payment_receipt.html')
+    except:
+        return redirect('gotemplates')
+
+@login_required(login_url='regcomp')
+def temp_vendpay(request):
+    try:
+        cmp1 = company.objects.get(id=request.session['uid'])
+        return render(request,'app1/tem_vendor_payment.html')
+    except:
+        return redirect('gotemplates')        
+
+@login_required(login_url='regcomp')
+def temp_custst(request):
+    try:
+        cmp1 = company.objects.get(id=request.session['uid'])
+        return render(request,'app1/tem_cust_stmnt.html')
+    except:
+        return redirect('gotemplates')                
+
+@login_required(login_url='regcomp')
+def temp_vendst(request):
+    try:
+        cmp1 = company.objects.get(id=request.session['uid'])
+        return render(request,'app1/tem_vend_stmnt.html')
+    except:
+        return redirect('gotemplates')       

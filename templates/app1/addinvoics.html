@@ -291,7 +291,15 @@ $('#baldue').val(parseFloat(x .toFixed(2)));
                     <td>
                       <select name='product' id="product" class="form-control" style="background-color: #2f516f; color: white;">
                         <option value=" " selected>Select Product</option>
-                        {% for proinv in inv %}
+                        
+                        {% for i in item %}
+                        {% if i.cid_id == cmp1.cid %}
+                            <option 
+                                    value="{{ i.name  }}">{{ i.name  }} </option>
+                        {% endif %}
+                    {% endfor %}
+                      
+                        <!-- {% for proinv in inv %}
                         {% if proinv.cid_id == cmp1.cid %}
                         <option text="{{ proinv.inventoryid }}" value="{{ proinv.name }}">{{ proinv.name }} </option>
                         {% endif %}
@@ -305,7 +313,7 @@ $('#baldue').val(parseFloat(x .toFixed(2)));
                         {% if proinv.cid_id == cmp1.cid %}
                         <option text="{{ proinv.bundleid }}" value="{{ proinv.name }}">{{ proinv.name }} </option>
                         {% endif %}
-                        {% endfor %}
+                        {% endfor %} -->
                       </select>
                     </td>
                     <td><input type="text" name='hsn' id="hsn1" placeholder='Enter HSN Code' class="form-control" style="background-color: #2f516f; color: white;" /></td>
@@ -524,7 +532,15 @@ $('#baldue').val(parseFloat(x .toFixed(2)));
                     <td>
                       <select name="product2" id="product2" class="form-control" style="background-color: #2f516f; color: white;">
                         <option value=" " selected>Select Product</option>
-                        {% for proinv in inv %}
+                        
+                        
+                        {% for i in item %}
+                        {% if i.cid_id == cmp1.cid %}
+                            <option 
+                                    value="{{ i.name  }}">{{ i.name  }} </option>
+                        {% endif %}
+                    {% endfor %}
+                        <!-- {% for proinv in inv %}
                         {% if proinv.cid_id == cmp1.cid %}
                         <option text="{{ proinv.inventoryid }}" value="{{ proinv.name }}">{{ proinv.name }} </option>
                         {% endif %}
@@ -538,7 +554,7 @@ $('#baldue').val(parseFloat(x .toFixed(2)));
                         {% if proinv.cid_id == cmp1.cid %}
                         <option text="{{ proinv.bundleid }}" value="{{ proinv.name }}">{{ proinv.name }} </option>
                         {% endif %}
-                        {% endfor %}
+                        {% endfor %} -->
                       </select>
                       {#                                                <button type="button" class="btn btn-outline-secondary ml-1">+</button>#}
                     </td>
@@ -756,7 +772,15 @@ $('#baldue').val(parseFloat(x .toFixed(2)));
                     <td>
                       <select name="product3" id="product3" class="form-control" style="background-color: #2f516f; color: white;">
                         <option value=" " selected>Select Product</option>
-                        {% for proinv in inv %}
+                        
+                        
+                        {% for i in item %}
+                        {% if i.cid_id == cmp1.cid %}
+                            <option 
+                                    value="{{ i.name  }}">{{ i.name  }} </option>
+                        {% endif %}
+                    {% endfor %}
+                        <!-- {% for proinv in inv %}
                         {% if proinv.cid_id == cmp1.cid %}
                         <option text="{{ proinv.inventoryid }}" value="{{ proinv.name }}">{{ proinv.name }} </option>
                         {% endif %}
@@ -770,7 +794,7 @@ $('#baldue').val(parseFloat(x .toFixed(2)));
                         {% if proinv.cid_id == cmp1.cid %}
                         <option text="{{ proinv.bundleid }}" value="{{ proinv.name }}">{{ proinv.name }} </option>
                         {% endif %}
-                        {% endfor %}
+                        {% endfor %} -->
                       </select>
                       {#                                                <button type="button" class="btn btn-outline-secondary ml-1">+</button>#}
                     </td>
@@ -988,7 +1012,13 @@ $('#baldue').val(parseFloat(x .toFixed(2)));
                     <td>
                       <select name="product4" id="product4" class="form-control" style="background-color: #2f516f; color: white;">
                         <option value=" " selected>Select Product</option>
-                        {% for proinv in inv %}
+                        {% for i in item %}
+                        {% if i.cid_id == cmp1.cid %}
+                            <option 
+                                    value="{{ i.name  }}">{{ i.name  }} </option>
+                        {% endif %}
+                    {% endfor %}
+                        <!-- {% for proinv in inv %}
                         {% if proinv.cid_id == cmp1.cid %}
                         <option text="{{ proinv.inventoryid }}" value="{{ proinv.name }}">{{ proinv.name }} </option>
                         {% endif %}
@@ -1002,7 +1032,7 @@ $('#baldue').val(parseFloat(x .toFixed(2)));
                         {% if proinv.cid_id == cmp1.cid %}
                         <option text="{{ proinv.bundleid }}" value="{{ proinv.name }}">{{ proinv.name }} </option>
                         {% endif %}
-                        {% endfor %}
+                        {% endfor %} -->
                       </select>
                       {#                                                <button type="button" class="btn btn-outline-secondary ml-1">+</button>#}
                     </td>

@@ -12,7 +12,7 @@
         <div class="card radius-15">
             <div class="card-body">
                 <div class="card-title">
-                    <center><h3 class="mb-0">ADD VENDORS</h3></center>
+                    <center><h3 class="mb-0">EDIT VENDOR</h3></center>
                 </div>
                 <hr/>
             </div>
@@ -36,47 +36,47 @@
                                     <option value="Miss">Miss</option>
                                     <option value="Ms">Ms</option>
                                 </select>
-                                <div class="valid-feedback">Looks good!</div>
+                                
                             </div>
                             <div class="col-md-3 mt-2">
                                 <label for="validationCustom02">First name</label>
                                 <input type="text" class="form-control" id="validationCustom02" name="firstname"
                                     value="{{ vndr.firstname }}"   required>
-                                <div class="valid-feedback">Looks good!</div>
+                                
                             </div>
                             <div class="col-md-3 mt-2">
                                 <label for="validationCustom02">Last name</label>
                                 <input type="text" class="form-control" id="validationCustom02" name="lastname"
-                                    value="{{ vndr.lastname }}"   required >
-                                <div class="valid-feedback">Looks good!</div>
+                                    value="{{ vndr.lastname }}">
+                                
                             </div>
                             <div class="col-md-3 mt-2">
                                 <label for="validationCustom03">Company</label>
                                 <input type="text" class="form-control" id="validationCustom03" name="company_name"
-                                    value="{{ vndr.companyname }}"   required>
-                                <div class="valid-feedback">Looks good!</div>
+                                    value="{{ vndr.companyname }}">
+                                
                             </div>
                         </div>
                         
                         <div class="row">
                             <div class="col-md-4 mt-3">
                                 <label for="validationCustom03">Email</label>
-                                <input type="email" class="form-control" id="validationCustom03" name="email" required
+                                <input type="email" class="form-control" id="validationCustom03" name="email"
                                     placeholder="finsys@mail.com" value="{{ vndr.email }}">
-                                <div class="invalid-feedback">Please provide a valid Email</div>
+                                
                             </div>
                             <div class="col-md-4 mt-3">
                                 <label for="validationCustom03">Website</label>
                                 <input type="text" class="form-control" id="validationCustom03" value="{{ vndr.website }}"
-                                    placeholder="www.finsys.com" onchange="checkweb(this)" name="website">
-                                <div id="warnweb" class="text-danger"></div>
+                                    placeholder="www.finsys.com" name="website">
+                                
                             </div>
                             <div class="col-md-4 mt-3">
                                 <label for="validationCustom01">Mobile</label>
                                 <input type="text" class="form-control" id="validationCustom01"
                                     placeholder="Mobile number" maxlength="10" value="{{ vndr.mobile }}"
-                                    onchange="checkphone(this)" name="mobile">
-                                <div class="text-danger m-2" id="warnphone"></div>
+                                    name="mobile">
+                                
                             </div>
                         </div>
                         <hr>
@@ -99,7 +99,7 @@
                                     <option value="Tax Deductor">Tax Deductor</option>
                                     <option value="SEZ Developer">SEZ Developer</option>
                                 </select>
-                                <div class="invalid-feedback">Please select a valid registration type.</div>
+                                <!-- <div class="invalid-feedback">Please select a valid registration type.</div>
                                 <div class="hide" id="regular"><label><i>(Business that is registered under gst)</i></label></div>
                                 <div class="hide" id="comp"><label>&nbsp;<i>(Business that is registered under composition scheme in gst)</i></label></div>
                                 <div class="hide" id="unreg"><label>&nbsp;&nbsp;&nbsp;<i>(Business that has not been registered under gst)</i></label></div>
@@ -107,7 +107,7 @@
                                 <div class="hide" id="sez"><label>&nbsp;&nbsp;&nbsp;<i>(Business that is located in a special economic zone of india or a SEZ developer)</i></label></div>
                                 <div class="hide" id="demed"><label>&nbsp;&nbsp;&nbsp;<i>(Supply of woods to an exports oriented unit or againsed advanced authorization or export promotion capital woods)</i></label></div>
                                 <div class="hide" id="taxdud"><label>&nbsp;&nbsp;<i>(State of central gov,government agencies or local authority)</i></label></div>
-                                <div class="hide" id="sezdev"><label>&nbsp;&nbsp;<i>(A person or organization who owns atleast 26% eqaulity in creating business units in special economic zone)</i></label></div>
+                                <div class="hide" id="sezdev"><label>&nbsp;&nbsp;<i>(A person or organization who owns atleast 26% eqaulity in creating business units in special economic zone)</i></label></div> -->
                             </div>
                               
                             <div class="col-md-4 mt-3">
@@ -132,9 +132,9 @@
 
                             <div class="col-md-4 mt-3">
                                 <label for="validationCustom03">PAN NO</label>
-                                <input type="text" class="form-control" id="validationCustom03" name="panno" required 
+                                <input type="text" class="form-control" id="validationCustom03" name="panno"
                                     onchange="checkpan(this)" placeholder="APPCK7465F" value="{{vndr.panno }}">
-                                <div class="text-danger m-2" id="warnpan"></div>
+                               
                             </div> 
 
                         </div>
@@ -159,11 +159,11 @@
                                 <label for="">Currency</label>
                                 <div class="d-flex">
                                     <input type="text" class="form-control" id="" name="currency" placeholder="INR - Indian Rupee"
-                                        id="validationCustom02" value="{{ vndr.currency }}" required>
+                                        id="validationCustom02" value="{{ vndr.currency }}">
                                     <a href="#">
                                         <button type="button" class="btn btn-outline-secondary ml-1">+</button>
                                     </a>
-                                    <div class="valid-feedback">Looks good!</div> 
+                                    
                                 </div>   
                             </div>
                             
@@ -174,14 +174,14 @@
                             </div>
                             <div class="col-md-3 mt-2">
                                <label for="">Payment Terms</label>
-                               <select class=" form-control" id="validationCustom02" name="paymentterms" required>
+                               <select class=" form-control" id="validationCustom02" name="paymentterms">
                                     <option value="{{ vndr.paymentterms }}">{{ vndr.paymentterms }}</option>
                                     <option value="Due on Receipt">Due on Receipt</option>
                                     <option value="Net 15">NET15</option>
                                     <option value="Net 30">NET30</option>
                                     <option value="Net 60">NET60</option>
                                 </select>
-                                <div class="valid-feedback">Looks good!</div>
+                                
                             </div>
                         </div>
                         <hr>
@@ -196,8 +196,8 @@
                                     <div class="col-md-12 mt-3">
                                         <div class="form-row">
                                             <label for="street">Street</label>
-                                            <input type="text" class="form-control" id="street" value="{{ vndr.street }}" name="street" required>
-                                            <div class="invalid-feedback">Please provide a valid Street</div>
+                                            <input type="text" class="form-control" id="street" value="{{ vndr.street }}" name="street">
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -207,9 +207,8 @@
                                             <label for="city">City</label>
                                             <input type="text" class="form-control" id="city"
                                                 name="city" value="{{ vndr.city }}"
-                                                required
                                                 placeholder="City">
-                                            <div class="invalid-feedback">Please provide a valid City</div>
+                                            
                                         </div>
                                     </div>
                                     <div class="col-md-6 mt-3">
@@ -258,7 +257,7 @@
                                                 <option value="West Bengal">West Bengal</option>
                                                 <option value="Other Territory">Other Territory</option>
                                             </select>
-                                            <div class="invalid-feedback">Please provide a valid State</div>
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -267,18 +266,18 @@
                                         <div class="form-row">
                                             <label for="pinco">Pin Code</label>
                                             <input type="text" class="form-control" id="pinco"
-                                                name="pincode" required maxlength="6" value="{{ vndr.pincode }}"
+                                                name="pincode" maxlength="6" value="{{ vndr.pincode }}"
                                                 placeholder="PIN code">
-                                            <div class="invalid-feedback">Please provide a valid Pin Code</div>
+                                            
                                         </div>
                                     </div>
                                     <div class="col-md-6 mt-3">
                                         <div class="form-row">
                                             <label for="country">Country</label>
                                             <input type="text" class="form-control" id="country" value="{{ vndr.country }}"
-                                                name="country" required
+                                                name="country" 
                                                 placeholder="Country">
-                                            <div class="invalid-feedback">Please provide a valid Country</div>
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -297,8 +296,8 @@
                                         <div class="form-row">
                                             <label for="shipstreet">Street</label>
                                             <input type="text" class="form-control" id="shipstreet" name="shipstreet"
-                                            value="{{ vndr.shipstreet }}" required>
-                                            <div class="invalid-feedback">Please provide a valid Street</div>
+                                            value="{{ vndr.shipstreet }}" >
+                                           
                                         </div>
                                     </div>
                                 </div>
@@ -307,8 +306,8 @@
                                         <div class="form-row">
                                             <label for="shipcity">City</label>
                                             <input type="text" class="form-control" id="shipcity" value="{{ vndr.shipcity }}"
-                                                name="shipcity" required placeholder="City">
-                                            <div class="invalid-feedback">Please provide a valid City</div>
+                                                name="shipcity" placeholder="City">
+                                           
                                         </div>
                                     </div>
                                     <div class="col-md-6 mt-3">
@@ -357,7 +356,7 @@
                                                 <option value="West Bengal">West Bengal</option>
                                                 <option value="Other Territory">Other Territory</option>
                                             </select>
-                                            <div class="invalid-feedback">Please provide a valid State</div>
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -366,32 +365,23 @@
                                         <div class="form-row">
                                             <label for="shippinco">Pin Code</label>
                                             <input type="text" class="form-control" id="shippinco"
-                                                name="shippincode" value="{{ vndr.shippincode }}" required
+                                                name="shippincode" value="{{ vndr.shippincode }}"
                                                 placeholder="PIN code">
-                                            <div class="invalid-feedback">Please provide a valid Pin Code</div>
+                                            
                                         </div>
                                     </div>
                                     <div class="col-md-6 mt-3">
                                         <div class="form-row">
                                             <label for="shipcountry">Country</label>
                                             <input type="text" class="form-control" id="shipcountry"
-                                                name="shipcountry" value="{{ vndr.shipcountry }}" required
+                                                name="shipcountry" value="{{ vndr.shipcountry }}"
                                                 placeholder="Country">
-                                            <div class="invalid-feedback">Please provide a valid Country</div>
+                                            
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
-                                    <label>Agree to terms and conditions</label>
-                                    <div class="invalid-feedback">You must agree before submitting.</div>
-                                </div>
-                            </div>
-                        </div>
+                        </div><hr>
                         <div class="row">
                             <div class="col-md-4"></div>
                             <div class="col-md-4">
@@ -560,39 +550,6 @@
             } else {
                 document.getElementById('warngst').innerHTML = 'Please provide a valid GSTIN';
                 alert('Please provide a valid GSTIN');
-            }
-        }
-
-        function checkpan(element) {
-            var paninput = element.value;
-            var panregexp = ["[a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}"]
-            if (paninput.match(panregexp)) {
-                document.getElementById('warnpan').innerHTML = '';
-            } else {
-                document.getElementById('warnpan').innerHTML = 'Please provide a valid PAN Number';
-                alert('Please provide a valid PAN Number')
-            }
-        }
-
-        function checkweb(element) {
-            var webinput = element.value;
-            var webregexp = "www."
-            if (webinput.startsWith(webregexp)) {
-                document.getElementById('warnweb').innerHTML = '';
-            } else {
-                document.getElementById('warnweb').innerHTML = 'Please provide a valid Website Address';
-                alert('Please provide a valid Website Address')
-            }
-        }
-
-        function checkphone(element) {
-            var phoneinput = element.value;
-            var phoneregexp = "[0-9]{10}";
-            if (phoneinput.match(phoneregexp)) {
-                document.getElementById('warnphone').innerHTML = '';
-            } else {
-                document.getElementById('warnphone').innerHTML = 'Please provide a valid Phone Number';
-                alert('Please provide a valid Phone Number')
             }
         }
     </script>

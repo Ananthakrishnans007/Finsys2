@@ -29,13 +29,12 @@
                         <div class="row">
                             <div class="col-md-3 mt-2">
                                 <label for="validationCustom01">Title</label>
-                                <select name="title" id="title" class="form-control" id="validationCustom01">
+                                <select name="title" id="title" class="form-control">
                                     <option value="Mr">Mr</option>
                                     <option value="Mrs">Mrs</option>
                                     <option value="Miss">Miss</option>
                                     <option value="Ms">Ms</option>
                                 </select>
-                                <div class="valid-feedback">Looks good!</div>
                             </div>
                             <div class="col-md-3 mt-2">
                                 <label for="validationCustom02">First name</label>
@@ -45,37 +44,30 @@
                             </div>
                             <div class="col-md-3 mt-2">
                                 <label for="validationCustom02">Last name</label>
-                                <input type="text" class="form-control" id="validationCustom02" name="lastname"
-                                       required >
-                                <div class="valid-feedback">Looks good!</div>
+                                <input type="text" class="form-control" id="validationCustom02" name="lastname">
                             </div>
                             <div class="col-md-3 mt-2">
                                 <label for="validationCustom03">Company</label>
-                                <input type="text" class="form-control" id="validationCustom03" name="company_name"
-                                       required>
-                                <div class="valid-feedback">Looks good!</div>
+                                <input type="text" class="form-control" id="validationCustom03" name="company_name">
                             </div>
                         </div>
                         
                         <div class="row">
                             <div class="col-md-4 mt-3">
                                 <label for="validationCustom03">Email</label>
-                                <input type="email" class="form-control" id="validationCustom03" name="email" required
+                                <input type="email" class="form-control" id="validationCustom03" name="email"
                                     placeholder="finsys@mail.com">
-                                <div class="invalid-feedback">Please provide a valid Email</div>
                             </div>
                             <div class="col-md-4 mt-3">
                                 <label for="validationCustom03">Website</label>
                                 <input type="text" class="form-control" id="validationCustom03"
-                                    placeholder="www.finsys.com" onchange="checkweb(this)" name="website">
-                                <div id="warnweb" class="text-danger"></div>
+                                    placeholder="www.finsys.com" name="website">
                             </div>
                             <div class="col-md-4 mt-3">
                                 <label for="validationCustom01">Mobile</label>
                                 <input type="text" class="form-control" id="validationCustom01"
                                     placeholder="Mobile number" maxlength="10"
-                                    onchange="checkphone(this)" name="mobile">
-                                <div class="text-danger m-2" id="warnphone"></div>
+                                    name="mobile">
                             </div>
                         </div>
                         <hr>
@@ -96,7 +88,6 @@
                                     <option value="Tax Deductor">Tax Deductor</option>
                                     <option value="SEZ Developer">SEZ Developer</option>
                                 </select>
-                                <div class="invalid-feedback">Please select a valid registration type.</div>
                                 <!-- <div class="hide" id="regular"><label><i>(Business that is registered under gst)</i></label></div>
                                 <div class="hide" id="comp"><label>&nbsp;<i>(Business that is registered under composition scheme in gst)</i></label></div>
                                 <div class="hide" id="unreg"><label>&nbsp;&nbsp;&nbsp;<i>(Business that has not been registered under gst)</i></label></div>
@@ -128,9 +119,8 @@
                              </div> -->
                             <div class="col-md-4 mt-3">
                                 <label for="validationCustom03">PAN NO</label>
-                                <input type="text" class="form-control" id="validationCustom03" name="panno" required 
-                                    onchange="checkpan(this)" placeholder="APPCK7465F">
-                                <div class="text-danger m-2" id="warnpan"></div>
+                                <input type="text" class="form-control" id="" name="panno"
+                                placeholder="APPCK7465F">
                             </div>
 
                         </div>
@@ -155,11 +145,10 @@
                                 <label for="">Currency</label>
                                 <div class="d-flex">
                                     <input type="text" class="form-control" id="" name="currency" placeholder="INR - Indian Rupee"
-                                        id="validationCustom02" required>
+                                        id="">
                                     <a href="#">
                                         <button type="button" class="btn btn-outline-secondary ml-1">+</button>
-                                    </a>
-                                    <div class="valid-feedback">Looks good!</div> 
+                                    </a> 
                                 </div>   
                             </div>
                             
@@ -172,14 +161,13 @@
                             </div>
                             <div class="col-md-3 mt-2">
                                <label for="">Payment Terms</label>
-                               <select class=" form-control" id="validationCustom02" name="paymentterms" required>
+                               <select class=" form-control" id="validationCustom02" name="paymentterms">
                                     <option selected disabled value="">Choose..</option>
                                     <option value="Due on Receipt">Due on Receipt</option>
                                     <option value="Net 15">NET15</option>
                                     <option value="Net 30">NET30</option>
                                     <option value="Net 60">NET60</option>
                                 </select>
-                                <div class="valid-feedback">Looks good!</div>
                             </div>
                         </div>
                         <hr>
@@ -194,8 +182,7 @@
                                     <div class="col-md-12 mt-3">
                                         <div class="form-row">
                                             <label for="street">Street</label>
-                                            <textarea class="form-control street" id="street" name="street" required></textarea>
-                                            <div class="invalid-feedback">Please provide a valid Street</div>
+                                            <textarea class="form-control street" id="street" name="street"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -205,9 +192,7 @@
                                             <label for="city">City</label>
                                             <input type="text" class="form-control" id="city"
                                                 name="city"
-                                                required
                                                 placeholder="City">
-                                            <div class="invalid-feedback">Please provide a valid City</div>
                                         </div>
                                     </div>
                                     <div class="col-md-6 mt-3">
@@ -255,7 +240,6 @@
                                                 <option value="West Bengal">West Bengal</option>
                                                 <option value="Other Territory">Other Territory</option>
                                             </select>
-                                            <div class="invalid-feedback">Please provide a valid State</div>
                                         </div>
                                     </div>
                                 </div>
@@ -264,18 +248,16 @@
                                         <div class="form-row">
                                             <label for="pinco">Pin Code</label>
                                             <input type="text" class="form-control" id="pinco"
-                                                name="pincode" required maxlength="6"
-                                                placeholder="PIN code">
-                                            <div class="invalid-feedback">Please provide a valid Pin Code</div>
+                                                name="pincode" maxlength="6"
+                                                placeholder="PIN Code">
                                         </div>
                                     </div>
                                     <div class="col-md-6 mt-3">
                                         <div class="form-row">
                                             <label for="country">Country</label>
                                             <input type="text" class="form-control" id="country"
-                                                name="country" required
+                                                name="country"
                                                 placeholder="Country">
-                                            <div class="invalid-feedback">Please provide a valid Country</div>
                                         </div>
                                     </div>
                                 </div>
@@ -295,8 +277,7 @@
                                             <label for="shipstreet">Street</label>
                                             <textarea class="form-control" id="shipstreet"
                                                 name="shipstreet"
-                                                required></textarea>
-                                            <div class="invalid-feedback">Please provide a valid Street</div>
+                                                ></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -305,8 +286,7 @@
                                         <div class="form-row">
                                             <label for="shipcity">City</label>
                                             <input type="text" class="form-control" id="shipcity"
-                                                name="shipcity" required placeholder="City">
-                                            <div class="invalid-feedback">Please provide a valid City</div>
+                                                name="shipcity" placeholder="City">
                                         </div>
                                     </div>
                                     <div class="col-md-6 mt-3">
@@ -354,7 +334,6 @@
                                                 <option value="West Bengal">West Bengal</option>
                                                 <option value="Other Territory">Other Territory</option>
                                             </select>
-                                            <div class="invalid-feedback">Please provide a valid State</div>
                                         </div>
                                     </div>
                                 </div>
@@ -363,18 +342,16 @@
                                         <div class="form-row">
                                             <label for="shippinco">Pin Code</label>
                                             <input type="text" class="form-control" id="shippinco"
-                                                name="shippincode" required
-                                                placeholder="PIN code">
-                                            <div class="invalid-feedback">Please provide a valid Pin Code</div>
+                                                name="shippincode"
+                                                placeholder="PIN Code">
                                         </div>
                                     </div>
                                     <div class="col-md-6 mt-3">
                                         <div class="form-row">
                                             <label for="shipcountry">Country</label>
                                             <input type="text" class="form-control" id="shipcountry"
-                                                name="shipcountry" required
+                                                name="shipcountry"
                                                 placeholder="Country">
-                                            <div class="invalid-feedback">Please provide a valid Country</div>
                                         </div>
                                     </div>
                                 </div>
@@ -558,39 +535,6 @@
             } else {
                 document.getElementById('warngst').innerHTML = 'Please provide a valid GSTIN';
                 alert('Please provide a valid GSTIN');
-            }
-        }
-
-        function checkpan(element) {
-            var paninput = element.value;
-            var panregexp = ["[a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}"]
-            if (paninput.match(panregexp)) {
-                document.getElementById('warnpan').innerHTML = '';
-            } else {
-                document.getElementById('warnpan').innerHTML = 'Please provide a valid PAN Number';
-                alert('Please provide a valid PAN Number')
-            }
-        }
-
-        function checkweb(element) {
-            var webinput = element.value;
-            var webregexp = "www."
-            if (webinput.startsWith(webregexp)) {
-                document.getElementById('warnweb').innerHTML = '';
-            } else {
-                document.getElementById('warnweb').innerHTML = 'Please provide a valid Website Address';
-                alert('Please provide a valid Website Address')
-            }
-        }
-
-        function checkphone(element) {
-            var phoneinput = element.value;
-            var phoneregexp = "[0-9]{10}";
-            if (phoneinput.match(phoneregexp)) {
-                document.getElementById('warnphone').innerHTML = '';
-            } else {
-                document.getElementById('warnphone').innerHTML = 'Please provide a valid Phone Number';
-                alert('Please provide a valid Phone Number')
             }
         }
     </script>
