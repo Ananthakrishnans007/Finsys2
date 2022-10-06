@@ -378,6 +378,14 @@ urlpatterns = [
 
     path('new_customers',views.new_customers,name='new_customers'),
 
+    path('estimate_create_item',views.estimate_create_item,name='estimate_create_item'),
+
+    path('estimate_create_item2/<int:id>',views.estimate_create_item2,name='estimate_create_item2'),
+
+    
+
+    
+
     path('updateestimate2/<int:id>',views.updateestimate2,name='updateestimate2'),
 
     path('search_estimate',views.search_estimate,name='search_estimate'),
@@ -393,6 +401,9 @@ urlpatterns = [
     path('estmate_filter2',views.estmate_filter2,name='estmate_filter2'),
 
     path('estmate_filter3',views.estmate_filter3,name='estmate_filter3'),
+
+    path('estimate_pdf',views.estimate_pdf,name='estimate_pdf'),
+     
 
 
     # Sales
@@ -429,6 +440,10 @@ urlpatterns = [
 
     path('new_customers3',views.new_customers3,name='new_customers3'),
 
+    path('sale_create_item',views.sale_create_item,name='sale_create_item'),
+
+    
+
 
     # invoice
 
@@ -439,6 +454,13 @@ urlpatterns = [
     re_path(r'^editinvoice/updateinvoice/(?P<id>\d+)$', views.updateinvoice, name='updateinvoice'),
     path('invoice_status/<int:id>',views.invoice_status,name='invoice_status'),
 
+    path('inv_create_item',views.inv_create_item,name='inv_create_item'),
+
+    path('updateinvoice2/<int:id>',views.updateinvoice2,name='updateinvoice2'),
+
+    
+    
+    path('invcreate2',views.invcreate2,name='invcreate2'),
     path('goinvoices1',views.goinvoices1,name='goinvoices1'),
 
     path('goinvoices2',views.goinvoices2,name='goinvoices2'),

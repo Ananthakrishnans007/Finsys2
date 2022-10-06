@@ -3272,6 +3272,65 @@ def invindex(request):
     except:
         return redirect('goinvoices')
 
+@login_required(login_url='regcomp')
+def invcreate2(request):
+    if request.method == 'POST':
+        cmp1 = company.objects.get(id=request.session["uid"])
+        inv2 = invoice(customername=request.POST['customername'], email=request.POST['email'],
+                       invoiceno='1000',
+                       invoicedate=request.POST['invoicedate'],
+                       terms=request.POST['terms'], duedate=request.POST['duedate'], bname=request.POST['bname'],
+                       placosupply=request.POST['placosupply'],
+
+                       cid=cmp1,
+                        subtotal=float(request.POST['subtotal']),
+                       note = request.POST['Note'],
+                       IGST = request.POST['IGST'],
+                       CGST = request.POST['CGST'],
+                       SGST = request.POST['SGST'],
+                       TCS = request.POST['TCS'],
+                       grandtotal=request.POST['grandtotal'],
+                       amtrecvd=request.POST['amtrecvd'], 
+                       baldue=request.POST['baldue'],
+
+
+                       )
+        if len(request.FILES) != 0:
+            inv2.file=request.FILES['file'] 
+        orderno = 'OR'+str(random.randint(1111111,9999999))
+        while invoice.objects.filter(invoice_orderno=orderno ) is None:
+            orderno = 'OR'+str(random.randint(1111111,9999999))
+        inv2.invoice_orderno =orderno
+        inv2.save()
+        inv2.invoiceno = int(inv2.invoiceno) + inv2.invoiceid
+        inv2.save()
+
+        product = request.POST.getlist("product[]")
+        hsn  = request.POST.getlist("hsn[]")
+        description = request.POST.getlist("description[]")
+        qty = request.POST.getlist("qty[]")
+        price = request.POST.getlist("price[]")
+        
+        tax = request.POST.getlist("tax[]")
+        total = request.POST.getlist("total[]")
+
+        invoiceid=invoice.objects.get(invoiceid =inv2.invoiceid)
+
+        if len(product)==len(hsn)==len(description)==len(qty)==len(price)==len(tax)==len(total) and product and hsn and description and qty and price and tax and total:
+            mapped=zip(product,hsn,description,qty,price,tax,total)
+            mapped=list(mapped)
+            for ele in mapped:
+                invoiceAdd,created = invoice_item.objects.get_or_create(product = ele[0],hsn=ele[1],description=ele[2],
+                qty=ele[3],price=ele[4],tax=ele[5],total=ele[6],invoice=invoiceid)
+
+        return redirect('goinvoices')
+    else:
+        return redirect('goinvoices')
+
+
+
+
+
 
 @login_required(login_url='regcomp')
 def invcreate(request):
@@ -9567,6 +9626,10 @@ def getitems(request):
         except:
             pass
         list.append(noninventorydict)
+
+
+
+
     else:
         notany = {'item': 'notany', 'name': ' ',
                   'sku': ' ', 'hsn': ' ',
@@ -24996,29 +25059,35 @@ def estindex2(request):
 def estcreate2(request):
     if request.method == 'POST':
         cmp1 = company.objects.get(id=request.session["uid"])
-        est2 = estimate(customer=request.POST['customer'], email=request.POST['email'], billingaddress=request.POST['billingaddress'], estimatedate=request.POST['estimatedate'], expirationdate=request.POST['expirationdate'], placeofsupply=request.POST['placeofsupply'],
-                        estimateno='1000', product=request.POST['product'], description=request.POST['description'],
-                        hsn=request.POST['hsn'],
-                        qty=request.POST['qty'], rate=request.POST['rate'], tax=request.POST['tax'],
-                        total=request.POST['total'], taxamount=request.POST['taxamount'],
-                        subtotal=request.POST['sub_total'], estimatetotal=request.POST['estimatetotal'], product1=request.POST[
-                            'product1'], hsn1=request.POST['hsn1'], qty1=request.POST['qty1'],
-                        description1=request.POST['description1'], rate1=request.POST[
-                            'rate1'], total1=request.POST['total1'], tax1=request.POST['tax1'],
-                        product2=request.POST['product2'], hsn2=request.POST['hsn2'], qty2=request.POST['qty2'],
-                        description2=request.POST['description2'], rate2=request.POST[
-                            'rate2'], total2=request.POST['total2'], tax2=request.POST['tax2'],
-                        product3=request.POST['product3'], hsn3=request.POST['hsn3'], qty3=request.POST['qty3'],
-                        description3=request.POST['description3'], rate3=request.POST[
-                            'rate3'], total3=request.POST['total3'], tax3=request.POST['tax3'],
+        est2 = estimate(customer=request.POST['customer'], email=request.POST['email'], billingaddress=request.POST['billingaddress'], 
+                        estimatedate=request.POST['estimatedate'], expirationdate=request.POST['expirationdate'],
+                        placeofsupply=request.POST['placosupply'],
+                        estimateno='1000',
+                        
+                        
+                        #  product=request.POST['product'], description=request.POST['description'],
+                        # hsn=request.POST['hsn'],
+                        # qty=request.POST['qty'], rate=request.POST['rate'], tax=request.POST['tax'],
+                        # total=request.POST['total'], taxamount=request.POST['taxamount'],
+                        #  , product1=request.POST[
+                        #     'product1'], hsn1=request.POST['hsn1'], qty1=request.POST['qty1'],
+                        # description1=request.POST['description1'], rate1=request.POST[
+                        #     'rate1'], total1=request.POST['total1'], tax1=request.POST['tax1'],
+                        # product2=request.POST['product2'], hsn2=request.POST['hsn2'], qty2=request.POST['qty2'],
+                        # description2=request.POST['description2'], rate2=request.POST[
+                        #     'rate2'], total2=request.POST['total2'], tax2=request.POST['tax2'],
+                        # product3=request.POST['product3'], hsn3=request.POST['hsn3'], qty3=request.POST['qty3'],
+                        # description3=request.POST['description3'], rate3=request.POST[
+                        #     'rate3'], total3=request.POST['total3'], tax3=request.POST['tax3'],
                         cid=cmp1,
                         reference_number = request.POST['Ref_No'],
                         note = request.POST['Note'],
-
+                        subtotal=request.POST['subtotal'],
                         IGST =request.POST['IGST'],
                         CGST  = request.POST['CGST'],
                         SGST = request.POST['SGST'],
                         TCS = request.POST['TCS'],
+                        estimatetotal=request.POST['grandtotal']
                         
                         
                         )
@@ -25029,6 +25098,26 @@ def estcreate2(request):
         est2.save()
         est2.estimateno = int(est2.estimateno) + est2.estimateid
         est2.save()
+
+        items = request.POST.getlist("product[]")
+        hsn = request.POST.getlist("hsn[]")
+        description = request.POST.getlist("description[]")
+        quantity = request.POST.getlist("qty[]")
+        rate = request.POST.getlist("price[]")
+        tax = request.POST.getlist("tax[]")
+        amount = request.POST.getlist("total[]")
+
+        estimateid= estimate.objects.get(estimateid=est2.estimateid)
+
+        if len(items)==len(hsn)==len(description)==len(quantity)==len(rate)==len(tax )==len(amount) and items and hsn and description and quantity and rate and tax and amount:
+                mapped=zip(items,hsn,description ,quantity,rate,tax,amount)
+                mapped=list(mapped)
+                for ele in mapped:
+                    itemAdd,created = estimate_item.objects.get_or_create(item = ele[0],hsn=ele[1],description=ele[2],
+                    quantity=ele[3],rate=ele[4],tax=ele[5],total=ele[6] ,estimate = estimateid)
+
+
+
         return redirect('goestimate')
     
     return redirect('goestimate')
@@ -25070,23 +25159,126 @@ def new_customers(request):
 
 
 
+
+def estimate_create_item(request):
+    if 'uid' in request.session:
+        if request.session.has_key('uid'):
+            uid = request.session['uid']
+        else:
+            return redirect('/')
+        cmp1 = company.objects.get(id=request.session['uid'])
+        if request.method == 'POST':
+            cmp1 = company.objects.get(id=request.session['uid'])
+            iname = request.POST['name']
+            itype = request.POST['type']
+            iunit = request.POST.get('unit')
+            ihsn = request.POST['hsn']
+            itax = request.POST['taxref']
+            ipcost = request.POST['pcost']
+            iscost = request.POST['salesprice']
+            itrate = request.POST['tax']
+            ipuracc = request.POST['pur_account']
+            isalacc = request.POST['sale_account']
+            ipurdesc = request.POST['pur_desc']
+            isaledesc = request.POST['sale_desc']
+            iintra = request.POST['intra_st']
+            iinter = request.POST['inter_st']
+            iinv = request.POST['invacc']
+            istock = request.POST['stock']
+            istatus = request.POST['status']
+            item = itemtable(name=iname,item_type=itype,unit=iunit,
+                                hsn=ihsn,tax_reference=itax,
+                                purchase_cost=ipcost,
+                                sales_cost=iscost,
+                                tax_rate=itrate,
+                                acount_pur=ipuracc,
+                                account_sal=isalacc,
+                                pur_desc=ipurdesc,
+                                sale_desc=isaledesc,
+                                intra_st=iintra,
+                                inter_st=iinter,
+                                inventry=iinv,
+                                stock=istock,
+                                status=istatus,
+                                cid=cmp1)
+            item.save()
+            return redirect('estindex2')
+        return render(request,'app1/estimate2.html')
+    return redirect('/') 
+
+
+def estimate_create_item2(request,id):
+    if 'uid' in request.session:
+        if request.session.has_key('uid'):
+            uid = request.session['uid']
+        else:
+            return redirect('/')
+        cmp1 = company.objects.get(id=request.session['uid'])
+        if request.method == 'POST':
+            cmp1 = company.objects.get(id=request.session['uid'])
+            iname = request.POST['name']
+            itype = request.POST['type']
+            iunit = request.POST.get('unit')
+            ihsn = request.POST['hsn']
+            itax = request.POST['taxref']
+            ipcost = request.POST['pcost']
+            iscost = request.POST['salesprice']
+            itrate = request.POST['tax']
+            ipuracc = request.POST['pur_account']
+            isalacc = request.POST['sale_account']
+            ipurdesc = request.POST['pur_desc']
+            isaledesc = request.POST['sale_desc']
+            iintra = request.POST['intra_st']
+            iinter = request.POST['inter_st']
+            iinv = request.POST['invacc']
+            istock = request.POST['stock']
+            istatus = request.POST['status']
+            item = itemtable(name=iname,item_type=itype,unit=iunit,
+                                hsn=ihsn,tax_reference=itax,
+                                purchase_cost=ipcost,
+                                sales_cost=iscost,
+                                tax_rate=itrate,
+                                acount_pur=ipuracc,
+                                account_sal=isalacc,
+                                pur_desc=ipurdesc,
+                                sale_desc=isaledesc,
+                                intra_st=iintra,
+                                inter_st=iinter,
+                                inventry=iinv,
+                                stock=istock,
+                                status=istatus,
+                                cid=cmp1)
+            item.save()
+            return redirect(editestimate,id)
+        return render(request,'app1/estimate2.html')
+    return redirect('/') 
+
+
+
+
 @login_required(login_url='regcomp')
 def editestimate(request, id):
     try:
         cmp1 = company.objects.get(cid=request.session['uid'])
-        edt = estimate.objects.get(estimateid=id, cid=cmp1)
+       
         inv = inventory.objects.filter(cid=cmp1).all()
         bun = bundle.objects.filter(cid=cmp1).all()
         noninv = noninventory.objects.filter(cid=cmp1).all()
         ser = service.objects.filter(cid=cmp1).all()
+
+        edt = estimate.objects.get(estimateid=id, cid=cmp1)
         item = itemtable.objects.filter(cid=cmp1).all()
+        estimateitem = estimate_item.objects.filter(estimate=id).all()
+        
 
 
         context = {'estimate': edt, 'cmp1': cmp1, 'inv': inv,
-                   'noninv': noninv, 'bun': bun, 'ser': ser,'item':item}
+                   'noninv': noninv, 'bun': bun, 'ser': ser,'item':item,'estimateitem':estimateitem}
         return render(request, 'app1/edit_estimate.html', context)
     except:
         return redirect('goestimate')
+
+
 
 
 @login_required(login_url='regcomp')
@@ -25099,55 +25291,73 @@ def updateestimate2(request, id):
         upd.billingaddress = request.POST['billingaddress']
         upd.estimatedate = request.POST['estimatedate']
         upd.expirationdate = request.POST['expirationdate']
-        upd.placeofsupply = request.POST['placeofsupply']
-        upd.product = request.POST['product']
-        upd.hsn = request.POST['hsn']
-        upd.description = request.POST['description']
-        upd.qty = request.POST['qty']
-        upd.rate = request.POST['rate']
-        upd.tax = request.POST['tax']
-        upd.total = request.POST['total']
-        upd.estimatetotal = request.POST['estimatetotal']
-        upd.product1 = request.POST['product1']
-        upd.hsn1 = request.POST['hsn1']
-        upd.description1 = request.POST['description1']
-        upd.qty1 = request.POST['qty1']
-        upd.rate1 = request.POST['rate1']
-        upd.total1 = request.POST['total1']
-        upd.tax1 = request.POST['tax1']
-        upd.product2 = request.POST['product2']
-        upd.hsn2 = request.POST['hsn2']
-        upd.description2 = request.POST['description2']
-        upd.qty2 = request.POST['qty2']
-        upd.rate2 = request.POST['rate2']
-        upd.total2 = request.POST['total2']
-        upd.tax2 = request.POST['tax2']
-        upd.product3 = request.POST['product3']
-        upd.hsn3 = request.POST['hsn3']
-        upd.description3 = request.POST['description3']
-        upd.qty3 = request.POST['qty3']
-        upd.rate3 = request.POST['rate3']
-        upd.total3 = request.POST['total3']
-        upd.tax3 = request.POST['tax3']
-        upd.taxamount = request.POST['taxamount']
+        upd.placeofsupply = request.POST['placosupply']
+        # upd.product = request.POST['product']
+        # upd.hsn = request.POST['hsn']
+        # upd.description = request.POST['description']
+        # upd.qty = request.POST['qty']
+        # upd.rate = request.POST['rate']
+        # upd.tax = request.POST['tax']
+        # upd.total = request.POST['total']
+        
+        # upd.product1 = request.POST['product1']
+        # upd.hsn1 = request.POST['hsn1']
+        # upd.description1 = request.POST['description1']
+        # upd.qty1 = request.POST['qty1']
+        # upd.rate1 = request.POST['rate1']
+        # upd.total1 = request.POST['total1']
+        # upd.tax1 = request.POST['tax1']
+        # upd.product2 = request.POST['product2']
+        # upd.hsn2 = request.POST['hsn2']
+        # upd.description2 = request.POST['description2']
+        # upd.qty2 = request.POST['qty2']
+        # upd.rate2 = request.POST['rate2']
+        # upd.total2 = request.POST['total2']
+        # upd.tax2 = request.POST['tax2']
+        # upd.product3 = request.POST['product3']
+        # upd.hsn3 = request.POST['hsn3']
+        # upd.description3 = request.POST['description3']
+        # upd.qty3 = request.POST['qty3']
+        # upd.rate3 = request.POST['rate3']
+        # upd.total3 = request.POST['total3']
+        # upd.tax3 = request.POST['tax3']
+        # upd.taxamount = request.POST['taxamount']
         upd.reference_number = request.POST['Ref_No']
         upd.note = request.POST['Note']
-        upd.subtotal=request.POST['sub_total'],
+        upd.subtotal=request.POST['subtotal']
 
-        upd.IGST =request.POST['IGST'],
-        upd.CGST  = request.POST['CGST'],
-        upd.SGST = request.POST['SGST'],
-        upd.TCS = request.POST['TCS'],
-
+        upd.IGST =request.POST['IGST']
+        upd.CGST  = request.POST['CGST']
+        upd.SGST = request.POST['SGST']
+        upd.TCS = request.POST['TCS']
+        upd.estimatetotal = request.POST['grandtotal']
         if len(request.FILES) != 0:
             if len(upd.file) > 0  :
                 os.remove(upd.estimate.path)
                 
-            upd.file = request.FILES['file'],
-
-        
+            upd.file = request.FILES['file']
 
         upd.save()
+        # items = request.POST.getlist("product[]")
+        # hsn = request.POST.getlist("hsn[]")
+        # description = request.POST.getlist("description[]")
+        # quantity = request.POST.getlist("qty[]")
+        # rate = request.POST.getlist("price[]")
+        # tax = request.POST.getlist("tax[]")
+        # amount = request.POST.getlist("total[]")
+
+        # estimateid= estimate.objects.get(estimateid=upd.estimateid)
+
+        # if len(items)==len(hsn)==len(description)==len(quantity)==len(rate)==len(tax )==len(amount) and items and hsn and description and quantity and rate and tax and amount:
+        #         mapped=zip(items,hsn,description ,quantity,rate,tax,amount)
+        #         mapped=list(mapped)
+        #         for ele in mapped:
+        #             itemAdd,created = estimate_item.objects.get_or_create(item = ele[0],hsn=ele[1],description=ele[2],
+        #             quantity=ele[3],rate=ele[4],tax=ele[5],total=ele[6] ,estimate = estimateid)
+                   
+
+
+
         return redirect('goestimate')
     else:
         return redirect('goestimate')
@@ -25204,12 +25414,14 @@ def estimate_view(request,id):
     cmp1 = company.objects.get(id=request.session['uid'])
     upd = estimate.objects.get(estimateid=id, cid=cmp1)
 
+    estitem = estimate_item.objects.filter(estimate=id)
+
     context ={
         'estimate':upd,
-        'cmp1':cmp1
+        'cmp1':cmp1,
+        'estitem':estitem,
 
     }
-
 
     return render(request,'app1/estimate_view.html',context)
 
@@ -25372,45 +25584,66 @@ def createsales_record(request):
 
         sel2 = salesorder(salename=request.POST['customer'], saleemail=request.POST['email'],
                         saleaddress=request.POST['billingaddress'], saledate=request.POST['Salesdate'],
-                        shipmentdate=request.POST['Shipmentdate'], placeofsupply=request.POST['placeofsupply'],
+                        shipmentdate=request.POST['Shipmentdate'], placeofsupply=request.POST['placosupply'],
                         saleno='1000', 
-                        product=request.POST['product'], 
-                        description=request.POST['description'],
-                        hsn=request.POST['hsn'],
-                        qty=request.POST['qty'],
-                        rate=request.POST['rate'],
-                        tax=request.POST['tax'],
+                        # product=request.POST['product'], 
+                        # description=request.POST['description'],
+                        # hsn=request.POST['hsn'],
+                        # qty=request.POST['qty'],
+                        # rate=request.POST['rate'],
+                        # tax=request.POST['tax'],
 
 
 
-                        total=request.POST['total'],
-                        taxamount=request.POST['taxamount'],
+                        # total=request.POST['total'],
+                        # taxamount=request.POST['taxamount'],
 
-                         product1=request.POST['product1'],
-                         hsn1=request.POST['hsn1'], qty1=request.POST['qty1'],
-                        description1=request.POST['description1'], rate1=request.POST[
-                            'rate1'], total1=request.POST['total1'], tax1=request.POST['tax1'],
-                        product2=request.POST['product2'], hsn2=request.POST['hsn2'], qty2=request.POST['qty2'],
-                        description2=request.POST['description2'], rate2=request.POST[
-                            'rate2'], total2=request.POST['total2'], tax2=request.POST['tax2'],
-                        product3=request.POST['product3'], hsn3=request.POST['hsn3'], qty3=request.POST['qty3'],
-                        description3=request.POST['description3'], rate3=request.POST[
-                            'rate3'], total3=request.POST['total3'], tax3=request.POST['tax3'],
+                        #  product1=request.POST['product1'],
+                        #  hsn1=request.POST['hsn1'], qty1=request.POST['qty1'],
+                        # description1=request.POST['description1'], rate1=request.POST[
+                        #     'rate1'], total1=request.POST['total1'], tax1=request.POST['tax1'],
+                        # product2=request.POST['product2'], hsn2=request.POST['hsn2'], qty2=request.POST['qty2'],
+                        # description2=request.POST['description2'], rate2=request.POST[
+                        #     'rate2'], total2=request.POST['total2'], tax2=request.POST['tax2'],
+                        # product3=request.POST['product3'], hsn3=request.POST['hsn3'], qty3=request.POST['qty3'],
+                        # description3=request.POST['description3'], rate3=request.POST[
+                        #     'rate3'], total3=request.POST['total3'], tax3=request.POST['tax3'],
                         cid=cmp1,
                         reference_number = request.POST['Ref_No'],
                         note = request.POST['Note'],
 
-                        subtotal=request.POST['sub_total'],
+                        subtotal=request.POST['subtotal'],
                         IGST =request.POST['IGST'],
                         CGST  = request.POST['CGST'],
                         SGST = request.POST['SGST'],
                         TCS = request.POST['TCS'],
-                        salestotal=request.POST['totalamount'],)            
+                        salestotal=request.POST['grandtotal'],)            
         if len(request.FILES) != 0:
             sel2.file=request.FILES['file']                    
         sel2.save()
         sel2.saleno= int(sel2.saleno) + sel2.id
         sel2.save()
+
+        product = request.POST.getlist("product[]")
+        hsn  = request.POST.getlist("hsn[]")
+        description = request.POST.getlist("description[]")
+        qty = request.POST.getlist("qty[]")
+        price = request.POST.getlist("price[]")
+        
+        tax = request.POST.getlist("tax[]")
+        total = request.POST.getlist("total[]")
+
+        salesorderid=salesorder.objects.get(id =sel2.id)
+
+        if len(product)==len(hsn)==len(description)==len(qty)==len(price)==len(tax)==len(total) and product and hsn and description and qty and price and tax and total:
+            mapped=zip(product,hsn,description,qty,price,tax,total)
+            mapped=list(mapped)
+            for ele in mapped:
+                salesorderAdd,created = sales_item.objects.get_or_create(product = ele[0],hsn=ele[1],description=ele[2],
+                qty=ele[3],price=ele[4],tax=ele[5],total=ele[6],salesorder=salesorderid)
+
+
+
         return redirect('gosalesorder')
     
     return redirect('gosalesorder')
@@ -25451,15 +25684,63 @@ def new_customers2(request):
     except:
         return redirect('newsalesorder')
 
+def sale_create_item(request):
+    if 'uid' in request.session:
+        if request.session.has_key('uid'):
+            uid = request.session['uid']
+        else:
+            return redirect('/')
+        cmp1 = company.objects.get(id=request.session['uid'])
+        if request.method == 'POST':
+            cmp1 = company.objects.get(id=request.session['uid'])
+            iname = request.POST['name']
+            itype = request.POST['type']
+            iunit = request.POST.get('unit')
+            ihsn = request.POST['hsn']
+            itax = request.POST['taxref']
+            ipcost = request.POST['pcost']
+            iscost = request.POST['salesprice']
+            itrate = request.POST['tax']
+            ipuracc = request.POST['pur_account']
+            isalacc = request.POST['sale_account']
+            ipurdesc = request.POST['pur_desc']
+            isaledesc = request.POST['sale_desc']
+            iintra = request.POST['intra_st']
+            iinter = request.POST['inter_st']
+            iinv = request.POST['invacc']
+            istock = request.POST['stock']
+            istatus = request.POST['status']
+            item = itemtable(name=iname,item_type=itype,unit=iunit,
+                                hsn=ihsn,tax_reference=itax,
+                                purchase_cost=ipcost,
+                                sales_cost=iscost,
+                                tax_rate=itrate,
+                                acount_pur=ipuracc,
+                                account_sal=isalacc,
+                                pur_desc=ipurdesc,
+                                sale_desc=isaledesc,
+                                intra_st=iintra,
+                                inter_st=iinter,
+                                inventry=iinv,
+                                stock=istock,
+                                status=istatus,
+                                cid=cmp1)
+            item.save()
+            return redirect('newsalesorder')
+        return render(request,'app1/salesorder.html')
+    return redirect('/') 
 
 
 def sales_order_view(request,id):
     cmp1 = company.objects.get(id=request.session['uid'])
     upd = salesorder.objects.get(id=id, cid=cmp1)
 
+    saleitem = sales_item.objects.filter(salesorder=id)
+
     context ={
         'sale':upd,
-        'cmp1':cmp1
+        'cmp1':cmp1,
+        'saleitem':saleitem
 
     }
 
@@ -25490,8 +25771,9 @@ def edit_sales_order(request, id):
         noninv = noninventory.objects.filter(cid=cmp1).all()
         ser = service.objects.filter(cid=cmp1).all()
         item = itemtable.objects.filter(cid=cmp1).all()
+        itemsale = sales_item.objects.filter(salesorder=id)
         context = {'sale': edt, 'cmp1': cmp1, 'inv': inv,
-                   'noninv': noninv, 'bun': bun, 'ser': ser,'item':item,}
+                   'noninv': noninv, 'bun': bun, 'ser': ser,'item':item,'itemsale':itemsale}
         return render(request, 'app1/edit_sales_order.html', context)
     except:
         return redirect('gosalesorder')
@@ -25508,55 +25790,55 @@ def updatesale(request, id):
         upd.saleaddress = request.POST['billingaddress']
         upd.saledate = request.POST['Salesdate']
         upd.shipmentdate = request.POST['Shipmentdate']
-        upd.placeofsupply= request.POST['placeofsupply']
-        upd.product = request.POST['product']
-        upd.hsn = request.POST['hsn']
-        upd.description = request.POST['description']
-        upd.qty = request.POST['qty']
-        upd.rate = request.POST['rate']
-        upd.tax = request.POST['tax']
-        upd.total = request.POST['total']
+        upd.placeofsupply= request.POST['placosupply']
+        # upd.product = request.POST['product']
+        # upd.hsn = request.POST['hsn']
+        # upd.description = request.POST['description']
+        # upd.qty = request.POST['qty']
+        # upd.rate = request.POST['rate']
+        # upd.tax = request.POST['tax']
+        # upd.total = request.POST['total']
         
-        upd.product1 = request.POST['product1']
-        upd.hsn1 = request.POST['hsn1']
-        upd.description1 = request.POST['description1']
-        upd.qty1 = request.POST['qty1']
-        upd.rate1 = request.POST['rate1']
-        upd.total1 = request.POST['total1']
-        upd.tax1 = request.POST['tax1']
+        # upd.product1 = request.POST['product1']
+        # upd.hsn1 = request.POST['hsn1']
+        # upd.description1 = request.POST['description1']
+        # upd.qty1 = request.POST['qty1']
+        # upd.rate1 = request.POST['rate1']
+        # upd.total1 = request.POST['total1']
+        # upd.tax1 = request.POST['tax1']
 
-        upd.product2 = request.POST['product2']
-        upd.hsn2 = request.POST['hsn2']
-        upd.description2 = request.POST['description2']
-        upd.qty2 = request.POST['qty2']
-        upd.rate2 = request.POST['rate2']
-        upd.total2 = request.POST['total2']
-        upd.tax2 = request.POST['tax2']
+        # upd.product2 = request.POST['product2']
+        # upd.hsn2 = request.POST['hsn2']
+        # upd.description2 = request.POST['description2']
+        # upd.qty2 = request.POST['qty2']
+        # upd.rate2 = request.POST['rate2']
+        # upd.total2 = request.POST['total2']
+        # upd.tax2 = request.POST['tax2']
 
-        upd.product3 = request.POST['product3']
-        upd.hsn3 = request.POST['hsn3']
-        upd.description3  = request.POST['description3']
-        upd.qty3 = request.POST['qty3']
-        upd.rate3 = request.POST['rate3']
-        upd.total3 = request.POST['total3']
-        upd.tax3 = request.POST['tax3']
-        upd.taxamount = request.POST['taxamount']
+        # upd.product3 = request.POST['product3']
+        # upd.hsn3 = request.POST['hsn3']
+        # upd.description3  = request.POST['description3']
+        # upd.qty3 = request.POST['qty3']
+        # upd.rate3 = request.POST['rate3']
+        # upd.total3 = request.POST['total3']
+        # upd.tax3 = request.POST['tax3']
+        # upd.taxamount = request.POST['taxamount']
 
         upd.reference_number = request.POST['Ref_No']
         upd.note = request.POST['Note']
 
-        upd.subtotal=request.POST['sub_total'],
-        upd.IGST =request.POST['IGST'],
-        upd.CGST  = request.POST['CGST'],
-        upd.SGST = request.POST['SGST'],
-        upd.TCS = request.POST['TCS'],
-        upd.salestotal = request.POST['totalamount'],
+        upd.subtotal=request.POST['subtotal']
+        upd.IGST =request.POST['IGST']
+        upd.CGST  = request.POST['CGST']
+        upd.SGST = request.POST['SGST']
+        upd.TCS = request.POST['TCS']
+        upd.salestotal = request.POST['grandtotal']
 
         if len(request.FILES) != 0:
             if len(upd.file) > 0  :
                 os.remove(upd.sales.path)
                 
-            upd.file = request.FILES['file'],
+            upd.file = request.FILES['file']
 
         
 
@@ -25694,6 +25976,8 @@ def invoice_view(request,id):
     cmp1 = company.objects.get(id=request.session['uid'])
     upd = invoice.objects.get(invoiceid=id, cid=cmp1)
 
+    invitem = invoice_item.objects.filter(invoice=id)
+
     total = upd.grandtotal
     words_total = num2words(total)
 
@@ -25701,6 +25985,7 @@ def invoice_view(request,id):
         'invoice':upd,
         'cmp1':cmp1,
         'words_total':words_total,
+        'invitem':invitem,
 
     }
 
@@ -25755,7 +26040,9 @@ def editinvoice(request, id):
         noninv = noninventory.objects.filter(cid=cmp1).all()
         ser = service.objects.filter(cid=cmp1).all()
         item = itemtable.objects.filter(cid=cmp1).all()
-        context = {'invoice': invo3, 'cmp1': cmp1, 'inv': inv, 'item':item,
+
+        invitem = invoice_item.objects.filter(invoice =id )
+        context = {'invoice': invo3, 'cmp1': cmp1, 'inv': inv, 'item':item,'invitem':invitem,
                    'noninv': noninv, 'bun': bun, 'ser': ser}
         return render(request, 'app1/editinvoice.html', context)
     except:
@@ -26398,6 +26685,65 @@ def updateinvoice(request, id):
         return redirect('goinvoices')
 
 @login_required(login_url='regcomp')
+def updateinvoice2(request, id):
+    if request.method =='POST':
+        cmp1 = company.objects.get(id=request.session['uid'])
+        invoi = invoice.objects.get(invoiceid=id, cid=cmp1)
+        invoi.customername = request.POST['customername']
+        invoi.email = request.POST['email']
+        invoi.terms = request.POST['terms']
+        invoi.invoicedate = request.POST['invoicedate']
+        invoi.duedate = request.POST['duedate']
+        invoi.bname = request.POST['bname']
+        invoi.placosupply = request.POST['placosupply']
+
+   
+        invoi.subtotal = request.POST['subtotal']
+        invoi.grandtotal = request.POST['grandtotal']
+        invoi.amtrecvd = request.POST['amtrecvd']
+        invoi.baldue = request.POST['baldue']
+        
+        invoi.note = request.POST['Note']
+        invoi.IGST = request.POST['IGST']
+        invoi.CGST = request.POST['CGST']
+        invoi.SGST = request.POST['SGST']
+        invoi.TCS = request.POST['TCS']
+
+        if len(request.FILES) != 0:
+            if len(invoi.file) > 0  :
+                os.remove(invoi.invoice.path)
+                
+            invoi.file = request.FILES['file'],
+
+        invoi.save()
+
+        # product = request.POST.getlist("product[]")
+        # hsn  = request.POST.getlist("hsn[]")
+        # description = request.POST.getlist("description[]")
+        # qty = request.POST.getlist("qty[]")
+        # price = request.POST.getlist("price[]")
+        
+        # tax = request.POST.getlist("tax[]")
+        # total = request.POST.getlist("total[]")
+
+        # invoiceid=invoice.objects.get(invoiceid =invoi.invoiceid)
+
+        # if len(product)==len(hsn)==len(description)==len(qty)==len(price)==len(tax)==len(total) and product and hsn and description and qty and price and tax and total:
+        #     mapped=zip(product,hsn,description,qty,price,tax,total)
+        #     mapped=list(mapped)
+        #     for ele in mapped:
+        #         created = invoice_item.objects.get_or_create(product = ele[0],hsn=ele[1],description=ele[2],
+        #         qty=ele[3],price=ele[4],tax=ele[5],total=ele[6],invoice=invoiceid)
+
+
+        return redirect('goinvoices')
+    else:
+        return redirect('goinvoices')
+
+
+
+
+@login_required(login_url='regcomp')
 def deleteinvoice(request, id):
     try:
         cmp1 = company.objects.get(id=request.session['uid'])
@@ -26456,6 +26802,56 @@ def goinvoices3(request):
     
     return redirect('goinvoices')
 
+def inv_create_item(request):
+    if 'uid' in request.session:
+        if request.session.has_key('uid'):
+            uid = request.session['uid']
+        else:
+            return redirect('/')
+        cmp1 = company.objects.get(id=request.session['uid'])
+        if request.method == 'POST':
+            cmp1 = company.objects.get(id=request.session['uid'])
+            iname = request.POST['name']
+            itype = request.POST['type']
+            iunit = request.POST.get('unit')
+            ihsn = request.POST['hsn']
+            itax = request.POST['taxref']
+            ipcost = request.POST['pcost']
+            iscost = request.POST['salesprice']
+            itrate = request.POST['tax']
+            ipuracc = request.POST['pur_account']
+            isalacc = request.POST['sale_account']
+            ipurdesc = request.POST['pur_desc']
+            isaledesc = request.POST['sale_desc']
+            iintra = request.POST['intra_st']
+            iinter = request.POST['inter_st']
+            iinv = request.POST['invacc']
+            istock = request.POST['stock']
+            istatus = request.POST['status']
+            item = itemtable(name=iname,item_type=itype,unit=iunit,
+                                hsn=ihsn,tax_reference=itax,
+                                purchase_cost=ipcost,
+                                sales_cost=iscost,
+                                tax_rate=itrate,
+                                acount_pur=ipuracc,
+                                account_sal=isalacc,
+                                pur_desc=ipurdesc,
+                                sale_desc=isaledesc,
+                                intra_st=iintra,
+                                inter_st=iinter,
+                                inventry=iinv,
+                                stock=istock,
+                                status=istatus,
+                                cid=cmp1)
+            item.save()
+            return redirect('goaddinvoices')
+        return render(request,'app1/addcustinvoice.html')
+    return redirect('/') 
+
+
+def estimate_pdf(request):
+
+    return redirect('')
 
 
 # Ananthakrishnanend
