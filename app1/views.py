@@ -9486,7 +9486,8 @@ def getdata1(request):
                         'product4': i.product4, 'hsn4': i.hsn4,
                         'description4': i.description4, 'qty4': i.qty4,
                         'price4': i.price4, 'total4': i.total4, 'amtrecvd': i.amtrecvd,
-                        'baldue': i.baldue}
+                        'baldue': i.baldue
+                        }
                 list.append(dict)
     else:
         custobject = customer.objects.get(firstname=a, lastname=b, cid=cmp1)
@@ -25254,8 +25255,6 @@ def estimate_create_item2(request,id):
     return redirect('/') 
 
 
-
-
 @login_required(login_url='regcomp')
 def editestimate(request, id):
     try:
@@ -25265,7 +25264,7 @@ def editestimate(request, id):
         bun = bundle.objects.filter(cid=cmp1).all()
         noninv = noninventory.objects.filter(cid=cmp1).all()
         ser = service.objects.filter(cid=cmp1).all()
-
+        customers = customer.objects.filter(cid=cmp1).all()
         edt = estimate.objects.get(estimateid=id, cid=cmp1)
         item = itemtable.objects.filter(cid=cmp1).all()
         estimateitem = estimate_item.objects.filter(estimate=id).all()
@@ -25273,7 +25272,7 @@ def editestimate(request, id):
 
 
         context = {'estimate': edt, 'cmp1': cmp1, 'inv': inv,
-                   'noninv': noninv, 'bun': bun, 'ser': ser,'item':item,'estimateitem':estimateitem}
+                   'noninv': noninv, 'bun': bun, 'ser': ser,'item':item,'estimateitem':estimateitem ,'customers':customers}
         return render(request, 'app1/edit_estimate.html', context)
     except:
         return redirect('goestimate')
@@ -25292,36 +25291,7 @@ def updateestimate2(request, id):
         upd.estimatedate = request.POST['estimatedate']
         upd.expirationdate = request.POST['expirationdate']
         upd.placeofsupply = request.POST['placosupply']
-        # upd.product = request.POST['product']
-        # upd.hsn = request.POST['hsn']
-        # upd.description = request.POST['description']
-        # upd.qty = request.POST['qty']
-        # upd.rate = request.POST['rate']
-        # upd.tax = request.POST['tax']
-        # upd.total = request.POST['total']
         
-        # upd.product1 = request.POST['product1']
-        # upd.hsn1 = request.POST['hsn1']
-        # upd.description1 = request.POST['description1']
-        # upd.qty1 = request.POST['qty1']
-        # upd.rate1 = request.POST['rate1']
-        # upd.total1 = request.POST['total1']
-        # upd.tax1 = request.POST['tax1']
-        # upd.product2 = request.POST['product2']
-        # upd.hsn2 = request.POST['hsn2']
-        # upd.description2 = request.POST['description2']
-        # upd.qty2 = request.POST['qty2']
-        # upd.rate2 = request.POST['rate2']
-        # upd.total2 = request.POST['total2']
-        # upd.tax2 = request.POST['tax2']
-        # upd.product3 = request.POST['product3']
-        # upd.hsn3 = request.POST['hsn3']
-        # upd.description3 = request.POST['description3']
-        # upd.qty3 = request.POST['qty3']
-        # upd.rate3 = request.POST['rate3']
-        # upd.total3 = request.POST['total3']
-        # upd.tax3 = request.POST['tax3']
-        # upd.taxamount = request.POST['taxamount']
         upd.reference_number = request.POST['Ref_No']
         upd.note = request.POST['Note']
         upd.subtotal=request.POST['subtotal']
@@ -25338,22 +25308,22 @@ def updateestimate2(request, id):
             upd.file = request.FILES['file']
 
         upd.save()
-        # items = request.POST.getlist("product[]")
-        # hsn = request.POST.getlist("hsn[]")
-        # description = request.POST.getlist("description[]")
-        # quantity = request.POST.getlist("qty[]")
-        # rate = request.POST.getlist("price[]")
-        # tax = request.POST.getlist("tax[]")
-        # amount = request.POST.getlist("total[]")
+        items = request.POST.getlist("product[]")
+        hsn = request.POST.getlist("hsn[]")
+        description = request.POST.getlist("description[]")
+        quantity = request.POST.getlist("qty[]")
+        rate = request.POST.getlist("price[]")
+        tax = request.POST.getlist("tax[]")
+        amount = request.POST.getlist("total[]")
 
-        # estimateid= estimate.objects.get(estimateid=upd.estimateid)
+        estimateid= estimate.objects.get(estimateid=upd.estimateid)
 
-        # if len(items)==len(hsn)==len(description)==len(quantity)==len(rate)==len(tax )==len(amount) and items and hsn and description and quantity and rate and tax and amount:
-        #         mapped=zip(items,hsn,description ,quantity,rate,tax,amount)
-        #         mapped=list(mapped)
-        #         for ele in mapped:
-        #             itemAdd,created = estimate_item.objects.get_or_create(item = ele[0],hsn=ele[1],description=ele[2],
-        #             quantity=ele[3],rate=ele[4],tax=ele[5],total=ele[6] ,estimate = estimateid)
+        if len(items)==len(hsn)==len(description)==len(quantity)==len(rate)==len(tax )==len(amount) and items and hsn and description and quantity and rate and tax and amount:
+                mapped=zip(items,hsn,description ,quantity,rate,tax,amount)
+                mapped=list(mapped)
+                for ele in mapped:
+                    itemAdd,created = estimate_item.objects.get_or_create(item = ele[0],hsn=ele[1],description=ele[2],
+                    quantity=ele[3],rate=ele[4],tax=ele[5],total=ele[6] ,estimate = estimateid)
                    
 
 
@@ -25361,6 +25331,42 @@ def updateestimate2(request, id):
         return redirect('goestimate')
     else:
         return redirect('goestimate')
+
+
+@login_required(login_url='regcomp')
+def new_customers4(request,id):
+    try:
+        cmp1 = company.objects.get(id=request.session["uid"])
+        if request.method == "POST":
+            firstname = request.POST['firstname']
+            lastname = request.POST['lastname']
+            if customer.objects.filter(firstname=firstname, lastname=lastname, cid=cmp1).exists():
+                messages.info(request,
+                              f"Customer {firstname} {lastname} already exists. Please provide a different name.")
+                return redirect('gocustomers')
+            else:
+                customer1 = customer(title=request.POST['title'], firstname=request.POST['firstname'],
+                                     lastname=request.POST['lastname'], company=request.POST['company'],
+                                     location=request.POST['location'], gsttype=request.POST['gsttype'],
+                                     gstin=request.POST['gstin'], panno=request.POST['panno'],
+                                     email=request.POST['email'],
+                                     website=request.POST['website'], mobile=request.POST['mobile'],
+                                     street=request.POST['street'], city=request.POST['city'],
+                                     state=request.POST['state'],
+                                     pincode=request.POST['pincode'], country=request.POST['country'],
+                                     shipstreet=request.POST['shipstreet'], shipcity=request.POST['shipcity'],
+                                     shipstate=request.POST['shipstate'],
+                                     shippincode=request.POST['shippincode'], shipcountry=request.POST['shipcountry'],
+                                     cid=cmp1)
+
+                customer1.save()
+                return redirect('editestimate',id)
+        customers = customer.objects.filter(cid=cmp1).all()
+        context = {'customers': customers, 'cmp1': cmp1}
+        return render(request, 'app1/customers.html', context)
+    except:
+        return redirect('goaddinvoices')
+
 
 
 @login_required(login_url='regcomp')
@@ -25455,37 +25461,37 @@ def convert2(request,id):
     upd.shipmentdate = est.expirationdate
     upd.placeofsupply= est.placeofsupply
 
-    upd.product = est.product
-    upd.hsn = est.hsn
-    upd.description =est.description
-    upd.qty = est.qty
-    upd.rate = est.rate
-    upd.tax = est.tax
-    upd.total = est.total
+    # upd.product = est.product
+    # upd.hsn = est.hsn
+    # upd.description =est.description
+    # upd.qty = est.qty
+    # upd.rate = est.rate
+    # upd.tax = est.tax
+    # upd.total = est.total
         
-    upd.product1 = est.product1
-    upd.hsn1 = est.hsn1
-    upd.description1 =est.description1
-    upd.qty1 = est.qty1
-    upd.rate1 =est.rate1
-    upd.total1 = est.total1
-    upd.tax1 =est.tax1
+    # upd.product1 = est.product1
+    # upd.hsn1 = est.hsn1
+    # upd.description1 =est.description1
+    # upd.qty1 = est.qty1
+    # upd.rate1 =est.rate1
+    # upd.total1 = est.total1
+    # upd.tax1 =est.tax1
 
-    upd.product2 =est.product2
-    upd.hsn2 = est.hsn2
-    upd.description2 = est.description2
-    upd.qty2 = est.qty2
-    upd.rate2 = est.rate2
-    upd.total2 = est.total2
-    upd.tax2 = est.tax2
+    # upd.product2 =est.product2
+    # upd.hsn2 = est.hsn2
+    # upd.description2 = est.description2
+    # upd.qty2 = est.qty2
+    # upd.rate2 = est.rate2
+    # upd.total2 = est.total2
+    # upd.tax2 = est.tax2
 
-    upd.product3 = est.product3
-    upd.hsn3 = est.hsn3
-    upd.description3  = est.description3
-    upd.qty3 = est.qty3
-    upd.rate3 = est.rate3
-    upd.total3 = est.total3
-    upd.tax3 = est.tax3
+    # upd.product3 = est.product3
+    # upd.hsn3 = est.hsn3
+    # upd.description3  = est.description3
+    # upd.qty3 = est.qty3
+    # upd.rate3 = est.rate3
+    # upd.total3 = est.total3
+    # upd.tax3 = est.tax3
     upd.taxamount = est.taxamount
 
     upd.reference_number = est.reference_number
@@ -25504,7 +25510,21 @@ def convert2(request,id):
     upd.save()
     upd.saleno = int(upd.saleno) + upd.id
     upd.save()
-    
+
+    es =estimate_item.objects.filter(estimate=id)
+
+    salid = salesorder.objects.get(id=upd.id)
+    for i in es:
+        a=sales_item()
+        a. salesorder = salid 
+        a.product = i.item
+        a.hsn = i.hsn
+        a.description = i.description
+        a.qty  = i.quantity
+        a.price = i.rate
+        a.total = i.total
+        a.tax = i.tax
+        a.save()
 
 
     return redirect(estimate_view,id)
@@ -25867,6 +25887,57 @@ def sale_convert2(request,id):
 
     upd.status = 'Invoice'
     upd.save()
+
+    inv = invoice()
+    inv.cid =  cmp1 
+    inv.customername  = upd.salename
+    inv.email = upd.saleemail
+   
+    inv.invoicedate = upd.saledate
+    inv.duedate  =  upd.shipmentdate
+    inv.bname = upd.saleaddress
+    inv.placosupply= upd.placeofsupply
+
+    # inv.reference_number = est.reference_number
+    inv.note = upd.note
+    
+    inv.subtotal=upd.subtotal 
+    inv.IGST =upd. IGST
+    inv.CGST  = upd.CGST
+    inv.SGST = upd.SGST
+    inv.TCS = upd.TCS 
+    inv.amtrecvd = 0 
+    inv.baldue = upd.salestotal 
+    inv.grandtotal = upd.salestotal 
+  
+    inv.file = upd.file
+    inv.saleno = '1000'
+
+
+
+    orderno = 'OR'+str(random.randint(1111111,9999999))
+    while invoice.objects.filter(invoice_orderno=orderno ) is None:
+        orderno = 'OR'+str(random.randint(1111111,9999999))
+    inv.invoice_orderno =orderno
+    inv.save()
+    inv.invoiceno = int(inv.invoiceno) + inv.invoiceid
+    inv.save()
+    
+    sl =sales_item.objects.filter(salesorder=id)
+
+    salid = invoice.objects.get(invoiceid=inv.invoiceid)
+    for i in sl:
+        a=invoice_item()
+        a. invoice = salid 
+        a.product = i.product
+        a.hsn = i.hsn
+        a.description = i.description
+        a.qty  = i.qty
+        a.price = i.price
+        a.total = i.total
+        a.tax = i.tax
+        a.save()
+
 
 
 
@@ -26853,6 +26924,27 @@ def estimate_pdf(request):
 
     return redirect('')
 
+
+
+
+@login_required(login_url='regcomp')
+def payment_received(request):
+    try:
+        cmp1 = company.objects.get(id=request.session["uid"])
+        customers = customer.objects.filter(cid=cmp1)
+        toda = date.today()
+        tod = toda.strftime("%Y-%m-%d")
+        inv = inventory.objects.filter(cid=cmp1)
+        bun = bundle.objects.filter(cid=cmp1)
+        noninv = noninventory.objects.filter(cid=cmp1)
+        ser = service.objects.filter(cid=cmp1)
+        acounts = accounts.objects.filter(cid=cmp1)
+        item = itemtable.objects.filter(cid=cmp1)
+        context = {'cmp1': cmp1, 'customers': customers, 'inv': inv, 'bun': bun, 'noninv': noninv, 'ser': ser,'item':item,
+                   'tod': tod, 'accoun': acounts}
+        return render(request, 'app1/payment_received.html', context)
+    except:
+        return redirect('/')
 
 # Ananthakrishnanend
 

@@ -1234,7 +1234,7 @@ class salesorder(models.Model):
     sale_status = (
         ('Draft','Draft'),
         ('Approved','Approved'),
-        ('Sales Order','Sales Order'),
+        ('Invoiced','Invoiced'),
 
     )
     

@@ -382,7 +382,8 @@ urlpatterns = [
 
     path('estimate_create_item2/<int:id>',views.estimate_create_item2,name='estimate_create_item2'),
 
-    
+     path('new_customers4/<int:id>',views.new_customers4,name='new_customers4'),
+
 
     
 
@@ -469,7 +470,8 @@ urlpatterns = [
 
     
 
-
+    # receipt
+    path('payment_received',views.payment_received,name='payment_received'),
     
 
 

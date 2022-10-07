@@ -323,8 +323,10 @@ footer p {
                 </li>
                     <ul class="dropdown-menu" style="background-color: black;">
                         <a class="dropdown-item " href="{% url 'sale_convert1' sale.id  %}"> &nbsp;Approved </a>
+
+                        {% if sale.status != 'Invoice' %}
                         <a class="dropdown-item " href="{% url 'sale_convert2' sale.id  %}"> &nbsp;Invoced</a>
-                        
+                        {% endif %}
                         
                     </ul>
             </div>
