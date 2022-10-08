@@ -26,6 +26,7 @@ from num2words import num2words
 import random
 
 
+
 from . models import *
 
 def index(request):
@@ -9445,6 +9446,24 @@ def getdata(request):
     return JsonResponse(json.dumps(list), content_type="application/json", safe=False)
 
 
+def getdatainv(request):
+    if request.method == 'POST':
+        cmp1 = company.objects.get(id=request.session["uid"])
+        id = request.POST['select']
+        print (id)
+
+        invitems = invoice.objects.values().filter(customername=id cid =cmp1 )
+        
+        x_data = list(invitems)
+        print (invitems)
+        
+        return JsonResponse({"status":" not","invitem":x_data })
+        # return redirect('goexpences')
+
+
+
+
+
 def getdata1(request):
     cmp1 = company.objects.get(id=request.session["uid"])
     id = request.GET.get('id')
@@ -9485,7 +9504,8 @@ def getdata1(request):
                         'price3': i.price3, 'total3': i.total3,
                         'product4': i.product4, 'hsn4': i.hsn4,
                         'description4': i.description4, 'qty4': i.qty4,
-                        'price4': i.price4, 'total4': i.total4, 'amtrecvd': i.amtrecvd,
+                        'price4': i.price4, 'total4': i.total4,
+                        'amtrecvd': i.amtrecvd,
                         'baldue': i.baldue
                         }
                 list.append(dict)

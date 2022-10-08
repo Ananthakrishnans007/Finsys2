@@ -472,8 +472,10 @@ urlpatterns = [
 
     # receipt
     path('payment_received',views.payment_received,name='payment_received'),
-    
 
+    path('getdatainv',views.getdatainv,name='getdatainv'),
+    
+    
 
     # path('pdf',views.pdf,name='pdf'),
 

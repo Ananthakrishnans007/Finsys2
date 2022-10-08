@@ -45,15 +45,22 @@
                                 <label class="scol-form-label">Email</label><br>
                                 <input type="email" name="email" id="email" class="form-control" placeholder="Email">
                             </div>
-                            <div class="col-md-4">
+                            <!-- <div class="col-md-4">
                                 <label class="scol-form-label">Find by invoice number</label><br>
                                 <input type="fbin" name="findinvoice" id="fbin" class="form-control">
-                            </div>
+                            </div> -->
                         </div>
                         <div class="row">
                             <div class="col-md-4">
                                 <label class="col-form-label">Payment Date</label>
                                 <input type="text" name="paymdate" value="{{ tod }}" class="form-control">
+                            </div>
+                            <div class="col-md-8"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label class="col-form-label">Reference No</label>
+                                <input type="text" name="ref" value="" class="form-control">
                             </div>
                             <div class="col-md-8"></div>
                         </div>
@@ -142,13 +149,13 @@
                                     </tr>
                                     </thead>
                                     <tbody id='invoicedata'>
-
+                                        {% for i in invitem %}
                                     <tr id='addr1' style="display: none;">
-                                        <td>1</td>
+                                        <td>{{ forloop.counter }}</td>
                                         <td><input type="text" name="descrip" id="descrip"
                                                    placeholder='Enter description' class="form-control"/>
                                         </td>
-                                        <td><input type="text" name='duedate' id="duedate" placeholder='Enter duedate'
+                                        <td><input type="text" name='duedate' id="duedate" placeholder='Enter duedate' 
                                                    class="form-control"/></td>
                                         <td><input type="text" name='orgamt'
                                                    placeholder='Enter original amount' id="orgamt"
@@ -160,150 +167,7 @@
                                                    placeholder='0.00'
                                                    class="form-control total" value="0"/></td>
                                     </tr>
-                                    <tr id='addr2' style="display: none;">
-                                        <td>2</td>
-                                        <td><input type="text" name='descrip1' id='descrip1'
-                                                   placeholder='Enter description' class="form-control"/>
-                                        </td>
-                                        <td><input type="text" name='duedate1' id='duedate1' placeholder='Enter duedate'
-                                                   class="form-control"/></td>
-                                        <td><input type="text" name='orgamt1' id='orgamt1'
-                                                   placeholder='Enter original amount'
-                                                   class="form-control qty" step="0" min="0"/></td>
-                                        <td><input type="number" name='openbal1' id='openbal1'
-                                                   placeholder='Enter open balance'
-                                                   class="form-control price" step="0.00" min="0"/></td>
-                                        <td><input type="number" name='payment1' id="payment1" placeholder='0.00'
-                                                   class="form-control total" onchange="addagain()" value="0"/></td>
-                                    </tr>
-                                    <tr id='addr3' style="display: none;">
-                                        <td>3</td>
-                                        <td><input type="text" name='descrip2' id='descrip2'
-                                                   placeholder='Enter description' class="form-control"/>
-                                        </td>
-                                        <td><input type="text" name='duedate2' id='duedate2' placeholder='Enter duedate'
-                                                   class="form-control"/></td>
-                                        <td><input type="text" name='orgamt2' id='orgamt2'
-                                                   placeholder='Enter original amount &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
-                                                   class="form-control qty" step="0" min="0"/></td>
-                                        <td><input type="number" name='openbal2' id='openbal2'
-                                                   placeholder='Enter open balance'
-                                                   class="form-control price" step="0.00" min="0"/></td>
-                                        <td><input type="number" name='payment2' id="payment2" placeholder='0.00'
-                                                   class="form-control total" onchange="addagain()" value="0"/></td>
-                                    </tr>
-                                    <tr id='addr4' style="display: none;">
-                                        <td>4</td>
-                                        <td><input type="text" name='descrip3' id='descrip3'
-                                                   placeholder='Enter description' class="form-control"/>
-                                        </td>
-                                        <td><input type="text" name='duedate3' id='duedate3' placeholder='Enter duedate'
-                                                   class="form-control"/></td>
-                                        <td><input type="text" name='orgamt3' id='orgamt3'
-                                                   placeholder='Enter original amount &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
-                                                   class="form-control qty" step="0" min="0"/></td>
-                                        <td><input type="number" name='openbal3' id='openbal3'
-                                                   placeholder='Enter open balance'
-                                                   class="form-control price" step="0.00" min="0"/></td>
-                                        <td><input type="number" name='payment3' id="payment3" placeholder='0.00'
-                                                   class="form-control total" onchange="addagain()" value="0"/></td>
-                                    </tr>
-                                    <tr id='addr5' style="display: none;">
-                                        <td>5</td>
-                                        <td><input type="text" name="descrip4" id="descrip4"
-                                                   placeholder='Enter description' class="form-control"/>
-                                        </td>
-                                        <td><input type="text" name='duedate4' id="duedate4" placeholder='Enter duedate'
-                                                   class="form-control"/></td>
-                                        <td><input type="text" name='orgamt4'
-                                                   placeholder='Enter original amount' id="orgamt4"
-                                                   class="form-control qty" step="0" min="0"/></td>
-                                        <td><input type="number" name='openbal4' id="openbal4"
-                                                   placeholder='Enter open balance'
-                                                   class="form-control price" step="0.00" min="0"/></td>
-                                        <td><input type="number" name='payment4' id="payment4" placeholder='0.00'
-                                                   class="form-control total" onchange="addagain()" value="0"/></td>
-                                    </tr>
-                                    <tr id='addr6' style="display: none;">
-                                        <td>6</td>
-                                        <td><input type="text" name='descrip5' id='descrip5'
-                                                   placeholder='Enter description' class="form-control"/>
-                                        </td>
-                                        <td><input type="text" name='duedate5' id='duedate5' placeholder='Enter duedate'
-                                                   class="form-control"/></td>
-                                        <td><input type="text" name='orgamt5' id='orgamt5'
-                                                   placeholder='Enter original amount'
-                                                   class="form-control qty" step="0" min="0"/></td>
-                                        <td><input type="number" name='openbal5' id='openbal5'
-                                                   placeholder='Enter open balance'
-                                                   class="form-control price" step="0.00" min="0"/></td>
-                                        <td><input type="number" name='payment5' id="payment5" placeholder='0.00'
-                                                   class="form-control total" onchange="addagain()" value="0"/></td>
-                                    </tr>
-                                    <tr id='addr7' style="display: none;">
-                                        <td>7</td>
-                                        <td><input type="text" name='descrip6' id='descrip6'
-                                                   placeholder='Enter description' class="form-control"/>
-                                        </td>
-                                        <td><input type="text" name='duedate6' id='duedate6' placeholder='Enter duedate'
-                                                   class="form-control"/></td>
-                                        <td><input type="text" name='orgamt6' id='orgamt6'
-                                                   placeholder='Enter original amount &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
-                                                   class="form-control qty" step="0" min="0"/></td>
-                                        <td><input type="number" name='openbal6' id='openbal6'
-                                                   placeholder='Enter open balance'
-                                                   class="form-control price" step="0.00" min="0"/></td>
-                                        <td><input type="number" name='payment6' id="payment6" placeholder='0.00'
-                                                   class="form-control total" onchange="addagain()" value="0"/></td>
-                                    </tr>
-                                    <tr id='addr8' style="display: none;">
-                                        <td>8</td>
-                                        <td><input type="text" name='descrip7' id='descrip7'
-                                                   placeholder='Enter description' class="form-control"/>
-                                        </td>
-                                        <td><input type="text" name='duedate7' id='duedate7' placeholder='Enter duedate'
-                                                   class="form-control"/></td>
-                                        <td><input type="text" name='orgamt7' id='orgamt7'
-                                                   placeholder='Enter original amount &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'
-                                                   class="form-control qty" step="0" min="0"/></td>
-                                        <td><input type="number" name='openbal7' id='openbal7'
-                                                   placeholder='Enter open balance'
-                                                   class="form-control price" step="0.00" min="0"/></td>
-                                        <td><input type="number" name='payment7' id="payment7" placeholder='0.00'
-                                                   class="form-control total" onchange="addagain()" value="0"/></td>
-                                    </tr>
-                                    <tr id='addr9' style="display: none;">
-                                        <td>9</td>
-                                        <td><input type="text" name="descrip8" id="descrip8"
-                                                   placeholder='Enter description' class="form-control"/>
-                                        </td>
-                                        <td><input type="text" name='duedate8' id="duedate8" placeholder='Enter duedate'
-                                                   class="form-control"/></td>
-                                        <td><input type="text" name='orgamt8'
-                                                   placeholder='Enter original amount' id="orgamt8"
-                                                   class="form-control qty" step="0" min="0"/></td>
-                                        <td><input type="number" name='openbal8' id="openbal8"
-                                                   placeholder='Enter open balance'
-                                                   class="form-control price" step="0.00" min="0"/></td>
-                                        <td><input type="number" name='payment8' id="payment8" placeholder='0.00'
-                                                   class="form-control total" onchange="addagain()" value="0"/></td>
-                                    </tr>
-                                    <tr id='addr10' style="display: none;">
-                                        <td>10</td>
-                                        <td><input type="text" name='descrip9' id='descrip9'
-                                                   placeholder='Enter description' class="form-control"/>
-                                        </td>
-                                        <td><input type="text" name='duedate9' id='duedate9' placeholder='Enter duedate'
-                                                   class="form-control"/></td>
-                                        <td><input type="text" name='orgamt9' id='orgamt9'
-                                                   placeholder='Enter original amount'
-                                                   class="form-control qty" step="0" min="0"/></td>
-                                        <td><input type="number" name='openbal9' id='openbal9'
-                                                   placeholder='Enter open balance'
-                                                   class="form-control price" step="0.00" min="0"/></td>
-                                        <td><input type="number" name='payment9' id="payment9" placeholder='0.00'
-                                                   class="form-control total" onchange="addagain()" value="0"/></td>
-                                    </tr>
+                                    {% endfor %}
                                     </tbody>
                                 </table>
                             </div>
@@ -482,13 +346,41 @@
         }
     </script>
     <script>
+        $("#select").change(function () {
+            const select = $(this).val();  
+            $.ajax({                      
+                type: "POST",
+                url: "{% url 'getdatainv' %}",
+                data: {
+                    'select': select,     
+                    'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
+                },
+                success:function(response){
+                    console.log(response)
+                    data = response.invitem
+                    for (i=0;i<data.length;i++){
+                        $('#tab_logic tbody').append(
+
+                           
+
+
+                        )
+
+
+                    }
+                }
+              
+            });
+        });
+    </script>
+    <!-- <script>
         $(document).ready(function () {
             $('#select').on('change', function () {
                 console.log('hai');
                 select = $('#select').val();
                 $.ajax({
                     type: "GET",
-                    url: "{% url 'getdata' %}",
+                    url: "{% url 'getdatainv' %}",
                     data: {id: select}
                 }).done(function (response) {
                     console.log(response, 'hai')
@@ -595,41 +487,6 @@
             })
         })
 
-        function addagain() {
-            var payment = parseFloat(document.getElementById('payment').value)
-            var payment1 = parseFloat(document.getElementById('payment1').value)
-            var payment2 = parseFloat(document.getElementById('payment2').value)
-            var payment3 = parseFloat(document.getElementById('payment3').value)
-            var payment4 = parseFloat(document.getElementById('payment4').value)
-            var payment5 = parseFloat(document.getElementById('payment5').value)
-            var payment6 = parseFloat(document.getElementById('payment6').value)
-            var payment7 = parseFloat(document.getElementById('payment7').value)
-            var payment8 = parseFloat(document.getElementById('payment8').value)
-            var payment9 = parseFloat(document.getElementById('payment9').value)
-            var paymentlistunsorted = [payment, payment1, payment2, payment3, payment4, payment5, payment6, payment7, payment8, payment9]
-            var paymentlist = []
-            for (i in paymentlistunsorted) {
-                if (isNaN(paymentlistunsorted[i]) == false) {
-                    paymentlist.push(paymentlistunsorted[i])
-                }
-            }
-            var sumpaym = 0
-            for (i in paymentlist) {
-                sumpaym += paymentlist[i]
-            }
-            var amtrcd = parseFloat(document.getElementById('amtrcvd').value)
-            if (sumpaym > amtrcd) {
-                document.getElementById('amtrcvd').value = sumpaym;
-                document.getElementById('amtoapply').value = sumpaym;
-                document.getElementById('amre').innerHTML = sumpaym;
-                document.getElementById('amtcredit').value = 0;
-            } else {
-                document.getElementById('amtrcvd').value = sumpaym;
-                document.getElementById('amtoapply').value = sumpaym;
-                document.getElementById('amre').innerHTML = sumpaym;
-                document.getElementById('amtcredit').value = 0;
-            }
-
-        }
-    </script>
+        
+    </script> -->
 {% endblock %}
