@@ -9452,10 +9452,11 @@ def getdatainv(request):
         id = request.POST['select']
         print (id)
 
-        invitems = invoice.objects.values().filter(customername=id cid =cmp1 )
+        invitems = invoice.objects.values().filter(customername=id ,cid =cmp1 )
+        
         
         x_data = list(invitems)
-        print (invitems)
+       
         
         return JsonResponse({"status":" not","invitem":x_data })
         # return redirect('goexpences')
