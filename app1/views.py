@@ -9451,14 +9451,18 @@ def getdatainv(request):
         cmp1 = company.objects.get(id=request.session["uid"])
         id = request.POST['select']
         print (id)
-
+        x = id.split()
+        x.append(" ")
+        a = x[0]
+        b = x[1]
+        if x[2] is not None:
+            b = x[1] + " " + x[2]
+        custobject = customer.objects.values().filter(firstname=a, lastname=b, cid=cmp1)
         invitems = invoice.objects.values().filter(customername=id ,cid =cmp1 )
-        
-        
         x_data = list(invitems)
-       
+        ct= list(custobject)
         
-        return JsonResponse({"status":" not","invitem":x_data })
+        return JsonResponse({"status":" not","invitem":x_data,"ct":ct })
         # return redirect('goexpences')
 
 
@@ -26945,7 +26949,19 @@ def estimate_pdf(request):
 
     return redirect('')
 
+def gopayment_received(request):
+    cmp1 = company.objects.get(id=request.session["uid"])
+    pay = payment.objects.filter(cid=cmp1).all()
 
+    context = {
+        'pay' :pay,
+        'cmp1': cmp1
+
+    }
+
+    return render(request, 'app1/gopayment_received.html',context)
+
+    
 
 
 @login_required(login_url='regcomp')
@@ -26966,6 +26982,142 @@ def payment_received(request):
         return render(request, 'app1/payment_received.html', context)
     except:
         return redirect('/')
+
+
+
+
+@login_required(login_url='regcomp')
+def paymentcreate2(request):
+    if request.method == 'POST':
+        cmp1 = company.objects.get(id=request.session["uid"])
+        pay2 = payment(customer=request.POST['customer'],
+                        email=request.POST['email'],
+                       paymdate=request.POST['paymdate'],
+                       pmethod=request.POST['pmethod'], refno='1000', depto=request.POST['depto'],
+                       amtreceived=request.POST['amtreceived'],
+                       amtapply=request.POST['amtapply'],
+                       amtcredit=request.POST['amtcredit'],
+                       cid=cmp1,
+                       referno=request.POST['ref'],
+
+
+                    #    descrip=request.POST['invno0'], duedate=request.POST['duedate0'], orgamt=request.POST['inv_amount0'],
+                    #    openbal=request.POST['openbal0'], payment=request.POST['payment0'],
+                    #    descrip1=request.POST['invno1'],
+                    #    duedate1=request.POST['duedate1'], orgamt1=request.POST['inv_amount1'],
+                    #    openbal1=request.POST['openbal1'], payment1=request.POST['payment1'],
+                    #    descrip2=request.POST['invno2'],
+                    #    duedate2=request.POST['duedate2'], orgamt2=request.POST['inv_amount2'],
+                    #    openbal2=request.POST['openbal2'],
+                    #    payment2=request.POST['payment2'], descrip3=request.POST['invno3'],
+                    #    duedate3=request.POST['duedate3'],
+                    #    orgamt3=request.POST['inv_amount3'], openbal3=request.POST['openbal3'],
+                    #    payment3=request.POST['payment3'], descrip4=request.POST['invno4'],
+                    #    duedate4=request.POST['duedate4'],
+                    #    orgamt4=request.POST['inv_amount4'], openbal4=request.POST['openbal4'],
+                    #    payment4=request.POST['payment4'], descrip5=request.POST['invno5'],
+                    #    duedate5=request.POST['duedate5'],
+                    #    orgamt5=request.POST['inv_amount5'], openbal5=request.POST['openbal5'],
+                    #    payment5=request.POST['payment5'], descrip6=request.POST['invno6'],
+                    #    duedate6=request.POST['duedate6'],
+                    #    orgamt6=request.POST['inv_amount6'], openbal6=request.POST['openbal6'],
+                    #    payment6=request.POST['payment6'], descrip7=request.POST['invno7'],
+                    #    duedate7=request.POST['duedate7'],
+                    #    orgamt7=request.POST['inv_amount7'], openbal7=request.POST['openbal7'],
+                    #    payment7=request.POST['payment7'], descrip8=request.POST['invno8'],
+                    #    duedate8=request.POST['duedate8'],
+                    #    orgamt8=request.POST['inv_amount8'], openbal8=request.POST['openbal8'],
+                    #    payment8=request.POST['payment8'], descrip9=request.POST['invno9'],
+                    #    duedate9=request.POST['duedate9'],
+                    #    orgamt9=request.POST['inv_amount9'], openbal9=request.POST['openbal9'],
+                    #    payment9=request.POST['payment9'],
+                       
+                        )
+        pay2.save()
+        pay2.refno = int(pay2.refno) + pay2.paymentid
+        pay2.save()
+
+
+        invno = request.POST.getlist("invno[]")
+        duedate = request.POST.getlist("duedate[]")
+        invamount = request.POST.getlist("inv_amount[]")
+        balamount = request.POST.getlist("openbal[]")
+        paymentamount = request.POST.getlist("payment[]")
+
+        payment_id=payment.objects.get(paymentid = pay2.paymentid )
+
+        if len(invno)==len(duedate)==len(invamount)==len(balamount)==len(paymentamount) and invno and duedate and invamount and balamount and paymentamount :
+            mapped=zip(invno,duedate,invamount,balamount,paymentamount)
+            mapped=list(mapped)
+            for ele in mapped:
+                salesorderAdd,created = paymentitems.objects.get_or_create(
+                    invno = ele[0],
+                    duedate=ele[1],
+                    invamount=ele[2],
+                    balamount=ele[3],
+                    paymentamount=ele[4],
+                    
+                    payment=payment_id)
+
+
+        amtreceived = float(request.POST['amtreceived'])
+        accont = accounts1.objects.get(
+            name='Account Receivable(Debtors)', cid=cmp1)
+        accont.balance = accont.balance - amtreceived
+        accont.save()
+        deposito = request.POST['depto']
+        try:
+            if accounts1.objects.get(name=deposito, cid=cmp1):
+                print(deposito)
+                acconut = accounts1.objects.get(name=deposito, cid=cmp1)
+                acconut.balance = acconut.balance + amtreceived
+                acconut.save()
+        except:
+            pass
+        try:
+            if accounts.objects.get(name=deposito, cid=cmp1):
+                acconut = accounts.objects.get(name=deposito, cid=cmp1)
+                acconut.balance = acconut.balance + amtreceived
+                acconut.save()
+        except:
+            pass
+        # 
+        paymetitem = paymentitems.objects.filter()               
+        try:
+            for i in paymetitem:
+                if invoice.objects.get(invoiceno=i.invno, cid=cmp1) and i.invno != 'undefined':
+                    print(deposito)
+                    invo = invoice.objects.get(invoiceno=i.invno, cid=cmp1)
+                    invo.amtrecvd = int(invo.amtrecvd) + int(i.paymentamount)
+                    invo.baldue = float(i.balamount) - float(i.paymentamount)
+                    invo.save()
+
+
+
+        
+        except:
+            pass
+        return redirect('gopayment_received')
+    else:
+        return redirect('gopayment_received')
+
+
+def search_payment_received(request):
+    cmp1 = company.objects.get(id=request.session["uid"])
+    if request.method == "POST":
+        search_str = json.loads(request.body).get('searchText')
+
+        expenses = payment.objects.filter(customer__istartswith=search_str,cid=cmp1) | payment.objects.filter(
+            paymdate__istartswith=search_str,cid=cmp1)| payment.objects.filter(
+            referno__icontains=search_str,cid=cmp1)| payment.objects.filter(
+            amtcredit__istartswith=search_str,cid=cmp1) | payment.objects.filter(
+            refno__istartswith=search_str,cid=cmp1)
+           
+        data =expenses .values()  
+        return JsonResponse(list(data),safe=False)   
+
+
+
 
 # Ananthakrishnanend
 

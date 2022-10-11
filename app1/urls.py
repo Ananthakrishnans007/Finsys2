@@ -1,5 +1,6 @@
 from django.urls import re_path,path
 from . import views
+from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = [
     re_path(r'^$', views.index, name='index'),
@@ -471,9 +472,18 @@ urlpatterns = [
     
 
     # receipt
+
+    
+    path('gopayment_received',views.gopayment_received,name='gopayment_received'),
     path('payment_received',views.payment_received,name='payment_received'),
 
     path('getdatainv',views.getdatainv,name='getdatainv'),
+
+    path('paymentcreate2',views.paymentcreate2,name='paymentcreate2'),
+
+    path('search_payment_received',csrf_exempt(views.search_payment_received),name='search_payment_received'),
+
+
     
     
 
