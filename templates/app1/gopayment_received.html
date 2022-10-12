@@ -163,7 +163,7 @@ body{
                             <tbody>
                                 {% for i in pay %}
                                 {% if i.cid_id == cmp1.cid %}
-                                    <tr  class="table-row " data-href="" >
+                                    <tr  class="table-row " data-href="{% url 'payment_view' i.paymentid %}" >
                                         <th style="text-align: center;">{{ i.paymdate  | date:'d-m-Y' }}</th>
                                         <td style="text-align: center;">{{ i.refno }}</td>
                                         <td style="text-align: center;"> {{ i.referno }}</td>
@@ -250,7 +250,7 @@ body{
                                         <td style="text-align: center;">  ${item.refno}</td>
                                         <td style="text-align: center;"> ${item.referno}</td>
                                         <td style="text-align: center;">  ${item.customer} </td>
-                                        <td style="text-align: center;"> </td>
+                                        <td style="text-align: center;"> ${item.amtapply}</td>
                                         <td style="text-align: center;">  ${item.amtcredit}</td>
                                         
                                     </tr>`

@@ -713,7 +713,12 @@ def customers(request):
                                      shipstreet=request.POST['shipstreet'], shipcity=request.POST['shipcity'],
                                      shipstate=request.POST['shipstate'],
                                      shippincode=request.POST['shippincode'], shipcountry=request.POST['shipcountry'],
-                                     cid=cmp1)
+                                     cid=cmp1,
+
+                                     opening_balance = request.POST['openbalance'],
+                                     
+                                     
+                                     )
 
                 customer1.save()
                 return redirect('/app1/customers')
@@ -772,6 +777,8 @@ def updatecustomer(request, id):
         custom.shipstate = request.POST['shipstate']
         custom.shippincode = request.POST['shippincode']
         custom.shipcountry = request.POST['shipcountry']
+        custom.opening_balance = request.POST['openbalance']
+
         custom.save()
         return redirect('gocustomers')
     except:
@@ -1451,7 +1458,11 @@ def cust(request):
                              website=request.POST['website'], mobile=request.POST['mobile'],
                              street=request.POST['street'],
                              city=request.POST['city'], state=request.POST['state'], pincode=request.POST['pincode'],
-                             country=request.POST['country'])
+                             country=request.POST['country']
+
+                             
+                             
+                             )
         customer1.save()
         custo = customer.objects.filter(cid=cmp1).all()
         context = {'customer': custo}
@@ -9458,7 +9469,7 @@ def getdatainv(request):
         if x[2] is not None:
             b = x[1] + " " + x[2]
         custobject = customer.objects.values().filter(firstname=a, lastname=b, cid=cmp1)
-        invitems = invoice.objects.values().filter(customername=id ,cid =cmp1 )
+        invitems = invoice.objects.values().filter(customername=id ,cid =cmp1,status='Approved' )
         x_data = list(invitems)
         ct= list(custobject)
         
@@ -26952,7 +26963,7 @@ def estimate_pdf(request):
 def gopayment_received(request):
     cmp1 = company.objects.get(id=request.session["uid"])
     pay = payment.objects.filter(cid=cmp1).all()
-
+    
     context = {
         'pay' :pay,
         'cmp1': cmp1
@@ -27090,6 +27101,8 @@ def paymentcreate2(request):
                     invo = invoice.objects.get(invoiceno=i.invno, cid=cmp1)
                     invo.amtrecvd = int(invo.amtrecvd) + int(i.paymentamount)
                     invo.baldue = float(i.balamount) - float(i.paymentamount)
+                    if invo.baldue == 0.0:
+                        invo.status = "Paid"
                     invo.save()
 
 
@@ -27116,6 +27129,35 @@ def search_payment_received(request):
         data =expenses .values()  
         return JsonResponse(list(data),safe=False)   
 
+
+def payment_view(request,id):
+    cmp1 = company.objects.get(id=request.session["uid"])
+    pay = payment.objects.get(paymentid=id)
+    pk =  pay.customer 
+    x = pk.split()
+    x.append(" ")
+    a = x[0]
+    b = x[1]
+    if x[2] is not None:
+        b = x[1] + " " + x[2]
+        custobject = customer.objects.get(firstname=a, lastname=b, cid=cmp1)
+    
+
+    context = {
+        'pay':pay ,
+        'cmp1':cmp1,
+        'custobject':custobject
+    }
+
+    return render(request,'app1/payment_view.html',context)
+
+
+def delete_payment(request,id):
+    cmp1 = company.objects.get(id=request.session['uid'])
+    pay = payment.objects.get(paymentid=id,cid = cmp1)
+    pay.delete()
+
+    return redirect('gopayment_received')
 
 
 

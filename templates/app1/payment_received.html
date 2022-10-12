@@ -36,9 +36,9 @@
                                             {% endif %}
                                         {% endfor %}
                                     </select>
-                                    <a href="{% url 'goaddcustpayment' %}">
+                                    <!-- <a href="{% url 'goaddcustpayment' %}">
                                         <button type="button" class="btn btn-outline-secondary ml-1">+</button>
-                                    </a>
+                                    </a> -->
                                 </div>
                             </div>
                             <div class=" col-md-4">
@@ -85,8 +85,8 @@
                                         {% for acc in accoun %}
                                             <option value="{{ acc.name }}">{{ acc.name }}</option>
                                         {% endfor %}
-                                        <option value="Deferred CGST">Deferred CGST</option>
-                                        <option value="Deferred GST Input Credit">Deferred GST Input Credit</option>
+                                        <option value="BANK">BANK</option>
+                                        <!-- <option value="Deferred GST Input Credit">Deferred GST Input Credit</option>
                                         <option value="Deferred IGST">Deferred IGST</option>
                                         <option value="Deferred Krishi Kalyan Cess Input Credit">Deferred Krishi
                                             Kalyan
@@ -104,7 +104,7 @@
                                         <option value="Service Tax Refund">Service Tax Refund</option>
                                         <option value="TDS Receivable">TDS Receivable</option>
                                         <option value="Uncategorised Asset">Uncategorised Asset</option>
-                                        <option value="Undeposited Fund">Undeposited Fund</option>
+                                        <option value="Undeposited Fund">Undeposited Fund</option> -->
                                     </select>
                                     <a href="{% url 'paymentcoacreate' %}"><button type="button" class="btn btn-outline-secondary ml-1">+</button></a>
                                 </div>
@@ -297,6 +297,7 @@
                     document.getElementById('payment0').value = opnbal
                 }
                 var bal = parseFloat(element.value) - parseFloat(document.getElementById('payment0').value);
+                var payment = parseFloat(document.getElementById('payment0').value)
             }else if(j==1){
 
                 var opnbal = parseFloat(document.getElementById('openbal0').value)

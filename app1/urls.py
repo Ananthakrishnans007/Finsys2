@@ -483,6 +483,10 @@ urlpatterns = [
 
     path('search_payment_received',csrf_exempt(views.search_payment_received),name='search_payment_received'),
 
+    path('payment_view/<int:id>',views.payment_view,name='payment_view'),
+
+    path('delete_payment/<int:id>',views.delete_payment,name='delete_payment'),
+
 
     
     

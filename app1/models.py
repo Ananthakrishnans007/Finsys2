@@ -61,6 +61,7 @@ class customer(models.Model):
     shipstate = models.CharField(max_length=100, null=True)
     shippincode = models.CharField(max_length=100, null=True)
     shipcountry = models.CharField(max_length=100, null=True)
+    opening_balance = models.CharField(max_length=100, null=True)
 
     customer_status = (
         ('Active','Active'),
@@ -1259,7 +1260,7 @@ class payment(models.Model):
 class paymentitems(models.Model):
     payment = models.ForeignKey(payment,on_delete=models.CASCADE)
     invno = models.CharField(max_length=100, default='')
-    duedate = models.DateField()
+    duedate = models.CharField(max_length=100, default='')
     invamount = models.CharField(max_length=100, default='')
     balamount = models.CharField(max_length=100, default='')
     paymentamount = models.CharField(max_length=100, default='0')

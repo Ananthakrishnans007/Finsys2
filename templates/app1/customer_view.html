@@ -31,11 +31,40 @@
             border-left: 6px solid gray;
         }
     </style>
+<script>
+    
+    function Overview() {
+            
+                document.getElementById('details').style.display = 'none';
+               
+        }
+        function Details() {
+            
+            document.getElementById('details').style.display = 'block';
+           
+    }
 
-    <div class="page-content">
-        <div class="card card-registration card-registration-2" style="border-radius: 15px;">
-            <div class="card-body p-0">
-                <div class="row g-0">
+</script>
+    <div class="page-content " >
+        <div class="card radius-15">
+            <div class="card-body">
+                <div class="card-title">
+                    <center><h2 class="mb-0">{{ customer.title }}. {{ customer.firstname }} {{ customer.lastname }}</h2></center>
+                    <hr>
+                    <div class="btn-group" style="float: left; ">
+
+                        <a style="padding: 10px; cursor: pointer;" onclick="Details()" >Details</a>
+                        <a style="padding: 10px; cursor: pointer;" onclick="Overview()"> Overview</a>
+                    </div> 
+                </div>
+            </div>
+        </div>
+        <div class="card card-registration card-registration-2" style="border-radius: 15px;"  >
+            <div class="card-body p-0" >
+               
+                <div id="details">
+                <div class="row g-0" >
+                   
                     <div class="col-lg-8">
                         <div class="p-5">
                             <div class="d-flex justify-content-between align-items-center mb-5">
@@ -157,6 +186,7 @@
                     </div>
                     <div class="col-lg-4 bg-grey">
                         <div class="p-5">
+                          
                             <h3 class="fw-bold mb-5 mt-2 pt-1">GST</h3>
                             <hr class="my-4">
                             <div class="d-flex justify-content-between mb-4">
@@ -171,6 +201,11 @@
                                 <h5 class="">PAN Number</h5>
                                 <h6>{{ customer.panno }}</h6>
                             </div>
+
+                            <div class="d-flex justify-content-between mb-4">
+                                <h5 class="">Opening Balance</h5>
+                                <h6>{{ customer.opening_balance }}</h6>
+                            </div>
                             <div class="d-flex justify-content-between mb-4">
                                 <h5 class="">status</h5>
                                 <h6>{{ customer.status }}</h6>
@@ -182,9 +217,7 @@
                                     <a href="{% url 'editcustomer' customer.customerid %}" class=" fa fa-pencil btn btn-outline-info rounded-pill text-grey mt-3 mb-3" role="button">
                                         Edit
                                     </a>&nbsp;&nbsp;&nbsp;
-                                    <!-- <a href="{% url 'deletecustomer' customer.customerid %}" >
-                                        Delete
-                                    </a> -->
+                                   
                                     <a   class="btn btn-outline-info rounded-pill text-grey mt-3 mb-3" role="button"> 
 
                                         <form  action="{% url 'deletecustomer' customer.customerid %}"   > 
@@ -197,6 +230,38 @@
                         </div>
                     </div>
                 </div>
+
+                </div>
+
+                <div id="overview">
+                    <div class="container-fluid">
+                        <!-- <div class="row"><div class="col-lg-3"><div class="text-muted">Payment due period</div> 
+                        <div>Due on Receipt</div></div>
+                         </div> -->
+                         <div class="row ml-0 mt-6"><p class="" style="margin-top: 50px; font-size: 20px;">Receivables</p></div>
+                        <table class="table table-responsive-md mt-4 table-hover">
+                            <thead>
+                            <tr>
+                                <th style="text-align: center;">CURRENCY</th>
+                                <th style="text-align: center;">OUTSTANDING RECEIVABLES</th>
+                                <th style="text-align: center;">UNUSED CREDITS</th>
+                               
+                                
+                            </tr>
+                            </thead>
+                            <tbody>
+                                </tbody>
+
+
+                </div>
+
+                </div>
+
+
+
+
+
+
             </div>
         </div>
     </div>
