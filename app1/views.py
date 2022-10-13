@@ -13499,7 +13499,7 @@ def profitandloss(request):
         except:
             pass
         toexpences = tot18 + tot19
-        context['toex'] = toexpences
+        context['toex'] = toexpencescustomer_profile
         print(texpences, toexpences)
         proandloss = ((grosprofit + totherincome) - (texpences + toexpences))
         context['prolo'] = proandloss
@@ -25057,8 +25057,70 @@ def gstverification(request):
 def customer_profile(request,id):
     cmp1 = company.objects.get(id=request.session["uid"])
     custo = customer.objects.get(customerid=id, cid=cmp1)
-    context = {'customer': custo, 'cmp1': cmp1}
+    fn =custo.firstname
+    ln = custo.lastname
+    su = fn+ ' ' +ln
+    
+    inv = invoice.objects.filter(cid=cmp1,customername=su,status='Approved')
+    
+
+    pay = payment.objects.filter(cid=cmp1,customer=su)
+    invoiced=0
+    sum=0
+    sum2=0
+    for i in inv:
+        if i.baldue:
+            sum+=i.baldue
+        if i.grandtotal:
+            invoiced += i.grandtotal  
+
+    for i in pay:
+        if i.amtcredit:
+            sum2+=i.amtcredit        
+    context = {'customer': custo,
+                'cmp1': cmp1,
+                'inv':inv,
+                'sum':sum,
+                'sum2':sum2,
+                'invoiced':invoiced,
+                
+     }
     return render(request, 'app1/customer_view.html', context)
+
+def search_resept(request,id):
+    if request.method == 'POST':
+        cmp1 = company.objects.get(id=request.session["uid"])
+        
+        se = request.POST['select']
+        print(se)
+        toda = date.today()
+        tod = toda.strftime("%Y-%m-%d")
+
+        print(tod)
+       
+        
+        custo = customer.objects.get(customerid=id, cid=cmp1)
+        fn =custo.firstname
+        ln = custo.lastname
+        su = fn+ ' ' +ln
+        invoiced=0
+        sum=0
+        sum2=0
+        if(se=="Today"):
+            inv = invoice.objects.values().filter(cid=cmp1,customername=su,status='Approved',invoicedate=tod )
+            inv2 =invoice.objects.filter(cid=cmp1,customername=su,status='Approved',invoicedate=tod )
+            for i in  inv2:
+                if i.baldue:
+                    sum+=i.baldue
+                if i.grandtotal:
+                    invoiced += i.grandtotal  
+            
+            pay = payment.objects.values().filter(cid=cmp1,customer=su,paymdate=tod)
+            x_data = list(inv)
+            ct= list(pay)
+            
+            context={"invoiced":invoiced,"sum":sum}
+            return JsonResponse({"status":" not","invitem":x_data,"ct":ct ,"invoiced":invoiced})
 
 
 def goestimate(request):

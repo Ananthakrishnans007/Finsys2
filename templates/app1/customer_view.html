@@ -30,19 +30,130 @@
         .vl {
             border-left: 6px solid gray;
         }
+        .table-row{
+        cursor:pointer;
+}
+/* hr {
+        border: 0;
+        clear:both;
+        display:block;
+        width: 96%;               
+        background-color:#000000;
+        height: 1px;
+      } */
+    .spaced>li {
+        color:black;
+        font-size:10px;
+    }
+
+    .table1{
+        font-size:10px;
+        width:100% ;
+        color:black;
+
+    }
+    .label-lg {
+            padding: .3em .6em .4em;
+            font-size: 12px;
+            color:black;
+            line-height: 1.1;
+            height: 24px
+    }
+    .widget-header{
+        background-color:#444;
+        color:white;
+        font-size:14px;
+    }
+    .widget-header:after,
+    .widget-header:before {
+            content: "";
+            display: table;
+            line-height: 0
+    }
+    .widget-header:after {
+            clear: right
+    }
+    .widget-box.collapsed>.widget-header {
+            border-bottom-width: 0
+        }
+        
+        .collapsed.fullscreen>.widget-header {
+            border-bottom-width: 1px
+        }
+        
+        .collapsed>.widget-body {
+            display: none
+        }
+        
+        .widget-header-flat {
+            background: #F7F7F7
+        }
+        
+        .widget-header-large {
+            min-height: 49px;
+            padding-left: 18px
+        }
+        
+
+        
+        .widget-header-small {
+            min-height: 31px;
+            padding-left: 10px
+        }
+        
+        .widget-header>.widget-title {
+            line-height: 36px;
+            padding: 0;
+            margin: 0;
+            display: inline;
+            font-size:13px;
+        }
+        
+        
+        
+        .widget-toolbar {
+            display: inline-block;
+            padding: 0 10px;
+            line-height: 37px;
+            float: right;
+            position: relative
+        }
+        
+        
+        
+        
+        
+       
+        
+        .widget-body {
+            background-color: #FFF
+        }
+        
+        .widget-main {
+            padding: 12px
+        }
+        
+       
     </style>
 <script>
     
     function Overview() {
             
+                document.getElementById('overview').style.display = 'block';
                 document.getElementById('details').style.display = 'none';
-               
+                document.getElementById('statment').style.display = 'none';
         }
         function Details() {
-            
+            document.getElementById('overview').style.display = 'none';
             document.getElementById('details').style.display = 'block';
-           
-    }
+            document.getElementById('statment').style.display = 'none';
+        }
+        function Statment() {
+            document.getElementById('overview').style.display = 'none';
+            document.getElementById('details').style.display = 'none';
+            document.getElementById('statment').style.display = 'block';
+               
+        }
 
 </script>
     <div class="page-content " >
@@ -55,6 +166,7 @@
 
                         <a style="padding: 10px; cursor: pointer;" onclick="Details()" >Details</a>
                         <a style="padding: 10px; cursor: pointer;" onclick="Overview()"> Overview</a>
+                        <a style="padding: 10px; cursor: pointer;" onclick="Statment()"> Statment</a>
                     </div> 
                 </div>
             </div>
@@ -233,8 +345,8 @@
 
                 </div>
 
-                <div id="overview">
-                    <div class="container-fluid">
+                <div id="overview" style="display: none;">
+                    <div class="container-fluid" >
                         <!-- <div class="row"><div class="col-lg-3"><div class="text-muted">Payment due period</div> 
                         <div>Due on Receipt</div></div>
                          </div> -->
@@ -250,7 +362,197 @@
                             </tr>
                             </thead>
                             <tbody>
+                                
+                                <tr class="table-row " data-href="{% url 'goinvoices' %}">
+                                <td style="text-align: center;">INR- Indian Rupee</td>
+                                <td style="text-align: center;">{{sum}}</td>
+                                <td style="text-align: center;">{{sum2}}</td>
+                                </tr>
+                               
+                            
                                 </tbody>
+
+                            </table>
+                </div>
+
+                </div>
+
+                <div id="statment" style="display: none;">
+                    <div class="container-fluid" >
+                       
+                        <div class="py-5">
+                            <div class="container">
+                               
+                                <i class="glyphicon glyphicon-calendar fa fa-calendar"></i> 
+                                <select id="select" class=" btn btn-outline-info dropdown-toggle text-grey" aria-label=".form-select-lg example" style="width: 15%;">
+                                    <option  selected></option>
+                                    <option value="Today">Today</option>
+                                    <option value="Yesterday">Yesterday</option>
+                                    <option></option>
+                                    <option></option>
+                                </select>
+                            
+                            </div>
+                            
+                              <div class="row hidden-md-up" style="margin-top: 15px;">
+                                <div class="col-md-9" style="margin: auto;">
+                                  <div class="card">
+                                    <div class="card-block">
+                                      <div class="card-body">
+                                        <div class="container bootdey">
+                                            <div class="row">
+                                                    <div class="col-sm-12 col-sm-offset-1" style="padding:20px;">
+                                                        <div class="widget-box">
+                                                            <div class="widget-header widget-header-large" >
+                                                                <h6 class="widget-title ">
+                                                                    Statement of Accounts<br>
+                                                                    dd/mm/yyyy to dd/mm/yyyy
+                                                                </h6>
+                                            
+                                                              
+                                                            </div>
+                                            
+                                                            <div class="widget-body">
+                                                                <div class="widget-main padding-24">
+                                                                    <div class="row"  style="padding:20px;" >
+                                                                        <div class="col-sm-12">
+                                                                            <div class="col-6">
+                                                                                <div style="width:30px;">
+                                                                                    <img src="/media/images/default.png">
+                                                                                  </div>
+                                                              
+                                                                            </div>
+                                            
+                                                                            <div class="col-6">
+                                                                                <p style="font-size:10px;color:black;"> {{cmp1.city}} <br>
+                                                                                    {{cmp1.pincode}}<br>
+                                                                                    {{cmp1.state}},India <br>
+                                                                                    {{cmp1.cemail}}
+                                                                                    <br>
+                                                                                    {{cmp1.pincode}}<br></p>
+                                                                               
+                                                                            </div>
+                                                                             <hr>
+                                                                        </div><!-- /.col -->
+                                                                       
+                                                                      
+                                                                    </div><!-- /.row -->
+                                           
+                                                                    <div class="row col-12">
+                                                                        <div class="col-6">
+                                                                            <p style="font-size:10px;color:black;">To,<br>{{customer.firstname}} {{customer.lastname}}<br>
+                                                                                {{customer.street}},{{customer.city}}<br>
+                                                                                {{customer.state}},{{customer.country}}<br>
+                                                                                {{customer.pincode }}<br>
+                                                                                {{customer.email}}
+                                                                                <br>
+                                                                                {{customer.phone}}<br></p>
+                                                                        </div>
+                                                                        <div class="col-6" >
+                                                                            <table style="font-size:10px;color:black;">
+                                                                                <tr>
+                                                                                    <td>Account Summary</td>
+                                                                                </tr>
+                                                                                {% if customer.opening_balance != ""  %}
+                                                                                <tr>
+                                                                                    <td>Opening balance</td>
+                                                                                    <td>{{customer.opening_balance}}</td>
+                                                                                </tr>
+                                                                                {% endif %}
+                                                                                <tr>
+                                                                                    <td>Invoiced Amount</td>
+                                                                                    <td>  <input type="text" id="invamount" style="border: none;"></td>
+                                                                                </tr>
+                                                                                <tr style="border-bottom: 1px solid black; width:100%;">
+                                                                                    <td>Amount received</td>
+                                                                                    <td>0.00</td>
+                                                                                </tr>
+                                                                                <tr >
+                                                                                    <td>Balance Due</td>
+                                                                                    <td>0.00</td>
+                                                                                </tr>
+                        
+                                                                            </table>
+                                                                       
+                                                                    </div>
+                                                                </div><br>
+                                                                <div class="col-md-12">
+                                                                    <table border="0" class=" table-striped" width="100%" style="font-size:10px;color:black;
+                                                                    ">
+                                                                    <thead class="thead-dark">
+                                                                        <tr >
+                                                                           <th>Date</th>
+                                                                           <th>Transactions</th>
+                                                                           <th>Details</th>
+                                                                           <th>Amount</th>
+                                                                           <th>Payments</th>
+                                                                           <th>Balance</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td>&nbsp</td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>&nbsp</td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>&nbsp</td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>&nbsp</td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                        </tr>
+                                                                        <br>
+                                                                        <tr>
+                                                                            <td colspan="5">Balance Due</td>
+                                                                            <td>0.00</td>
+                        
+                                                                        </tr>
+                                                                    </table>
+                                                                </div>
+                                                                   
+                                            
+                                                                    <div class="hr hr8 hr-double hr-dotted"></div>
+                                            
+                                                                    
+                                                            
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>    
+                                    
+                                      
+                                     
+                                    </div>
+                                  </div>
+                                </div>
+                               
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        </div>  
 
 
                 </div>
@@ -265,9 +567,60 @@
             </div>
         </div>
     </div>
+
+    <script>
+        $("#select").change(function () {
+            const select = $(this).val();  
+            $.ajax({                      
+                type: "POST",
+                url: "{% url 'search_resept' customer.customerid %}",
+                data: {
+                    'select': select,    
+                    'csrfmiddlewaretoken':$('input[name=csrfmiddlewaretoken]').val(),
+                },
+                success:function(response){
+                    console.log(response)
+                    data = response.invitem
+                    data2 = response.invoiced
+                    
+                    for (i=0;i<data.length;i++){
+                        
+                        $('#tab_logic tbody').append(
+
+                                `
+                             
+                                    `
+                                
+                            )
+                            
+                            
+
+
+                    }
+                    $('#tab_logic tbody').append(
+
+                                `
+                             
+                                    `
+                                
+                            )
+                    document.getElementById('invamount').value = data2
+                    
+                  
+                }
+              
+            });
+        });
+        </script>
     
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
+    <script>
+        $(document).ready(function($) {
+            $(".table-row").dblclick(function() {
+                window.document.location = $(this).data("href");
+            });
+        });
+    </script>
     <script>
 
 $('.delete').click(function(event) {

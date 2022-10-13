@@ -487,6 +487,11 @@ urlpatterns = [
 
     path('delete_payment/<int:id>',views.delete_payment,name='delete_payment'),
 
+    path('search_resept/<int:id>',views.search_resept,name='search_resept'),
+
+
+    
+
 
     
     
