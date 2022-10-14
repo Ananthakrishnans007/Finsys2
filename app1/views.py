@@ -25060,14 +25060,16 @@ def customer_profile(request,id):
     fn =custo.firstname
     ln = custo.lastname
     su = fn+ ' ' +ln
-    
-    inv = invoice.objects.filter(cid=cmp1,customername=su,status='Approved')
+    toda = date.today()
+    tod = toda.strftime("%Y-%m-%d")
+    inv = invoice.objects.filter(cid=cmp1,customername=su,status='Approved',invoicedate=tod)
     
 
-    pay = payment.objects.filter(cid=cmp1,customer=su)
+    pay = payment.objects.filter(cid=cmp1,customer=su,paymdate=tod)
     invoiced=0
     sum=0
     sum2=0
+    re=0
     for i in inv:
         if i.baldue:
             sum+=i.baldue
@@ -25076,13 +25078,28 @@ def customer_profile(request,id):
 
     for i in pay:
         if i.amtcredit:
-            sum2+=i.amtcredit        
+            sum2+=i.amtcredit 
+        if i.amtreceived:
+           re+=i.amtreceived
+
+
+    invs = invoice.objects.filter(cid=cmp1,customername=su,).all() 
+    payme = payment.objects.filter(cid=cmp1,customer=su,).all()  
+    est1 = estimate.objects.filter(cid=cmp1,customer=su,).all()   
+    sel1 = salesorder.objects.filter(cid=cmp1,salename=su,).all() 
     context = {'customer': custo,
                 'cmp1': cmp1,
                 'inv':inv,
                 'sum':sum,
                 'sum2':sum2,
                 'invoiced':invoiced,
+                'tod':tod,
+                're':re,
+                'pay':pay,
+                'invs':invs,
+                'payme':payme,
+                'est1':est1,
+                'sel1':sel1,
                 
      }
     return render(request, 'app1/customer_view.html', context)
@@ -25091,13 +25108,12 @@ def search_resept(request,id):
     if request.method == 'POST':
         cmp1 = company.objects.get(id=request.session["uid"])
         
-        se = request.POST['select']
-        print(se)
-        toda = date.today()
-        tod = toda.strftime("%Y-%m-%d")
+        # se = request.POST['select']
 
-        print(tod)
-       
+        fst =  request.POST['fd']
+        lst = request.POST['ld']
+        print(fst)
+        print(lst)
         
         custo = customer.objects.get(customerid=id, cid=cmp1)
         fn =custo.firstname
@@ -25106,21 +25122,32 @@ def search_resept(request,id):
         invoiced=0
         sum=0
         sum2=0
-        if(se=="Today"):
-            inv = invoice.objects.values().filter(cid=cmp1,customername=su,status='Approved',invoicedate=tod )
-            inv2 =invoice.objects.filter(cid=cmp1,customername=su,status='Approved',invoicedate=tod )
-            for i in  inv2:
-                if i.baldue:
-                    sum+=i.baldue
-                if i.grandtotal:
-                    invoiced += i.grandtotal  
+        re=0
+        
+        inv = invoice.objects.values().filter(cid=cmp1,customername=su,status='Approved',invoicedate__gte=fst,invoicedate__lte=lst)
+        inv2 =invoice.objects.filter(cid=cmp1,customername=su,status='Approved',invoicedate__gte=fst,invoicedate__lte=lst)
+        for i in  inv2:
+            if i.baldue:
+                sum+=i.baldue
+            if i.grandtotal:
+                invoiced += i.grandtotal  
             
-            pay = payment.objects.values().filter(cid=cmp1,customer=su,paymdate=tod)
-            x_data = list(inv)
-            ct= list(pay)
+        pay = payment.objects.values().filter(cid=cmp1,customer=su,paymdate__gte=fst,paymdate__lte=lst,)
+        pay2 = payment.objects.filter(cid=cmp1,customer=su,paymdate__gte=fst,paymdate__lte=lst,)
+        for i in pay2:
+            if i.amtcredit:
+                sum2+=i.amtcredit
+            if i.amtreceived:
+                re+=i.amtreceived  
+
+       
+        
+        x_data = list(inv)
+        ct= list(pay)
+        
             
-            context={"invoiced":invoiced,"sum":sum}
-            return JsonResponse({"status":" not","invitem":x_data,"ct":ct ,"invoiced":invoiced})
+            
+        return JsonResponse({"status":" not","invitem":x_data,"ct":ct ,"invoiced":invoiced,'re':re,'sum':sum,"df":fst,"dl":lst})
 
 
 def goestimate(request):
@@ -27132,7 +27159,14 @@ def paymentcreate2(request):
                     
                     payment=payment_id)
 
-
+        pyit = paymentitems.objects.filter(payment=pay2.paymentid)
+        print(pyit)
+        amt =0
+        for m in pyit:
+            if m.balamount:
+                amt+=m.balamount
+        pay2.balance = amt     
+        pay2.save()
         amtreceived = float(request.POST['amtreceived'])
         accont = accounts1.objects.get(
             name='Account Receivable(Debtors)', cid=cmp1)
@@ -27155,7 +27189,9 @@ def paymentcreate2(request):
         except:
             pass
         # 
-        paymetitem = paymentitems.objects.filter()               
+        paymetitem = paymentitems.objects.filter()
+        
+        pay2.save()              
         try:
             for i in paymetitem:
                 if invoice.objects.get(invoiceno=i.invno, cid=cmp1) and i.invno != 'undefined':
@@ -27165,7 +27201,9 @@ def paymentcreate2(request):
                     invo.baldue = float(i.balamount) - float(i.paymentamount)
                     if invo.baldue == 0.0:
                         invo.status = "Paid"
+        
                     invo.save()
+        
 
 
 

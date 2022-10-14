@@ -1196,10 +1196,12 @@ class payment(models.Model):
     pmethod = models.CharField(max_length=100)
     refno = models.CharField(max_length=100)
     depto = models.CharField(max_length=100)
-    amtreceived = models.CharField(max_length=100)
+    amtreceived = models.FloatField()
     amtapply = models.CharField(max_length=100, default='0')
     amtcredit = models.FloatField()
     referno = models.CharField(max_length=255, )
+    balance= models.FloatField(default='0')
+    
     # descrip = models.CharField(max_length=100, default='')
     # duedate = models.CharField(max_length=10, default='')
     # orgamt = models.CharField(max_length=100, default='0')
@@ -1262,7 +1264,7 @@ class paymentitems(models.Model):
     invno = models.CharField(max_length=100, default='')
     duedate = models.CharField(max_length=100, default='')
     invamount = models.CharField(max_length=100, default='')
-    balamount = models.CharField(max_length=100, default='')
+    balamount = models.FloatField()
     paymentamount = models.CharField(max_length=100, default='0')
     
 
