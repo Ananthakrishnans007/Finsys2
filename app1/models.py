@@ -1,4 +1,5 @@
 from distutils.command.upload import upload
+from email.policy import default
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -1197,7 +1198,7 @@ class payment(models.Model):
     refno = models.CharField(max_length=100)
     depto = models.CharField(max_length=100)
     amtreceived = models.FloatField()
-    amtapply = models.CharField(max_length=100, default='0')
+    amtapply = models.FloatField()
     amtcredit = models.FloatField()
     referno = models.CharField(max_length=255, )
     balance= models.FloatField(default='0')
@@ -1267,6 +1268,18 @@ class paymentitems(models.Model):
     balamount = models.FloatField()
     paymentamount = models.CharField(max_length=100, default='0')
     
+
+class cust_statment(models.Model):
+    customer = models.CharField(max_length=255, default='')
+    inv = models.ForeignKey(invoice,on_delete=models.CASCADE,blank=True,null=True)
+    pay=models.ForeignKey(payment,on_delete=models.CASCADE,blank=True,null=True)
+    Date = models.DateField()
+    Transactions = models.CharField(max_length=255,blank=True,null=True)
+    Details	= models.CharField(max_length=255,blank=True,null=True)
+    Amount	= models.FloatField(blank=True,null=True)
+    Payments=models.FloatField(blank=True,null=True)	
+    Balance=models.FloatField(blank=True,null=True)
+
 
 
 # Rahanas -------------

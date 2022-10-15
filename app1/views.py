@@ -25066,6 +25066,24 @@ def customer_profile(request,id):
     
 
     pay = payment.objects.filter(cid=cmp1,customer=su,paymdate=tod)
+
+    statment = cust_statment.objects.filter(customer=su,Date=tod)
+    bal=0
+    for i in statment:
+        if i.Transactions =="Invoice":
+            
+            i.Balance = bal + i.Amount
+            if i.Balance:
+                bal += i.Balance
+        if i.Transactions =="Payment Received":
+            i.Balance = bal-i.Payments
+            
+
+        i.save() 
+    print(bal)     
+        
+
+
     invoiced=0
     sum=0
     sum2=0
@@ -25079,8 +25097,8 @@ def customer_profile(request,id):
     for i in pay:
         if i.amtcredit:
             sum2+=i.amtcredit 
-        if i.amtreceived:
-           re+=i.amtreceived
+        if i.amtapply:
+           re+=i.amtapply
 
 
     invs = invoice.objects.filter(cid=cmp1,customername=su,).all() 
@@ -25100,6 +25118,8 @@ def customer_profile(request,id):
                 'payme':payme,
                 'est1':est1,
                 'sel1':sel1,
+                'statment':statment,
+
                 
      }
     return render(request, 'app1/customer_view.html', context)
@@ -25137,9 +25157,8 @@ def search_resept(request,id):
         for i in pay2:
             if i.amtcredit:
                 sum2+=i.amtcredit
-            if i.amtreceived:
-                re+=i.amtreceived  
-
+            if i.amtapply:
+                re+=i.amtapply
        
         
         x_data = list(inv)
@@ -26956,6 +26975,15 @@ def invoice_status(request,id):
 
     inoi.status = 'Approved'
     inoi.save()
+
+    statment = cust_statment()
+    statment.customer =inoi.customername 
+    statment.inv =inoi
+    
+    statment.Date = inoi.invoicedate
+    statment.Transactions = "Invoice"
+    statment.Amount = inoi.grandtotal
+    statment.save()
     return redirect(invoice_view,id)
 
 
@@ -27136,6 +27164,20 @@ def paymentcreate2(request):
         pay2.save()
         pay2.refno = int(pay2.refno) + pay2.paymentid
         pay2.save()
+
+
+        statment2=cust_statment()
+        statment2.customer = pay2.customer
+        statment2.Transactions = "Payment Received"
+        statment2.pay = pay2
+        statment2.Date = pay2.paymdate
+        statment2.Payments = pay2.amtapply
+        statment2.save()
+        
+        
+
+
+
 
 
         invno = request.POST.getlist("invno[]")
