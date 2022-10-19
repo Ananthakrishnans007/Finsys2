@@ -62,7 +62,7 @@ class customer(models.Model):
     shipstate = models.CharField(max_length=100, null=True)
     shippincode = models.CharField(max_length=100, null=True)
     shipcountry = models.CharField(max_length=100, null=True)
-    opening_balance = models.CharField(max_length=100, null=True)
+    opening_balance = models.FloatField()
 
     customer_status = (
         ('Active','Active'),
@@ -1271,13 +1271,15 @@ class paymentitems(models.Model):
 
 class cust_statment(models.Model):
     customer = models.CharField(max_length=255, default='')
+    cid = models.ForeignKey(company, on_delete=models.CASCADE)
     inv = models.ForeignKey(invoice,on_delete=models.CASCADE,blank=True,null=True)
     pay=models.ForeignKey(payment,on_delete=models.CASCADE,blank=True,null=True)
     Date = models.DateField()
     Transactions = models.CharField(max_length=255,blank=True,null=True)
     Details	= models.CharField(max_length=255,blank=True,null=True)
-    Amount	= models.FloatField(blank=True,null=True)
-    Payments=models.FloatField(blank=True,null=True)	
+    Details2= models.CharField(max_length=255,blank=True,null=True)
+    Amount	= models.FloatField(default='',null=True)
+    Payments=models.FloatField(default='',null=True)	
     Balance=models.FloatField(blank=True,null=True)
 
 

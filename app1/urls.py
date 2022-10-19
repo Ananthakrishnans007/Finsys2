@@ -489,6 +489,11 @@ urlpatterns = [
 
     path('search_resept/<int:id>',views.search_resept,name='search_resept'),
 
+    path('account_transactions/<str:id>',views.account_transactions,name='account_transactions'),
+
+
+    
+
 
     
 

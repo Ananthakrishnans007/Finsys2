@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 from curses.ascii import HT
 from http.client import HTTPResponse
 from multiprocessing import context
@@ -25068,13 +25069,12 @@ def customer_profile(request,id):
     pay = payment.objects.filter(cid=cmp1,customer=su,paymdate=tod)
 
     statment = cust_statment.objects.filter(customer=su,Date=tod)
-    bal=0
+    bal=custo.opening_balance
     for i in statment:
         if i.Transactions =="Invoice":
             
             i.Balance = bal + i.Amount
-            if i.Balance:
-                bal += i.Balance
+            bal = i.Balance
         if i.Transactions =="Payment Received":
             i.Balance = bal-i.Payments
             
@@ -25099,8 +25099,20 @@ def customer_profile(request,id):
             sum2+=i.amtcredit 
         if i.amtapply:
            re+=i.amtapply
+    
+    resum = 0
+    invo2= invoice.objects.filter(cid=cmp1,customername=su,status='Approved')
+    for i in invo2:
+        if i.baldue:
+            resum +=i.baldue
+         
 
 
+
+
+
+
+    baldue=invoiced+custo.opening_balance
     invs = invoice.objects.filter(cid=cmp1,customername=su,).all() 
     payme = payment.objects.filter(cid=cmp1,customer=su,).all()  
     est1 = estimate.objects.filter(cid=cmp1,customer=su,).all()   
@@ -25119,6 +25131,8 @@ def customer_profile(request,id):
                 'est1':est1,
                 'sel1':sel1,
                 'statment':statment,
+                'baldue':baldue,
+                'resum':resum,
 
                 
      }
@@ -25151,7 +25165,7 @@ def search_resept(request,id):
                 sum+=i.baldue
             if i.grandtotal:
                 invoiced += i.grandtotal  
-            
+          
         pay = payment.objects.values().filter(cid=cmp1,customer=su,paymdate__gte=fst,paymdate__lte=lst,)
         pay2 = payment.objects.filter(cid=cmp1,customer=su,paymdate__gte=fst,paymdate__lte=lst,)
         for i in pay2:
@@ -25159,14 +25173,39 @@ def search_resept(request,id):
                 sum2+=i.amtcredit
             if i.amtapply:
                 re+=i.amtapply
+        baldue=invoiced+custo.opening_balance -re 
+        statment2 = cust_statment.objects.all()
+        for j in statment2:
+            if j.Transactions =="Invoice":
+                j.Details2 = "INV-"+" "+str(j.inv.invoiceno) +" "+ "due on" +" "+ str(j.inv.duedate)
+            if j.Transactions =="Payment Received":
+                 j.Details2 = "₹"+ str(j.Payments) +" "+"payment"
+                      
+            j.save()          
        
+        statment = cust_statment.objects.filter(customer=su)
+        bal=custo.opening_balance
         
+        for i in statment:
+            if i.Transactions =="Invoice":
+            
+                i.Balance = bal + i.Amount
+            
+                bal = i.Balance
+            print(bal)    
+            if i.Transactions =="Payment Received":
+                i.Balance = bal - i.Payments
+  
+            i.save() 
+        print(bal)      
+        
+        stat = cust_statment.objects.values().filter(customer=su,Date__gte=fst,Date__lte=lst,)
         x_data = list(inv)
         ct= list(pay)
-        
+        st=list(stat)
             
             
-        return JsonResponse({"status":" not","invitem":x_data,"ct":ct ,"invoiced":invoiced,'re':re,'sum':sum,"df":fst,"dl":lst})
+        return JsonResponse({"status":" not","invitem":x_data,"ct":ct ,"invoiced":invoiced,'re':re,'sum':sum,"df":fst,"dl":lst,"st":st,"baldue":baldue,})
 
 
 def goestimate(request):
@@ -26978,6 +27017,8 @@ def invoice_status(request,id):
 
     statment = cust_statment()
     statment.customer =inoi.customername 
+
+    statment.cid = cmp1
     statment.inv =inoi
     
     statment.Date = inoi.invoicedate
@@ -27168,6 +27209,7 @@ def paymentcreate2(request):
 
         statment2=cust_statment()
         statment2.customer = pay2.customer
+        statment.cid = cmp1
         statment2.Transactions = "Payment Received"
         statment2.pay = pay2
         statment2.Date = pay2.paymdate
@@ -27301,7 +27343,54 @@ def delete_payment(request,id):
 
     return redirect('gopayment_received')
 
+def account_transactions(request,id):
+    cmp1 = company.objects.get(id=request.session["uid"])
 
+
+    x = id.split()
+    x.append(" ")
+    a = x[0]
+    b = x[1]
+    
+    custobject = customer.objects.get(firstname=a, lastname=b, cid=cmp1)
+    opnbal =custobject.opening_balance
+    print(opnbal) 
+    
+    statment = cust_statment.objects.filter(customer=id,cid=cmp1)
+    debit=0
+    credit=0
+    total1 = 0
+    
+
+    for i in statment :
+        if i.Amount:
+            debit+=i.Amount
+        if i.Payments:
+            credit+=i.Payments
+
+    total1=debit-credit          
+
+    bal=custobject.opening_balance
+    for i in statment:
+        if i.Transactions =="Invoice":
+            
+            i.Balance = bal + i.Amount
+            bal = i.Balance
+        if i.Transactions =="Payment Received":
+            i.Balance = bal-i.Payments
+            
+
+        i.save() 
+    print(bal)
+
+    context = {
+        "statment":statment,
+        "cmp1":cmp1,
+        'total1':total1,
+        'credit':credit,
+    }
+
+    return render(request,'app1/account_transactions.html',context)
 
 # Ananthakrishnanend
 
