@@ -563,12 +563,12 @@
                                                                                 <tr>
                                                                                     <td>Account Summary</td>
                                                                                 </tr>
-                                                                                {% if customer.opening_balance != ""  %}
+                                                                                
                                                                                 <tr>
                                                                                     <td>Opening balance</td>
-                                                                                    <td>{{customer.opening_balance}}</td>
+                                                                                    <td> <input type="text" id="open"  value="{{bal_amount}}" style="border: none;"></td>
                                                                                 </tr>
-                                                                                {% endif %}
+                                                                                
                                                                                 <tr>
                                                                                     <td>Invoiced Amount</td>
                                                                                     <td>  <input type="text" id="invamount" value="{{invoiced}}" style="border: none;"></td>
@@ -579,7 +579,7 @@
                                                                                 </tr>
                                                                                 <tr >
                                                                                     <td>Balance Due</td>
-                                                                                    <td>  <input type="text" id="due" value="{{sum}}" style="border: none;"></td>
+                                                                                    <td>  <input type="text" id="due" value="{{baldue}}" style="border: none;"></td>
                                                                                 </tr>
                         
                                                                             </table>
@@ -599,6 +599,17 @@
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody >
+
+                                                                        <tr >
+                                                                            <td>{{tod }}</td>
+                                                                            <td>***Opening Balance***</td>
+                                                                            <td></td>
+                                                                            <td>{{bal_amount}}</td>
+                                                                            <td></td>
+                                                                            <td>{{bal_amount}}</td>
+                                                                         </tr>
+
+
                                                                         {% for i in statment %}
                                                                         <tr>
                                                                             <td>{{i.Date | date:'d-m-Y'}}</td>
@@ -631,7 +642,7 @@
                                                                         <br>
                                                                         <tr>
                                                                             <td colspan="5">Balance Due</td>
-                                                                            <td>{{sum}}</td>
+                                                                            <td>{{baldue}}</td>
                         
                                                                         </tr>
                                                                         </tbody >
@@ -929,6 +940,25 @@ document.getElementById('saletable').style.display = 'block';
                     data7 = response.invitem
                     data8 = response.st
                     data9 = response.baldue
+                    data10 = response.opening
+
+                    data11 = response.fst
+
+
+                    $('#tab_logic tbody').append(
+
+                    `<tr>
+                    <td>${data11}</td>
+                    <td>***Opening Balance***</td>
+                    <td></td>
+                    <td>${data10}</td>
+                    <td></td>
+                    <td>${data10}</td>
+                    </tr> `
+
+
+                    )
+                    
                     
                     for (i=0;i<data8.length;i++){
                         
@@ -985,6 +1015,7 @@ document.getElementById('saletable').style.display = 'block';
                     document.getElementById('due').value = data9
                     document.getElementById('df').value = data5 
                     document.getElementById('dl').value = data6
+                    document.getElementById('open').value = data10
 
                     
                     

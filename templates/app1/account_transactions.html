@@ -63,7 +63,41 @@ body{
   left: 50%; */
   /* transform: translate(-50%, -50%); */
 }
+
       </style>
+
+      
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+  <script src="https://pingendo.com/assets/bootstrap/bootstrap-4.0.0-alpha.6.min.js"></script>
+
+
+  <script>
+    function printDiv() {
+        var divContents = document.getElementById("GFG").innerHTML;
+        var a = window.open( '', 'height=1000, width=2000');
+        a.document.write('<html>');
+        a.document.write(divContents);
+        a.document.write('</body></html>');
+        a.document.close();
+        a.print();
+    }
+</script>
+
+<script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+
+<script type="text/javascript">function ExportToExcel(type, fn, dl) {
+       var elt = document.getElementById('tbl_exporttable_to_xls');
+       var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
+       return dl ?
+         XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }):
+         XLSX.writeFile(wb, fn || ('Account Transactions.' + (type || 'xlsx')));
+    }</script>
+
+
+
+
+
         <div class="page-content">
             <div class="card radius-15">
                 <div class="card-body">
@@ -73,11 +107,61 @@ body{
                     </div>
                 </div>
             </div>
+
+            <div class="card radius-15">
+                <div class="card-body">
+                    <form action="{% url 'account_transactions1'%}" method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <label style="text-align:left ">Report period</label><br>
+                                <input type="text" name="cust" value="{{cust2}}" hidden>
+                                <select class="form-control" id="filterstyle" onchange="filterDate(this)"
+                                        list="hosting-plan"
+                                        name="reportperiod" type="text">
+                                    <option><span class="bx bx-right-arrow-alt"></span>All dates</option>
+                                    <option><span class="bx bx-right-arrow-alt"></span>Custom</option>
+                                    </select>
+                            </div>
+                            <div class="col-sm-4" id="frdate" style="display: none;">
+                                <label for="from">From</label>
+                                <input type="date" class="form-control" name="fdate"
+                                       style="background-color: #2f516f;color: white;">
+                            </div>
+                            <div class="col-sm-4" id="todate" style="display: none;">
+                                <label for="from">To</label>
+                                <input type="date" class="form-control" name="ldate"
+                                       style="background-color: #2f516f;color: white;">
+                            </div>
+                            <div class="col-md-3"></div>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-6"></div>
+                            <!-- <div class="col-md-2">
+    
+                            </div> -->
+                            
+                            <div class="col-md-3">
+    
+                                <button class="btn btn-outline-info  rounded-pill w-100" type="submit">Search</button>
+                            </div>
+                            <div class="col-md-3" >
+                                <button onclick="printDiv()">Print</button>
+
+                                <button onclick="ExportToExcel('xlsx')">Export to excel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
             <div class="card radius-15">
                 <div class="card-body">
                     
                     <div class="container-fluid">
-                        <table class="table table-responsive-md mt-4 table-hover">
+                        <div id="GFG" >
+                        <table class="table table-responsive-md mt-4 table-hover" id="tbl_exporttable_to_xls" >
                             <thead>
                             <tr>
                                 <th style="text-align: center;">Date</th>
@@ -94,14 +178,30 @@ body{
                             <tbody>
                                
                                     <tr class="table-row " data-href="" >
-                                        <td style="text-align: center;"> As On </td>
+                                        <td style="text-align: center;"> As On 
+
+                                            {% if fdate != "" %}
+
+                                            {{fdate}}
+                                            {% else %}
+
+                                            
+                                            01-04-{% now 'Y' %}
+
+                                            {% endif %}
+                                        
+                                        </td>
                                         <td style="text-align: center;">Opening Balance</td>
                                         <td style="text-align: center;"> </td>
                                         <td style="text-align: center;"></td>
                                         <td style="text-align: center;"> </td>
                                         <td style="text-align: center;"></td>
+                                        <td style="text-align: center;">
+                                            {% if prebalance %}
+                                            ₹{{prebalance}}
+                                            {% endif %}
+                                        </td>
                                         <td style="text-align: center;"></td>
-                                        <td style="text-align: center;">₹0.0</td>
                                         <td style="text-align: center;"></td>
                                         
                                     </tr>
@@ -111,6 +211,7 @@ body{
                                         <td style="text-align: center;"> {{i.Date | date:'d-m-Y'}} </td>
                                         <td style="text-align: center;">Accounts Receivable</td>
                                         <td style="text-align: center;"> {{i.customer}}</td>
+                                        
                                         <td style="text-align: center;">
                                             {% if i.Transactions == "Payment Received"  %}
                                             Customer Payment
@@ -119,13 +220,10 @@ body{
                                             {% endif %}
                                         </td>
                                         <td style="text-align: center;"> </td>
-                                        <td style="text-align: center;">{% if i.Amount %}
-                                            {{i.Amount}}
-                                            {% endif %}
-                                        </td>
+                                        <td style="text-align: center;"></td>
                                         <td style="text-align: center;">
-                                            {% if i.Payments %}
-                                            {{i.Payments}}
+                                            {% if i.Amount %}
+                                            {{i.Amount}}
                                             {% endif %}
                                         </td>
                                         <td style="text-align: center;">
@@ -150,10 +248,22 @@ body{
 
                                 {% endif %}
                             {% endfor %}
+
+                            {% if value != "" %}
                             <tr class="table-row "  >
                                 <td style="text-align: center;"> </td>
                                 <td colspan="2" style="text-align: center;">Total Debits and Credits 
-                                    <!-- (01/10/2022 - 31/10/2022)  -->
+
+                                    {% if fdate != "" %}
+
+                                    ( {{fdate}}  - {{ldate}} ) 
+                                            {% else %}
+
+                                            
+                                            ( 01-04-{% now 'Y' %} - {{to}} ) 
+
+                                            {% endif %}
+                                    
                                 </td>
                                 
                                 <td style="text-align: center;"></td>
@@ -164,8 +274,21 @@ body{
                                 <td style="text-align: center;"></td>
                                 
                             </tr>
+                            {% endif %}
+                            
                             <tr class="table-row " data-href="" >
-                                <td style="text-align: center;"> As On </td>
+                                <td style="text-align: center;"> As On 
+                                    {% if ldate != "" %}
+
+                                    {{ldate}}
+                                    {% else %}
+
+                                    
+                                    {{to}}
+
+                                    {% endif %}
+                                
+                                </td>
                                 <td style="text-align: center;">Closing Balance</td>
                                 <td style="text-align: center;"> </td>
                                 <td style="text-align: center;"></td>
@@ -178,6 +301,7 @@ body{
                             </tr>
                             </tbody>
                         </table>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -254,7 +378,17 @@ $('.delete').click(function(event) {
 
     </script>
 
-        
+       <script>
+         function filterDate(element) {
+            if (element.value == 'Custom') {
+                document.getElementById('frdate').style.display = 'block';
+                document.getElementById('todate').style.display = 'block';
+            } else {
+                document.getElementById('frdate').style.display = 'none';
+                document.getElementById('todate').style.display = 'none';
+            }
+        }
+       </script> 
         
        
     {% endif %}

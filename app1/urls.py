@@ -491,6 +491,11 @@ urlpatterns = [
 
     path('account_transactions/<str:id>',views.account_transactions,name='account_transactions'),
 
+    path('account_transactions1',views.account_transactions1,name='account_transactions1'),
+
+
+    
+
 
     
 

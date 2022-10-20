@@ -702,6 +702,8 @@ def customers(request):
                               f"Customer {firstname} {lastname} already exists. Please provide a different name.")
                 return redirect('gocustomers')
             else:
+                toda = date.today()
+                tod = toda.strftime("%Y-%m-%d")
                 customer1 = customer(title=request.POST['title'], firstname=request.POST['firstname'],
                                      lastname=request.POST['lastname'], company=request.POST['company'],
                                      location=request.POST['location'], gsttype=request.POST['gsttype'],
@@ -717,11 +719,44 @@ def customers(request):
                                      cid=cmp1,
 
                                      opening_balance = request.POST['openbalance'],
+
+                                     date= tod,
                                      
                                      
                                      )
 
                 customer1.save()
+
+                if customer1.opening_balance != "":
+
+                    add_cust_stat=cust_statment(
+
+                    customer = customer1.firstname +" "+ customer1.lastname,
+
+                    cid  = cmp1,
+
+                    
+
+                    Date = customer1.date,
+
+                    Transactions="Customer Opening Balance",
+
+                    Amount= customer1.opening_balance,
+
+                )
+
+                
+
+                add_cust_stat.save()
+
+                    
+
+
+
+
+
+
+
                 return redirect('/app1/customers')
         customers = customer.objects.filter(cid=cmp1).all()
         context = {'customers': customers, 'cmp1': cmp1}
@@ -14900,12 +14935,16 @@ def profitandlossfiltered(request):
 def accreceivables(request):
     try:
         cmp1 = company.objects.get(id=request.session["uid"])
+
         inv = invoice.objects.filter(cid=cmp1).values(
             'customername').annotate(t1=Sum('baldue'))
         cre = credit.objects.filter(cid=cmp1).values(
             'customer').annotate(t1=Coalesce(Sum('grndtot'), 0))
         tot = invoice.objects.filter(
             cid=cmp1).all().aggregate(t2=Sum('baldue'))
+
+        
+
         tot1 = credit.objects.filter(
             cid=cmp1).all().aggregate(t2=Sum('grndtot'))
         context = {'invoice': inv, 'cmp1': cmp1,
@@ -14927,6 +14966,10 @@ def accreceivables1(request):
         elif filmeth == 'Custom':
             fromdate = request.POST['fper']
             todate = request.POST['tper']
+
+            print(fromdate)
+
+
         elif filmeth == 'This month':
             fromdate = toda.strftime("%Y-%m-01")
             todate = toda.strftime("%Y-%m-31")
@@ -25063,24 +25106,46 @@ def customer_profile(request,id):
     su = fn+ ' ' +ln
     toda = date.today()
     tod = toda.strftime("%Y-%m-%d")
+    to = toda.strftime("%d-%m-%Y")
     inv = invoice.objects.filter(cid=cmp1,customername=su,status='Approved',invoicedate=tod)
     
 
     pay = payment.objects.filter(cid=cmp1,customer=su,paymdate=tod)
 
+    preamount =0
+    prepayment= 0
+    prebalance=0
+    prev_balance = cust_statment.objects.filter(customer=su,Date__lt=tod)
+    for j in prev_balance:
+        if j.Amount:
+            preamount += j.Amount
+
+        if j.Payments:
+            prepayment += j.Payments
+    
+
+    prebalance = preamount-prepayment
+    print(prebalance)
+
+
     statment = cust_statment.objects.filter(customer=su,Date=tod)
-    bal=custo.opening_balance
+    bal=0
+    if prebalance !=0:
+        bal=prebalance
+        
+
+
     for i in statment:
-        if i.Transactions =="Invoice":
-            
-            i.Balance = bal + i.Amount
-            bal = i.Balance
+        if i.Transactions =="Invoice" or "Customer Opening Balance":
+            if i.Amount:
+                i.Balance = bal + i.Amount
+                bal = i.Balance
         if i.Transactions =="Payment Received":
             i.Balance = bal-i.Payments
             
 
         i.save() 
-    print(bal)     
+         
         
 
 
@@ -25112,7 +25177,7 @@ def customer_profile(request,id):
 
 
 
-    baldue=invoiced+custo.opening_balance
+    baldue=invoiced+prebalance-re
     invs = invoice.objects.filter(cid=cmp1,customername=su,).all() 
     payme = payment.objects.filter(cid=cmp1,customer=su,).all()  
     est1 = estimate.objects.filter(cid=cmp1,customer=su,).all()   
@@ -25133,6 +25198,8 @@ def customer_profile(request,id):
                 'statment':statment,
                 'baldue':baldue,
                 'resum':resum,
+                'bal_amount':prebalance,
+                'tod':to,
 
                 
      }
@@ -25142,7 +25209,7 @@ def search_resept(request,id):
     if request.method == 'POST':
         cmp1 = company.objects.get(id=request.session["uid"])
         
-        # se = request.POST['select']
+        
 
         fst =  request.POST['fd']
         lst = request.POST['ld']
@@ -25173,7 +25240,33 @@ def search_resept(request,id):
                 sum2+=i.amtcredit
             if i.amtapply:
                 re+=i.amtapply
-        baldue=invoiced+custo.opening_balance -re 
+
+
+
+        preamount =0
+        prepayment= 0
+        prebalance=0
+        prev_balance = cust_statment.objects.filter(customer=su,Date__lt=fst)
+        for j in prev_balance:
+            if j.Amount:
+                preamount += j.Amount
+
+            if j.Payments:
+                prepayment += j.Payments
+    
+
+        prebalance = preamount-prepayment
+        print(prebalance)
+
+        currentamt =0 
+        current = cust_statment.objects.filter(customer=su,Date__gte=fst,Date__lte=lst)
+
+        for j in current:
+            if j.Amount:
+                currentamt += j.Amount
+
+        
+        baldue=currentamt+prebalance-re 
         statment2 = cust_statment.objects.all()
         for j in statment2:
             if j.Transactions =="Invoice":
@@ -25183,21 +25276,26 @@ def search_resept(request,id):
                       
             j.save()          
        
-        statment = cust_statment.objects.filter(customer=su)
-        bal=custo.opening_balance
+        statment = cust_statment.objects.filter(customer=su,Date__gte=fst,Date__lte=lst)
+
+
+        bal=0
+        if prebalance !=0:
+            bal=prebalance
         
         for i in statment:
-            if i.Transactions =="Invoice":
+            if i.Transactions =="Invoice" or "Customer Opening Balance":
+                if i.Amount:
+                    i.Balance = i.Amount + bal
             
-                i.Balance = bal + i.Amount
-            
-                bal = i.Balance
-            print(bal)    
+                    bal = i.Balance
+             
             if i.Transactions =="Payment Received":
                 i.Balance = bal - i.Payments
+                bal=i.Balance
   
             i.save() 
-        print(bal)      
+             
         
         stat = cust_statment.objects.values().filter(customer=su,Date__gte=fst,Date__lte=lst,)
         x_data = list(inv)
@@ -25205,7 +25303,15 @@ def search_resept(request,id):
         st=list(stat)
             
             
-        return JsonResponse({"status":" not","invitem":x_data,"ct":ct ,"invoiced":invoiced,'re':re,'sum':sum,"df":fst,"dl":lst,"st":st,"baldue":baldue,})
+        return JsonResponse({"status":" not",
+        "invitem":x_data,"ct":ct ,
+        "invoiced":currentamt,'re':re,'sum':sum,
+        "df":fst,"dl":lst,"st":st,"baldue":baldue,
+        'opening':prebalance,
+        'fst':fst,
+
+        
+        })
 
 
 def goestimate(request):
@@ -27025,6 +27131,7 @@ def invoice_status(request,id):
     statment.Transactions = "Invoice"
     statment.Amount = inoi.grandtotal
     statment.save()
+
     return redirect(invoice_view,id)
 
 
@@ -27209,7 +27316,7 @@ def paymentcreate2(request):
 
         statment2=cust_statment()
         statment2.customer = pay2.customer
-        statment.cid = cmp1
+        statment2.cid = cmp1
         statment2.Transactions = "Payment Received"
         statment2.pay = pay2
         statment2.Date = pay2.paymdate
@@ -27346,11 +27453,15 @@ def delete_payment(request,id):
 def account_transactions(request,id):
     cmp1 = company.objects.get(id=request.session["uid"])
 
-
     x = id.split()
     x.append(" ")
     a = x[0]
     b = x[1]
+
+    toda = date.today()
+    tod = toda.strftime("%Y-%m-%d")
+
+    to=toda.strftime("%d-%m-%Y")
     
     custobject = customer.objects.get(firstname=a, lastname=b, cid=cmp1)
     opnbal =custobject.opening_balance
@@ -27383,14 +27494,132 @@ def account_transactions(request,id):
         i.save() 
     print(bal)
 
+    fdate =""
+    ldate =""
+
     context = {
         "statment":statment,
         "cmp1":cmp1,
         'total1':total1,
         'credit':credit,
+        'cust2':id,
+        'to':to,
+        'fdate':fdate,
+        'ldate':ldate,
+        
     }
 
     return render(request,'app1/account_transactions.html',context)
+
+def account_transactions1(request):
+
+    if request.method =="POST":
+        cust = request.POST['cust']
+
+        select=request.POST['reportperiod']
+
+        if select =="All dates":
+            return redirect('account_transactions',cust)
+        if select == "Custom":
+            fdate = request.POST['fdate']
+            ldate = request.POST['ldate']
+            cmp1 = company.objects.get(id=request.session["uid"])
+            print(fdate)
+
+            x = cust.split()
+            x.append(" ")
+            a = x[0]
+            b = x[1]
+            cu = a +" "+ b
+            custobject = customer.objects.get(firstname=a, lastname=b, cid=cmp1)
+            opnbal =custobject.opening_balance
+            print(opnbal) 
+
+            statment1 = cust_statment.objects.filter(customer=cu,cid=cmp1)
+            bal=0
+            for i in statment1:
+                if i.Transactions =="Invoice":
+                    if i.Amount:
+                        i.Balance = bal + i.Amount
+                        bal = i.Balance
+                if i.Transactions =="Payment Received":
+                    if i.Payments:
+                        i.Balance = bal-i.Payments
+            
+
+                i.save() 
+
+            preamount=0
+            prepayment=0
+            prebalance = 0
+            prev_balance = cust_statment.objects.filter(customer=cu,Date__lt=fdate)
+            for j in prev_balance:
+                if j.Amount:
+                    preamount += j.Amount
+
+                if j.Payments:
+                    prepayment += j.Payments
+    
+
+            prebalance = preamount-prepayment
+            print(prebalance)   
+
+            statment = cust_statment.objects.filter(customer=cu,cid=cmp1,Date__gte=fdate,Date__lte=ldate)
+            bal=0
+            for i in statment:
+                if i.Transactions =="Invoice":
+                    if i.Amount:
+                        i.Balance = bal + i.Amount
+                        bal = i.Balance
+                if i.Transactions =="Payment Received":
+                    if i.Payments:
+                        i.Balance = bal-i.Payments
+            
+
+                i.save()  
+
+            value = ""
+            if statment.exists():
+                value=1
+
+                
+ 
+
+
+
+
+            debit=0
+            credit=0
+            total1 = 0
+    
+
+            for i in statment :
+                if i.Amount:
+                    debit+=i.Amount
+                if i.Payments:
+                    credit+=i.Payments
+
+            total1=prebalance+debit-credit          
+
+            bal=custobject.opening_balance
+            
+        
+            context = {
+            "statment":statment,
+            "cmp1":cmp1,
+            'total1':total1,
+            'credit':credit,
+            "cust2":cust,
+            "prebalance":prebalance,
+            'fdate':fdate,
+            'ldate':ldate,
+            'value':value,
+
+
+            }
+
+
+            return render(request,'app1/account_transactions.html',context)
 
 # Ananthakrishnanend
 
