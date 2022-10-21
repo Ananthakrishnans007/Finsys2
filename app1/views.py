@@ -609,7 +609,28 @@ def gocustomers(request):
     try:
         cmp1 = company.objects.get(id=request.session["uid"])
         custo = customer.objects.filter(cid=cmp1).all()
-        context = {'customer': custo, 'cmp1': cmp1}
+        
+        for i in custo:
+            custname = i.firstname +" "+i.lastname
+            
+            statment = cust_statment.objects.filter(customer=custname,cid=cmp1)
+            debit=0
+            credit=0
+            total1 = 0
+            
+            for j in statment :
+                if j.Amount:
+                    debit+=j.Amount
+                if j.Payments:
+                    credit+=j.Payments
+
+            total1=debit-credit
+            print(total1)
+            i.receivables = total1
+            i.save()
+
+
+        context = {'customers': custo, 'cmp1': cmp1}
         return render(request, 'app1/customers.html', context)
     except:
         return redirect('godash')
@@ -692,7 +713,7 @@ def goaddsuppliers(request):
 
 @login_required(login_url='regcomp')
 def customers(request):
-    try:
+    
         cmp1 = company.objects.get(id=request.session["uid"])
         if request.method == "POST":
             firstname = request.POST['firstname']
@@ -757,12 +778,11 @@ def customers(request):
 
 
 
-                return redirect('/app1/customers')
+                return redirect('gocustomers')
         customers = customer.objects.filter(cid=cmp1).all()
         context = {'customers': customers, 'cmp1': cmp1}
         return render(request, 'app1/customers.html', context)
-    except:
-        return redirect('gocustomers')
+    
 
 
 @login_required(login_url='regcomp')
@@ -9699,9 +9719,6 @@ def getitems(request):
         except:
             pass
         list.append(noninventorydict)
-
-
-
 
     else:
         notany = {'item': 'notany', 'name': ' ',
@@ -25034,6 +25051,29 @@ def deletestyle(request, customizeid):
 
 
 # Ananthakrishnan
+
+
+
+def cust_add_file(request,id):
+    cmp1 = company.objects.get(id=request.session['uid'])
+    cust = customer.objects.get(customerid=id,cid=cmp1)
+
+    if request.method == 'POST':
+        
+        if len(request.FILES) != 0:
+           
+            if cust.file != "default.jpg":
+                 os.remove(cust.file.path)
+                
+            cust.file=request.FILES['file']
+        
+        cust.save()
+        return redirect('customer_profile',id)
+      
+
+
+
+
 @login_required(login_url='regcomp')
 def gosearch(request):
     if request.method == "POST":
@@ -25063,8 +25103,8 @@ def gosearch(request):
 def gocustomers1(request):
     try:
         cmp1 = company.objects.get(id=request.session["uid"])
-        custo = customer.objects.filter(cid=cmp1).all()
-        context = {'customer': custo, 'cmp1': cmp1}
+        custo = customer.objects.filter(cid=cmp1,status='Active').all()
+        context = {'customers': custo, 'cmp1': cmp1}
         return render(request, 'app1/customers.html', context)
     except:
         return redirect('godash')
@@ -25075,8 +25115,8 @@ def gocustomers1(request):
 def gocustomers2(request):
     try:
         cmp1 = company.objects.get(id=request.session["uid"])
-        custo = customer.objects.filter(cid=cmp1).all()
-        context = {'customer': custo, 'cmp1': cmp1}
+        custo = customer.objects.filter(cid=cmp1,status='Inactive').all()
+        context = {'customers': custo, 'cmp1': cmp1}
         return render(request, 'app1/customers.html', context)
     except:
         return redirect('godash')

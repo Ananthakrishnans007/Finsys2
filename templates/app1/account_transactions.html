@@ -92,7 +92,8 @@ body{
        return dl ?
          XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }):
          XLSX.writeFile(wb, fn || ('Account Transactions.' + (type || 'xlsx')));
-    }</script>
+    }
+    </script>
 
 
 

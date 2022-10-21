@@ -214,6 +214,42 @@
 
     
 </script>
+
+
+
+<!-- modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add File</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form action="{% url 'cust_add_file' customer.customerid %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
+        <div class="modal-body">
+          <input type="file" class="form-control" name="file">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+      </div>
+    </div>
+  </div>
+
+
+
+
+<!-- /modal-->
+
+
+
+
+
+
     <div class="page-content " >
         <div class="card radius-15">
             <div class="card-body">
@@ -226,6 +262,24 @@
                         <a style="padding: 10px; cursor: pointer;" onclick="Overview()"> Overview</a>
                         <a style="padding: 10px; cursor: pointer;" onclick="transaction()"> Transactions</a>
                         <a style="padding: 10px; cursor: pointer;" onclick="Statment()"> Statment</a>
+                    </div> 
+                    <div class="btn-group" style="float: right; ">
+                       
+                            
+                            <button type="button"
+                                    class="btn btn-outline-info  dropdown-toggle dropdown-toggle-split fa fa-paperclip"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-top: 8px;">
+                                <span class="sr-only ">Toggle Dropdown</span>
+                                Attach file
+                            </button>
+                            <div class="dropdown-menu" style="margin-top: 8px;">
+                                <a class="dropdown-item" style="cursor: pointer;" data-toggle="modal" data-target="#exampleModal">Attach file</a>
+                                {% if customer.file != "default.jpg" %}
+                                <a class="dropdown-item fa fa-download" style="cursor: pointer;"download  href="{{customer.file.url }}" >Download file</a>
+                                {% endif %}
+                           
+                        </div>
+                        
                     </div> 
                 </div>
             </div>
@@ -479,7 +533,7 @@
                                 
                                 <tr class="table-row " data-href="{% url 'goinvoices' %}">
                                 <td style="text-align: center;">INR- Indian Rupee</td>
-                                <td style="text-align: center;">{{resum}}</td>
+                                <td style="text-align: center;">{{customer.receivables}}</td>
                                 <td style="text-align: center;">{{sum2}}</td>
                                 </tr>
                                

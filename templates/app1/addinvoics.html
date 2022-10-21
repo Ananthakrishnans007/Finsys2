@@ -121,16 +121,26 @@ $('#baldue').val(parseFloat(x .toFixed(2)));
 
 <script>
   var item_row_counter = 1
+  var temp = 0
 
   function add_item_row() {
       old_item_row_count = item_row_counter
       item_row_counter++;
+      oldtemp = temp
+      temp ++;
+      
 
       $('#items-table-body >tr:last').clone(true).insertAfter('#items-table-body >tr:last');
       $('#items-table-body >tr:last input').val('');
 
       $('#items-table-body >tr:last td')[0].innerHTML = item_row_counter
+
+      document.getElementById('product').id = 'product'+temp ;
+      
+
+      
       update_amounts($('#items-table-body input[name=total1]:last'));
+      
   }
 
   function setup_rows() {
@@ -157,7 +167,7 @@ $('#baldue').val(parseFloat(x .toFixed(2)));
   <div class="page-content">
     <!--breadcrumb-->
     <div class="card radius-15">
-      <div class="card-body">
+      <div class="card-body">.
         <div class="card-title">
           <center>
             <h3 class="mb-0" id="invnumb">INVOICE</h3>
@@ -209,7 +219,7 @@ $('#baldue').val(parseFloat(x .toFixed(2)));
             <div class="col-md-3 mt-3">
               <label class="col-form-label">Invoice Date:</label>
               <div>
-                <input type="text" value="{{ tod }}" class="form-control" name="invoicedate" style="background-color: #2f516f; color: white;">
+                <input type="date" value="{{ tod }}" class="form-control" name="invoicedate" style="background-color: #2f516f; color: white;">
               </div>
             </div>
             <div class="col-md-3 mt-3">
@@ -2240,548 +2250,548 @@ $('#baldue').val(parseFloat(x .toFixed(2)));
         }
       })
     });
-    $('#product').on('change', function() {
-      select = $('#product').val();
-      $.ajax({
-        type: "GET",
-        url: "{% url 'getitems' %}",
-        data: {
-          id: select
-        }
-      }).done(function(response) {
-        var json_data = JSON.parse(response);
-        for (key in json_data) {
-          document.getElementById('hsn1').value = json_data[key]['hsn'];
-          document.getElementById('description').value = json_data[key]['description'];
-          document.getElementById('qty1').value = 0;
-          if (json_data[key]['initialqty'] == '' || json_data[key]['initialqty'] == undefined) {
-            document.getElementById('qtyspan').innerHTML = '';
-          } else {
-            document.getElementById('qtyspan').innerHTML = 'Available Quantity : ' + json_data[key]['initialqty'];
-          }
-          if (json_data[key]['item'] == 'bundle') {
-            document.getElementById('unit1').value = 0;
-            document.getElementById('unit1').style.display = 'none';
-            document.getElementById('tax1').style.display = 'none';
-            document.getElementById('total1').style.display = 'none';
-            if (json_data[key]['qty1'] == undefined || json_data[key]['qty1'] == 0) {
-              document.getElementById('bun1').style.display = 'none';
-            } else {
-              document.getElementById('bun1').style.display = 'table-row';
-              document.getElementById('product11').value = json_data[key]['product1'];
-              document.getElementById('hsn11').value = json_data[key]['hsn1'];
-              document.getElementById('description11').value = json_data[key]['description1'];
-              document.getElementById('qty11').value = json_data[key]['qty1'];
-              document.getElementById('qty111').value = json_data[key]['qty1'];
-              document.getElementById('unit11').value = json_data[key]['price1'];
-              document.getElementById('total11').value = json_data[key]['total1'];
-              document.getElementById('tax11').value = json_data[key]['tax1'];
-            }
-            if (json_data[key]['qty2'] == undefined || json_data[key]['qty2'] == 0) {
-              document.getElementById('bun2').style.display = 'none';
-            } else {
-              document.getElementById('bun2').style.display = 'table-row';
-              document.getElementById('product12').value = json_data[key]['product2'];
-              document.getElementById('hsn12').value = json_data[key]['hsn2'];
-              document.getElementById('description12').value = json_data[key]['description2'];
-              document.getElementById('qty12').value = json_data[key]['qty2'];
-              document.getElementById('qty121').value = json_data[key]['qty2'];
-              document.getElementById('unit12').value = json_data[key]['price2'];
-              document.getElementById('total12').value = json_data[key]['total2'];
-              document.getElementById('tax12').value = json_data[key]['tax2'];
-            }
-            if (json_data[key]['qty3'] == undefined || json_data[key]['qty3'] == 0) {
-              document.getElementById('bun3').style.display = 'none';
-            } else {
-              document.getElementById('bun3').style.display = 'table-row';
-              document.getElementById('product13').value = json_data[key]['product3'];
-              document.getElementById('hsn13').value = json_data[key]['hsn3'];
-              document.getElementById('description13').value = json_data[key]['description3'];
-              document.getElementById('qty13').value = json_data[key]['qty3'];
-              document.getElementById('qty131').value = json_data[key]['qty3'];
-              document.getElementById('unit13').value = json_data[key]['price3'];
-              document.getElementById('total13').value = json_data[key]['total3'];
-              document.getElementById('tax13').value = json_data[key]['tax3'];
-            }
-            if (json_data[key]['qty4'] == undefined || json_data[key]['qty4'] == 0) {
-              document.getElementById('bun4').style.display = 'none';
-            } else {
-              document.getElementById('bun4').style.display = 'table-row';
-              document.getElementById('product14').value = json_data[key]['product4'];
-              document.getElementById('hsn14').value = json_data[key]['hsn4'];
-              document.getElementById('description14').value = json_data[key]['description4'];
-              document.getElementById('qty14').value = json_data[key]['qty4'];
-              document.getElementById('qty141').value = json_data[key]['qty4'];
-              document.getElementById('unit14').value = json_data[key]['price4'];
-              document.getElementById('total14').value = json_data[key]['total4'];
-              document.getElementById('tax14').value = json_data[key]['tax4'];
-            }
-          } else {
-            document.getElementById('unit1').value = json_data[key]['salesprice'];
-            var place = document.getElementById('plosu').value;
-            if (place == '{{ cmp1.state }}') {
-              document.getElementById('unit1').style.display = 'block';
-              document.getElementById('tax1').style.display = 'block';
-              document.getElementById('total1').style.display = 'block';
-              document.getElementById('ta1').value = json_data[key]['tax'];
-              document.getElementById('ta1').innerHTML = json_data[key]['tax'] + ' % GST';
-            } else if (place != '{{ cmp1.state }}') {
-              document.getElementById('unit1').style.display = 'block';
-              document.getElementById('tax1').style.display = 'block';
-              document.getElementById('total1').style.display = 'block';
-              document.getElementById('ta5').value = json_data[key]['tax'];
-              document.getElementById('ta5').innerHTML = json_data[key]['tax'] + ' % IGST';
-            }
+    // $('#product').on('change', function() {
+    //   select = $('#product').val();
+    //   $.ajax({
+    //     type: "GET",
+    //     url: "{% url 'getitems' %}",
+    //     data: {
+    //       id: select
+    //     }
+    //   }).done(function(response) {
+    //     var json_data = JSON.parse(response);
+    //     for (key in json_data) {
+    //       document.getElementById('hsn1').value = json_data[key]['hsn'];
+    //       document.getElementById('description').value = json_data[key]['description'];
+    //       document.getElementById('qty1').value = 0;
+    //       if (json_data[key]['initialqty'] == '' || json_data[key]['initialqty'] == undefined) {
+    //         document.getElementById('qtyspan').innerHTML = '';
+    //       } else {
+    //         document.getElementById('qtyspan').innerHTML = 'Available Quantity : ' + json_data[key]['initialqty'];
+    //       }
+    //       if (json_data[key]['item'] == 'bundle') {
+    //         document.getElementById('unit1').value = 0;
+    //         document.getElementById('unit1').style.display = 'none';
+    //         document.getElementById('tax1').style.display = 'none';
+    //         document.getElementById('total1').style.display = 'none';
+    //         if (json_data[key]['qty1'] == undefined || json_data[key]['qty1'] == 0) {
+    //           document.getElementById('bun1').style.display = 'none';
+    //         } else {
+    //           document.getElementById('bun1').style.display = 'table-row';
+    //           document.getElementById('product11').value = json_data[key]['product1'];
+    //           document.getElementById('hsn11').value = json_data[key]['hsn1'];
+    //           document.getElementById('description11').value = json_data[key]['description1'];
+    //           document.getElementById('qty11').value = json_data[key]['qty1'];
+    //           document.getElementById('qty111').value = json_data[key]['qty1'];
+    //           document.getElementById('unit11').value = json_data[key]['price1'];
+    //           document.getElementById('total11').value = json_data[key]['total1'];
+    //           document.getElementById('tax11').value = json_data[key]['tax1'];
+    //         }
+    //         if (json_data[key]['qty2'] == undefined || json_data[key]['qty2'] == 0) {
+    //           document.getElementById('bun2').style.display = 'none';
+    //         } else {
+    //           document.getElementById('bun2').style.display = 'table-row';
+    //           document.getElementById('product12').value = json_data[key]['product2'];
+    //           document.getElementById('hsn12').value = json_data[key]['hsn2'];
+    //           document.getElementById('description12').value = json_data[key]['description2'];
+    //           document.getElementById('qty12').value = json_data[key]['qty2'];
+    //           document.getElementById('qty121').value = json_data[key]['qty2'];
+    //           document.getElementById('unit12').value = json_data[key]['price2'];
+    //           document.getElementById('total12').value = json_data[key]['total2'];
+    //           document.getElementById('tax12').value = json_data[key]['tax2'];
+    //         }
+    //         if (json_data[key]['qty3'] == undefined || json_data[key]['qty3'] == 0) {
+    //           document.getElementById('bun3').style.display = 'none';
+    //         } else {
+    //           document.getElementById('bun3').style.display = 'table-row';
+    //           document.getElementById('product13').value = json_data[key]['product3'];
+    //           document.getElementById('hsn13').value = json_data[key]['hsn3'];
+    //           document.getElementById('description13').value = json_data[key]['description3'];
+    //           document.getElementById('qty13').value = json_data[key]['qty3'];
+    //           document.getElementById('qty131').value = json_data[key]['qty3'];
+    //           document.getElementById('unit13').value = json_data[key]['price3'];
+    //           document.getElementById('total13').value = json_data[key]['total3'];
+    //           document.getElementById('tax13').value = json_data[key]['tax3'];
+    //         }
+    //         if (json_data[key]['qty4'] == undefined || json_data[key]['qty4'] == 0) {
+    //           document.getElementById('bun4').style.display = 'none';
+    //         } else {
+    //           document.getElementById('bun4').style.display = 'table-row';
+    //           document.getElementById('product14').value = json_data[key]['product4'];
+    //           document.getElementById('hsn14').value = json_data[key]['hsn4'];
+    //           document.getElementById('description14').value = json_data[key]['description4'];
+    //           document.getElementById('qty14').value = json_data[key]['qty4'];
+    //           document.getElementById('qty141').value = json_data[key]['qty4'];
+    //           document.getElementById('unit14').value = json_data[key]['price4'];
+    //           document.getElementById('total14').value = json_data[key]['total4'];
+    //           document.getElementById('tax14').value = json_data[key]['tax4'];
+    //         }
+    //       } else {
+    //         document.getElementById('unit1').value = json_data[key]['salesprice'];
+    //         var place = document.getElementById('plosu').value;
+    //         if (place == '{{ cmp1.state }}') {
+    //           document.getElementById('unit1').style.display = 'block';
+    //           document.getElementById('tax1').style.display = 'block';
+    //           document.getElementById('total1').style.display = 'block';
+    //           document.getElementById('ta1').value = json_data[key]['tax'];
+    //           document.getElementById('ta1').innerHTML = json_data[key]['tax'] + ' % GST';
+    //         } else if (place != '{{ cmp1.state }}') {
+    //           document.getElementById('unit1').style.display = 'block';
+    //           document.getElementById('tax1').style.display = 'block';
+    //           document.getElementById('total1').style.display = 'block';
+    //           document.getElementById('ta5').value = json_data[key]['tax'];
+    //           document.getElementById('ta5').innerHTML = json_data[key]['tax'] + ' % IGST';
+    //         }
 
-            document.getElementById('bun1').style.display = 'none';
-            document.getElementById('product11').value = '';
-            document.getElementById('hsn11').value = '';
-            document.getElementById('description11').value = '';
-            document.getElementById('qty11').value = 0;
-            document.getElementById('qty111').value = 0;
-            document.getElementById('unit11').value = 0;
-            document.getElementById('total11').value = 0;
-            document.getElementById('tax11').value = 0;
+    //         document.getElementById('bun1').style.display = 'none';
+    //         document.getElementById('product11').value = '';
+    //         document.getElementById('hsn11').value = '';
+    //         document.getElementById('description11').value = '';
+    //         document.getElementById('qty11').value = 0;
+    //         document.getElementById('qty111').value = 0;
+    //         document.getElementById('unit11').value = 0;
+    //         document.getElementById('total11').value = 0;
+    //         document.getElementById('tax11').value = 0;
 
-            document.getElementById('bun2').style.display = 'none';
-            document.getElementById('product12').value = '';
-            document.getElementById('hsn12').value = '';
-            document.getElementById('description12').value = '';
-            document.getElementById('qty12').value = 0;
-            document.getElementById('qty121').value = 0;
-            document.getElementById('unit12').value = 0;
-            document.getElementById('total12').value = 0;
-            document.getElementById('tax12').value = 0;
+    //         document.getElementById('bun2').style.display = 'none';
+    //         document.getElementById('product12').value = '';
+    //         document.getElementById('hsn12').value = '';
+    //         document.getElementById('description12').value = '';
+    //         document.getElementById('qty12').value = 0;
+    //         document.getElementById('qty121').value = 0;
+    //         document.getElementById('unit12').value = 0;
+    //         document.getElementById('total12').value = 0;
+    //         document.getElementById('tax12').value = 0;
 
-            document.getElementById('bun3').style.display = 'none';
-            document.getElementById('product13').value = '';
-            document.getElementById('hsn13').value = '';
-            document.getElementById('description13').value = '';
-            document.getElementById('qty13').value = 0;
-            document.getElementById('qty131').value = 0;
-            document.getElementById('unit13').value = 0;
-            document.getElementById('total13').value = 0;
-            document.getElementById('tax13').value = 0;
+    //         document.getElementById('bun3').style.display = 'none';
+    //         document.getElementById('product13').value = '';
+    //         document.getElementById('hsn13').value = '';
+    //         document.getElementById('description13').value = '';
+    //         document.getElementById('qty13').value = 0;
+    //         document.getElementById('qty131').value = 0;
+    //         document.getElementById('unit13').value = 0;
+    //         document.getElementById('total13').value = 0;
+    //         document.getElementById('tax13').value = 0;
 
-            document.getElementById('bun4').style.display = 'none';
-            document.getElementById('product14').value = '';
-            document.getElementById('hsn14').value = '';
-            document.getElementById('description14').value = '';
-            document.getElementById('qty14').value = 0;
-            document.getElementById('qty141').value = 0;
-            document.getElementById('unit14').value = 0;
-            document.getElementById('total14').value = 0;
-            document.getElementById('tax14').value = 0;
-          }
-        }
-      });
-    });
-    $('#product2').on('change', function() {
-      select = $('#product2').val();
-      $.ajax({
-        type: "GET",
-        url: "{% url 'getitems' %}",
-        data: {
-          id: select
-        }
-      }).done(function(response) {
-        var json_data = JSON.parse(response);
-        for (key in json_data) {
-          document.getElementById('hsn2').value = json_data[key]['hsn'];
-          document.getElementById('description2').value = json_data[key]['description'];
-          document.getElementById('qty2').value = 0;
-          if (json_data[key]['initialqty'] == '' || json_data[key]['initialqty'] == undefined) {
-            document.getElementById('qtyspan1').innerHTML = '';
-          } else {
-            document.getElementById('qtyspan1').innerHTML = 'Available Quantity : ' + json_data[key]['initialqty'];
-          }
-          if (json_data[key]['item'] == 'bundle') {
-            document.getElementById('unit2').value = 0;
-            document.getElementById('unit2').style.display = 'none';
-            document.getElementById('tax2').style.display = 'none';
-            document.getElementById('total2').style.display = 'none';
-            if (json_data[key]['qty1'] == undefined || json_data[key]['qty1'] == 0) {
-              document.getElementById('bun5').style.display = 'none';
-            } else {
-              document.getElementById('bun5').style.display = 'table-row';
-              document.getElementById('product21').value = json_data[key]['product1'];
-              document.getElementById('hsn21').value = json_data[key]['hsn1'];
-              document.getElementById('description21').value = json_data[key]['description1'];
-              document.getElementById('qty21').value = json_data[key]['qty1'];
-              document.getElementById('qty211').value = json_data[key]['qty1'];
-              document.getElementById('unit21').value = json_data[key]['price1'];
-              document.getElementById('total21').value = json_data[key]['total1'];
-              document.getElementById('tax21').value = json_data[key]['tax1'];
-            }
-            if (json_data[key]['qty2'] == undefined || json_data[key]['qty2'] == 0) {
-              document.getElementById('bun6').style.display = 'none';
-            } else {
-              document.getElementById('bun6').style.display = 'table-row';
-              document.getElementById('product22').value = json_data[key]['product2'];
-              document.getElementById('hsn22').value = json_data[key]['hsn2'];
-              document.getElementById('description22').value = json_data[key]['description2'];
-              document.getElementById('qty22').value = json_data[key]['qty2'];
-              document.getElementById('qty221').value = json_data[key]['qty2'];
-              document.getElementById('unit22').value = json_data[key]['price2'];
-              document.getElementById('total22').value = json_data[key]['total2'];
-              document.getElementById('tax22').value = json_data[key]['tax2'];
-            }
-            if (json_data[key]['qty3'] == undefined || json_data[key]['qty3'] == 0) {
-              document.getElementById('bun7').style.display = 'none';
-            } else {
-              document.getElementById('bun7').style.display = 'table-row';
-              document.getElementById('product23').value = json_data[key]['product3'];
-              document.getElementById('hsn23').value = json_data[key]['hsn3'];
-              document.getElementById('description23').value = json_data[key]['description3'];
-              document.getElementById('qty23').value = json_data[key]['qty3'];
-              document.getElementById('qty231').value = json_data[key]['qty3'];
-              document.getElementById('unit23').value = json_data[key]['price3'];
-              document.getElementById('total23').value = json_data[key]['total3'];
-              document.getElementById('tax23').value = json_data[key]['tax3'];
-            }
-            if (json_data[key]['qty4'] == undefined || json_data[key]['qty4'] == 0) {
-              document.getElementById('bun8').style.display = 'none';
-            } else {
-              document.getElementById('bun8').style.display = 'table-row';
-              document.getElementById('product24').value = json_data[key]['product4'];
-              document.getElementById('hsn24').value = json_data[key]['hsn4'];
-              document.getElementById('description24').value = json_data[key]['description4'];
-              document.getElementById('qty24').value = json_data[key]['qty4'];
-              document.getElementById('qty241').value = json_data[key]['qty4'];
-              document.getElementById('unit24').value = json_data[key]['price4'];
-              document.getElementById('total24').value = json_data[key]['total4'];
-              document.getElementById('tax24').value = json_data[key]['tax4'];
-            }
-          } else {
-            document.getElementById('unit2').value = json_data[key]['salesprice'];
-            var place = document.getElementById('plosu').value;
-            if (place == '{{ cmp1.state }}') {
-              document.getElementById('unit2').style.display = 'block';
-              document.getElementById('tax2').style.display = 'block';
-              document.getElementById('total2').style.display = 'block';
-              document.getElementById('ta2').value = json_data[key]['tax'];
-              document.getElementById('ta2').innerHTML = json_data[key]['tax'] + ' % GST';
-            } else if (place != '{{ cmp1.state }}') {
-              document.getElementById('unit2').style.display = 'block';
-              document.getElementById('tax2').style.display = 'block';
-              document.getElementById('total2').style.display = 'block';
-              document.getElementById('ta6').value = json_data[key]['tax'];
-              document.getElementById('ta6').innerHTML = json_data[key]['tax'] + ' % IGST';
-            }
-            document.getElementById('bun5').style.display = 'none';
-            document.getElementById('product21').value = '';
-            document.getElementById('hsn21').value = '';
-            document.getElementById('description21').value = '';
-            document.getElementById('qty21').value = 0;
-            document.getElementById('qty211').value = 0;
-            document.getElementById('unit21').value = 0;
-            document.getElementById('total21').value = 0;
-            document.getElementById('tax21').value = 0;
+    //         document.getElementById('bun4').style.display = 'none';
+    //         document.getElementById('product14').value = '';
+    //         document.getElementById('hsn14').value = '';
+    //         document.getElementById('description14').value = '';
+    //         document.getElementById('qty14').value = 0;
+    //         document.getElementById('qty141').value = 0;
+    //         document.getElementById('unit14').value = 0;
+    //         document.getElementById('total14').value = 0;
+    //         document.getElementById('tax14').value = 0;
+    //       }
+    //     }
+    //   });
+    // });
+    // $('#product2').on('change', function() {
+    //   select = $('#product2').val();
+    //   $.ajax({
+    //     type: "GET",
+    //     url: "{% url 'getitems' %}",
+    //     data: {
+    //       id: select
+    //     }
+    //   }).done(function(response) {
+    //     var json_data = JSON.parse(response);
+    //     for (key in json_data) {
+    //       document.getElementById('hsn2').value = json_data[key]['hsn'];
+    //       document.getElementById('description2').value = json_data[key]['description'];
+    //       document.getElementById('qty2').value = 0;
+    //       if (json_data[key]['initialqty'] == '' || json_data[key]['initialqty'] == undefined) {
+    //         document.getElementById('qtyspan1').innerHTML = '';
+    //       } else {
+    //         document.getElementById('qtyspan1').innerHTML = 'Available Quantity : ' + json_data[key]['initialqty'];
+    //       }
+    //       if (json_data[key]['item'] == 'bundle') {
+    //         document.getElementById('unit2').value = 0;
+    //         document.getElementById('unit2').style.display = 'none';
+    //         document.getElementById('tax2').style.display = 'none';
+    //         document.getElementById('total2').style.display = 'none';
+    //         if (json_data[key]['qty1'] == undefined || json_data[key]['qty1'] == 0) {
+    //           document.getElementById('bun5').style.display = 'none';
+    //         } else {
+    //           document.getElementById('bun5').style.display = 'table-row';
+    //           document.getElementById('product21').value = json_data[key]['product1'];
+    //           document.getElementById('hsn21').value = json_data[key]['hsn1'];
+    //           document.getElementById('description21').value = json_data[key]['description1'];
+    //           document.getElementById('qty21').value = json_data[key]['qty1'];
+    //           document.getElementById('qty211').value = json_data[key]['qty1'];
+    //           document.getElementById('unit21').value = json_data[key]['price1'];
+    //           document.getElementById('total21').value = json_data[key]['total1'];
+    //           document.getElementById('tax21').value = json_data[key]['tax1'];
+    //         }
+    //         if (json_data[key]['qty2'] == undefined || json_data[key]['qty2'] == 0) {
+    //           document.getElementById('bun6').style.display = 'none';
+    //         } else {
+    //           document.getElementById('bun6').style.display = 'table-row';
+    //           document.getElementById('product22').value = json_data[key]['product2'];
+    //           document.getElementById('hsn22').value = json_data[key]['hsn2'];
+    //           document.getElementById('description22').value = json_data[key]['description2'];
+    //           document.getElementById('qty22').value = json_data[key]['qty2'];
+    //           document.getElementById('qty221').value = json_data[key]['qty2'];
+    //           document.getElementById('unit22').value = json_data[key]['price2'];
+    //           document.getElementById('total22').value = json_data[key]['total2'];
+    //           document.getElementById('tax22').value = json_data[key]['tax2'];
+    //         }
+    //         if (json_data[key]['qty3'] == undefined || json_data[key]['qty3'] == 0) {
+    //           document.getElementById('bun7').style.display = 'none';
+    //         } else {
+    //           document.getElementById('bun7').style.display = 'table-row';
+    //           document.getElementById('product23').value = json_data[key]['product3'];
+    //           document.getElementById('hsn23').value = json_data[key]['hsn3'];
+    //           document.getElementById('description23').value = json_data[key]['description3'];
+    //           document.getElementById('qty23').value = json_data[key]['qty3'];
+    //           document.getElementById('qty231').value = json_data[key]['qty3'];
+    //           document.getElementById('unit23').value = json_data[key]['price3'];
+    //           document.getElementById('total23').value = json_data[key]['total3'];
+    //           document.getElementById('tax23').value = json_data[key]['tax3'];
+    //         }
+    //         if (json_data[key]['qty4'] == undefined || json_data[key]['qty4'] == 0) {
+    //           document.getElementById('bun8').style.display = 'none';
+    //         } else {
+    //           document.getElementById('bun8').style.display = 'table-row';
+    //           document.getElementById('product24').value = json_data[key]['product4'];
+    //           document.getElementById('hsn24').value = json_data[key]['hsn4'];
+    //           document.getElementById('description24').value = json_data[key]['description4'];
+    //           document.getElementById('qty24').value = json_data[key]['qty4'];
+    //           document.getElementById('qty241').value = json_data[key]['qty4'];
+    //           document.getElementById('unit24').value = json_data[key]['price4'];
+    //           document.getElementById('total24').value = json_data[key]['total4'];
+    //           document.getElementById('tax24').value = json_data[key]['tax4'];
+    //         }
+    //       } else {
+    //         document.getElementById('unit2').value = json_data[key]['salesprice'];
+    //         var place = document.getElementById('plosu').value;
+    //         if (place == '{{ cmp1.state }}') {
+    //           document.getElementById('unit2').style.display = 'block';
+    //           document.getElementById('tax2').style.display = 'block';
+    //           document.getElementById('total2').style.display = 'block';
+    //           document.getElementById('ta2').value = json_data[key]['tax'];
+    //           document.getElementById('ta2').innerHTML = json_data[key]['tax'] + ' % GST';
+    //         } else if (place != '{{ cmp1.state }}') {
+    //           document.getElementById('unit2').style.display = 'block';
+    //           document.getElementById('tax2').style.display = 'block';
+    //           document.getElementById('total2').style.display = 'block';
+    //           document.getElementById('ta6').value = json_data[key]['tax'];
+    //           document.getElementById('ta6').innerHTML = json_data[key]['tax'] + ' % IGST';
+    //         }
+    //         document.getElementById('bun5').style.display = 'none';
+    //         document.getElementById('product21').value = '';
+    //         document.getElementById('hsn21').value = '';
+    //         document.getElementById('description21').value = '';
+    //         document.getElementById('qty21').value = 0;
+    //         document.getElementById('qty211').value = 0;
+    //         document.getElementById('unit21').value = 0;
+    //         document.getElementById('total21').value = 0;
+    //         document.getElementById('tax21').value = 0;
 
-            document.getElementById('bun6').style.display = 'none';
-            document.getElementById('product22').value = '';
-            document.getElementById('hsn22').value = '';
-            document.getElementById('description22').value = '';
-            document.getElementById('qty22').value = 0;
-            document.getElementById('qty221').value = 0;
-            document.getElementById('unit22').value = 0;
-            document.getElementById('total22').value = 0;
-            document.getElementById('tax22').value = 0;
+    //         document.getElementById('bun6').style.display = 'none';
+    //         document.getElementById('product22').value = '';
+    //         document.getElementById('hsn22').value = '';
+    //         document.getElementById('description22').value = '';
+    //         document.getElementById('qty22').value = 0;
+    //         document.getElementById('qty221').value = 0;
+    //         document.getElementById('unit22').value = 0;
+    //         document.getElementById('total22').value = 0;
+    //         document.getElementById('tax22').value = 0;
 
-            document.getElementById('bun7').style.display = 'none';
-            document.getElementById('product23').value = '';
-            document.getElementById('hsn23').value = '';
-            document.getElementById('description23').value = '';
-            document.getElementById('qty23').value = 0;
-            document.getElementById('qty231').value = 0;
-            document.getElementById('unit23').value = 0;
-            document.getElementById('total23').value = 0;
-            document.getElementById('tax23').value = 0;
+    //         document.getElementById('bun7').style.display = 'none';
+    //         document.getElementById('product23').value = '';
+    //         document.getElementById('hsn23').value = '';
+    //         document.getElementById('description23').value = '';
+    //         document.getElementById('qty23').value = 0;
+    //         document.getElementById('qty231').value = 0;
+    //         document.getElementById('unit23').value = 0;
+    //         document.getElementById('total23').value = 0;
+    //         document.getElementById('tax23').value = 0;
 
-            document.getElementById('bun8').style.display = 'none';
-            document.getElementById('product24').value = '';
-            document.getElementById('hsn24').value = '';
-            document.getElementById('description24').value = '';
-            document.getElementById('qty24').value = 0;
-            document.getElementById('qty241').value = 0;
-            document.getElementById('unit24').value = 0;
-            document.getElementById('total24').value = 0;
-            document.getElementById('tax24').value = 0;
-          }
-        }
-      });
-    });
-    $('#product3').on('change', function() {
-      select = $('#product3').val();
-      $.ajax({
-        type: "GET",
-        url: "{% url 'getitems' %}",
-        data: {
-          id: select
-        }
-      }).done(function(response) {
-        var json_data = JSON.parse(response);
-        for (key in json_data) {
-          document.getElementById('hsn3').value = json_data[key]['hsn'];
-          document.getElementById('description3').value = json_data[key]['description'];
-          document.getElementById('qty3').value = 0;
-          if (json_data[key]['initialqty'] == '' || json_data[key]['initialqty'] == undefined) {
-            document.getElementById('qtyspan2').innerHTML = '';
-          } else {
-            document.getElementById('qtyspan2').innerHTML = 'Available Quantity : ' + json_data[key]['initialqty'];
-          }
-          if (json_data[key]['item'] == 'bundle') {
-            document.getElementById('unit3').value = 0;
-            document.getElementById('unit3').style.display = 'none';
-            document.getElementById('tax3').style.display = 'none';
-            document.getElementById('total3').style.display = 'none';
-            if (json_data[key]['qty1'] == undefined || json_data[key]['qty1'] == 0) {
-              document.getElementById('bun9').style.display = 'none';
-            } else {
-              document.getElementById('bun9').style.display = 'table-row';
-              document.getElementById('product31').value = json_data[key]['product1'];
-              document.getElementById('hsn31').value = json_data[key]['hsn1'];
-              document.getElementById('description31').value = json_data[key]['description1'];
-              document.getElementById('qty31').value = json_data[key]['qty1'];
-              document.getElementById('qty311').value = json_data[key]['qty1'];
-              document.getElementById('unit31').value = json_data[key]['price1'];
-              document.getElementById('total31').value = json_data[key]['total1'];
-              document.getElementById('tax31').value = json_data[key]['tax1'];
-            }
-            if (json_data[key]['qty2'] == undefined || json_data[key]['qty2'] == 0) {
-              document.getElementById('bun10').style.display = 'none';
-            } else {
-              document.getElementById('bun10').style.display = 'table-row';
-              document.getElementById('product32').value = json_data[key]['product2'];
-              document.getElementById('hsn32').value = json_data[key]['hsn2'];
-              document.getElementById('description32').value = json_data[key]['description2'];
-              document.getElementById('qty32').value = json_data[key]['qty2'];
-              document.getElementById('qty321').value = json_data[key]['qty2'];
-              document.getElementById('unit32').value = json_data[key]['price2'];
-              document.getElementById('total32').value = json_data[key]['total2'];
-              document.getElementById('tax32').value = json_data[key]['tax2'];
-            }
-            if (json_data[key]['qty3'] == undefined || json_data[key]['qty3'] == 0) {
-              document.getElementById('bun11').style.display = 'none';
-            } else {
-              document.getElementById('bun11').style.display = 'table-row';
-              document.getElementById('product33').value = json_data[key]['product3'];
-              document.getElementById('hsn33').value = json_data[key]['hsn3'];
-              document.getElementById('description33').value = json_data[key]['description3'];
-              document.getElementById('qty33').value = json_data[key]['qty3'];
-              document.getElementById('qty331').value = json_data[key]['qty3'];
-              document.getElementById('unit33').value = json_data[key]['price3'];
-              document.getElementById('total33').value = json_data[key]['total3'];
-              document.getElementById('tax33').value = json_data[key]['tax3'];
-            }
-            if (json_data[key]['qty4'] == undefined || json_data[key]['qty4'] == 0) {
-              document.getElementById('bun12').style.display = 'none';
-            } else {
-              document.getElementById('bun12').style.display = 'table-row';
-              document.getElementById('product34').value = json_data[key]['product4'];
-              document.getElementById('hsn34').value = json_data[key]['hsn4'];
-              document.getElementById('description34').value = json_data[key]['description4'];
-              document.getElementById('qty34').value = json_data[key]['qty4'];
-              document.getElementById('qty341').value = json_data[key]['qty4'];
-              document.getElementById('unit34').value = json_data[key]['price4'];
-              document.getElementById('total34').value = json_data[key]['total4'];
-              document.getElementById('tax34').value = json_data[key]['tax4'];
-            }
-          } else {
-            document.getElementById('unit3').value = json_data[key]['salesprice'];
-            var place = document.getElementById('plosu').value;
-            if (place == '{{ cmp1.state }}') {
-              document.getElementById('unit3').style.display = 'block';
-              document.getElementById('tax3').style.display = 'block';
-              document.getElementById('total3').style.display = 'block';
-              document.getElementById('ta3').value = json_data[key]['tax'];
-              document.getElementById('ta3').innerHTML = json_data[key]['tax'] + ' % GST';
-            } else if (place != '{{ cmp1.state }}') {
-              document.getElementById('unit3').style.display = 'block';
-              document.getElementById('tax3').style.display = 'block';
-              document.getElementById('total3').style.display = 'block';
-              document.getElementById('ta7').value = json_data[key]['tax'];
-              document.getElementById('ta7').innerHTML = json_data[key]['tax'] + ' % IGST';
-            }
+    //         document.getElementById('bun8').style.display = 'none';
+    //         document.getElementById('product24').value = '';
+    //         document.getElementById('hsn24').value = '';
+    //         document.getElementById('description24').value = '';
+    //         document.getElementById('qty24').value = 0;
+    //         document.getElementById('qty241').value = 0;
+    //         document.getElementById('unit24').value = 0;
+    //         document.getElementById('total24').value = 0;
+    //         document.getElementById('tax24').value = 0;
+    //       }
+    //     }
+    //   });
+    // });
+    // $('#product3').on('change', function() {
+    //   select = $('#product3').val();
+    //   $.ajax({
+    //     type: "GET",
+    //     url: "{% url 'getitems' %}",
+    //     data: {
+    //       id: select
+    //     }
+    //   }).done(function(response) {
+    //     var json_data = JSON.parse(response);
+    //     for (key in json_data) {
+    //       document.getElementById('hsn3').value = json_data[key]['hsn'];
+    //       document.getElementById('description3').value = json_data[key]['description'];
+    //       document.getElementById('qty3').value = 0;
+    //       if (json_data[key]['initialqty'] == '' || json_data[key]['initialqty'] == undefined) {
+    //         document.getElementById('qtyspan2').innerHTML = '';
+    //       } else {
+    //         document.getElementById('qtyspan2').innerHTML = 'Available Quantity : ' + json_data[key]['initialqty'];
+    //       }
+    //       if (json_data[key]['item'] == 'bundle') {
+    //         document.getElementById('unit3').value = 0;
+    //         document.getElementById('unit3').style.display = 'none';
+    //         document.getElementById('tax3').style.display = 'none';
+    //         document.getElementById('total3').style.display = 'none';
+    //         if (json_data[key]['qty1'] == undefined || json_data[key]['qty1'] == 0) {
+    //           document.getElementById('bun9').style.display = 'none';
+    //         } else {
+    //           document.getElementById('bun9').style.display = 'table-row';
+    //           document.getElementById('product31').value = json_data[key]['product1'];
+    //           document.getElementById('hsn31').value = json_data[key]['hsn1'];
+    //           document.getElementById('description31').value = json_data[key]['description1'];
+    //           document.getElementById('qty31').value = json_data[key]['qty1'];
+    //           document.getElementById('qty311').value = json_data[key]['qty1'];
+    //           document.getElementById('unit31').value = json_data[key]['price1'];
+    //           document.getElementById('total31').value = json_data[key]['total1'];
+    //           document.getElementById('tax31').value = json_data[key]['tax1'];
+    //         }
+    //         if (json_data[key]['qty2'] == undefined || json_data[key]['qty2'] == 0) {
+    //           document.getElementById('bun10').style.display = 'none';
+    //         } else {
+    //           document.getElementById('bun10').style.display = 'table-row';
+    //           document.getElementById('product32').value = json_data[key]['product2'];
+    //           document.getElementById('hsn32').value = json_data[key]['hsn2'];
+    //           document.getElementById('description32').value = json_data[key]['description2'];
+    //           document.getElementById('qty32').value = json_data[key]['qty2'];
+    //           document.getElementById('qty321').value = json_data[key]['qty2'];
+    //           document.getElementById('unit32').value = json_data[key]['price2'];
+    //           document.getElementById('total32').value = json_data[key]['total2'];
+    //           document.getElementById('tax32').value = json_data[key]['tax2'];
+    //         }
+    //         if (json_data[key]['qty3'] == undefined || json_data[key]['qty3'] == 0) {
+    //           document.getElementById('bun11').style.display = 'none';
+    //         } else {
+    //           document.getElementById('bun11').style.display = 'table-row';
+    //           document.getElementById('product33').value = json_data[key]['product3'];
+    //           document.getElementById('hsn33').value = json_data[key]['hsn3'];
+    //           document.getElementById('description33').value = json_data[key]['description3'];
+    //           document.getElementById('qty33').value = json_data[key]['qty3'];
+    //           document.getElementById('qty331').value = json_data[key]['qty3'];
+    //           document.getElementById('unit33').value = json_data[key]['price3'];
+    //           document.getElementById('total33').value = json_data[key]['total3'];
+    //           document.getElementById('tax33').value = json_data[key]['tax3'];
+    //         }
+    //         if (json_data[key]['qty4'] == undefined || json_data[key]['qty4'] == 0) {
+    //           document.getElementById('bun12').style.display = 'none';
+    //         } else {
+    //           document.getElementById('bun12').style.display = 'table-row';
+    //           document.getElementById('product34').value = json_data[key]['product4'];
+    //           document.getElementById('hsn34').value = json_data[key]['hsn4'];
+    //           document.getElementById('description34').value = json_data[key]['description4'];
+    //           document.getElementById('qty34').value = json_data[key]['qty4'];
+    //           document.getElementById('qty341').value = json_data[key]['qty4'];
+    //           document.getElementById('unit34').value = json_data[key]['price4'];
+    //           document.getElementById('total34').value = json_data[key]['total4'];
+    //           document.getElementById('tax34').value = json_data[key]['tax4'];
+    //         }
+    //       } else {
+    //         document.getElementById('unit3').value = json_data[key]['salesprice'];
+    //         var place = document.getElementById('plosu').value;
+    //         if (place == '{{ cmp1.state }}') {
+    //           document.getElementById('unit3').style.display = 'block';
+    //           document.getElementById('tax3').style.display = 'block';
+    //           document.getElementById('total3').style.display = 'block';
+    //           document.getElementById('ta3').value = json_data[key]['tax'];
+    //           document.getElementById('ta3').innerHTML = json_data[key]['tax'] + ' % GST';
+    //         } else if (place != '{{ cmp1.state }}') {
+    //           document.getElementById('unit3').style.display = 'block';
+    //           document.getElementById('tax3').style.display = 'block';
+    //           document.getElementById('total3').style.display = 'block';
+    //           document.getElementById('ta7').value = json_data[key]['tax'];
+    //           document.getElementById('ta7').innerHTML = json_data[key]['tax'] + ' % IGST';
+    //         }
 
-            document.getElementById('bun9').style.display = 'none';
-            document.getElementById('product31').value = '';
-            document.getElementById('hsn31').value = '';
-            document.getElementById('description31').value = '';
-            document.getElementById('qty31').value = 0;
-            document.getElementById('qty311').value = 0;
-            document.getElementById('unit31').value = 0;
-            document.getElementById('total31').value = 0;
-            document.getElementById('tax31').value = 0;
+    //         document.getElementById('bun9').style.display = 'none';
+    //         document.getElementById('product31').value = '';
+    //         document.getElementById('hsn31').value = '';
+    //         document.getElementById('description31').value = '';
+    //         document.getElementById('qty31').value = 0;
+    //         document.getElementById('qty311').value = 0;
+    //         document.getElementById('unit31').value = 0;
+    //         document.getElementById('total31').value = 0;
+    //         document.getElementById('tax31').value = 0;
 
-            document.getElementById('bun10').style.display = 'none';
-            document.getElementById('product32').value = '';
-            document.getElementById('hsn32').value = '';
-            document.getElementById('description32').value = '';
-            document.getElementById('qty32').value = 0;
-            document.getElementById('qty321').value = 0;
-            document.getElementById('unit32').value = 0;
-            document.getElementById('total32').value = 0;
-            document.getElementById('tax32').value = 0;
+    //         document.getElementById('bun10').style.display = 'none';
+    //         document.getElementById('product32').value = '';
+    //         document.getElementById('hsn32').value = '';
+    //         document.getElementById('description32').value = '';
+    //         document.getElementById('qty32').value = 0;
+    //         document.getElementById('qty321').value = 0;
+    //         document.getElementById('unit32').value = 0;
+    //         document.getElementById('total32').value = 0;
+    //         document.getElementById('tax32').value = 0;
 
-            document.getElementById('bun11').style.display = 'none';
-            document.getElementById('product33').value = '';
-            document.getElementById('hsn33').value = '';
-            document.getElementById('description33').value = '';
-            document.getElementById('qty33').value = 0;
-            document.getElementById('qty331').value = 0;
-            document.getElementById('unit33').value = 0;
-            document.getElementById('total33').value = 0;
-            document.getElementById('tax33').value = 0;
+    //         document.getElementById('bun11').style.display = 'none';
+    //         document.getElementById('product33').value = '';
+    //         document.getElementById('hsn33').value = '';
+    //         document.getElementById('description33').value = '';
+    //         document.getElementById('qty33').value = 0;
+    //         document.getElementById('qty331').value = 0;
+    //         document.getElementById('unit33').value = 0;
+    //         document.getElementById('total33').value = 0;
+    //         document.getElementById('tax33').value = 0;
 
-            document.getElementById('bun12').style.display = 'none';
-            document.getElementById('product34').value = '';
-            document.getElementById('hsn34').value = '';
-            document.getElementById('description34').value = '';
-            document.getElementById('qty34').value = 0;
-            document.getElementById('qty341').value = 0;
-            document.getElementById('unit34').value = 0;
-            document.getElementById('total34').value = 0;
-            document.getElementById('tax34').value = 0;
-          }
-        }
-      });
-    });
-    $('#product4').on('change', function() {
-      select = $('#product4').val();
-      $.ajax({
-        type: "GET",
-        url: "{% url 'getitems' %}",
-        data: {
-          id: select
-        }
-      }).done(function(response) {
-        var json_data = JSON.parse(response);
-        for (key in json_data) {
-          document.getElementById('hsn4').value = json_data[key]['hsn'];
-          document.getElementById('description4').value = json_data[key]['description'];
-          document.getElementById('qty4').value = 0;
-          if (json_data[key]['initialqty'] == '' || json_data[key]['initialqty'] == undefined) {
-            document.getElementById('qtyspan3').innerHTML = '';
-          } else {
-            document.getElementById('qtyspan3').innerHTML = 'Available Quantity : ' + json_data[key]['initialqty'];
-          }
-          if (json_data[key]['item'] == 'bundle') {
-            document.getElementById('unit4').value = 0;
-            document.getElementById('unit4').style.display = 'none';
-            document.getElementById('tax4').style.display = 'none';
-            document.getElementById('total4').style.display = 'none';
-            if (json_data[key]['qty1'] == undefined || json_data[key]['qty1'] == 0) {
-              document.getElementById('bun13').style.display = 'none';
-            } else {
-              document.getElementById('bun13').style.display = 'table-row';
-              document.getElementById('product41').value = json_data[key]['product1'];
-              document.getElementById('hsn41').value = json_data[key]['hsn1'];
-              document.getElementById('description41').value = json_data[key]['description1'];
-              document.getElementById('qty41').value = json_data[key]['qty1'];
-              document.getElementById('qty411').value = json_data[key]['qty1'];
-              document.getElementById('unit41').value = json_data[key]['price1'];
-              document.getElementById('total41').value = json_data[key]['total1'];
-              document.getElementById('tax41').value = json_data[key]['tax1'];
-            }
-            if (json_data[key]['qty2'] == undefined || json_data[key]['qty2'] == 0) {
-              document.getElementById('bun14').style.display = 'none';
-            } else {
-              document.getElementById('bun14').style.display = 'table-row';
-              document.getElementById('product42').value = json_data[key]['product2'];
-              document.getElementById('hsn42').value = json_data[key]['hsn2'];
-              document.getElementById('description42').value = json_data[key]['description2'];
-              document.getElementById('qty42').value = json_data[key]['qty2'];
-              document.getElementById('qty421').value = json_data[key]['qty2'];
-              document.getElementById('unit42').value = json_data[key]['price2'];
-              document.getElementById('total42').value = json_data[key]['total2'];
-              document.getElementById('tax42').value = json_data[key]['tax2'];
-            }
-            if (json_data[key]['qty3'] == undefined || json_data[key]['qty3'] == 0) {
-              document.getElementById('bun15').style.display = 'none';
-            } else {
-              document.getElementById('bun15').style.display = 'table-row';
-              document.getElementById('product43').value = json_data[key]['product3'];
-              document.getElementById('hsn43').value = json_data[key]['hsn3'];
-              document.getElementById('description43').value = json_data[key]['description3'];
-              document.getElementById('qty43').value = json_data[key]['qty3'];
-              document.getElementById('qty431').value = json_data[key]['qty3'];
-              document.getElementById('unit43').value = json_data[key]['price3'];
-              document.getElementById('total43').value = json_data[key]['total3'];
-              document.getElementById('tax43').value = json_data[key]['tax3'];
-            }
-            if (json_data[key]['qty4'] == undefined || json_data[key]['qty4'] == 0) {
-              document.getElementById('bun16').style.display = 'none';
-            } else {
-              document.getElementById('bun16').style.display = 'table-row';
-              document.getElementById('product44').value = json_data[key]['product4'];
-              document.getElementById('hsn44').value = json_data[key]['hsn4'];
-              document.getElementById('description44').value = json_data[key]['description4'];
-              document.getElementById('qty44').value = json_data[key]['qty4'];
-              document.getElementById('qty441').value = json_data[key]['qty4'];
-              document.getElementById('unit44').value = json_data[key]['price4'];
-              document.getElementById('total44').value = json_data[key]['total4'];
-              document.getElementById('tax44').value = json_data[key]['tax4'];
-            }
-          } else {
-            document.getElementById('unit4').value = json_data[key]['salesprice'];
-            var place = document.getElementById('plosu').value;
-            if (place == '{{ cmp1.state }}') {
-              document.getElementById('unit4').style.display = 'block';
-              document.getElementById('tax4').style.display = 'block';
-              document.getElementById('total4').style.display = 'block';
-              document.getElementById('ta4').value = json_data[key]['tax'];
-              document.getElementById('ta4').innerHTML = json_data[key]['tax'] + ' % GST';
-            } else if (place != '{{ cmp1.state }}') {
-              document.getElementById('unit4').style.display = 'block';
-              document.getElementById('tax4').style.display = 'block';
-              document.getElementById('total4').style.display = 'block';
-              document.getElementById('ta8').value = json_data[key]['tax'];
-              document.getElementById('ta8').innerHTML = json_data[key]['tax'] + ' % IGST';
-            }
-            document.getElementById('bun13').style.display = 'none';
-            document.getElementById('product41').value = '';
-            document.getElementById('hsn41').value = '';
-            document.getElementById('description41').value = '';
-            document.getElementById('qty41').value = 0;
-            document.getElementById('qty411').value = 0;
-            document.getElementById('unit41').value = 0;
-            document.getElementById('total41').value = 0;
-            document.getElementById('tax41').value = 0;
+    //         document.getElementById('bun12').style.display = 'none';
+    //         document.getElementById('product34').value = '';
+    //         document.getElementById('hsn34').value = '';
+    //         document.getElementById('description34').value = '';
+    //         document.getElementById('qty34').value = 0;
+    //         document.getElementById('qty341').value = 0;
+    //         document.getElementById('unit34').value = 0;
+    //         document.getElementById('total34').value = 0;
+    //         document.getElementById('tax34').value = 0;
+    //       }
+    //     }
+    //   });
+    // });
+    // $('#product4').on('change', function() {
+    //   select = $('#product4').val();
+    //   $.ajax({
+    //     type: "GET",
+    //     url: "{% url 'getitems' %}",
+    //     data: {
+    //       id: select
+    //     }
+    //   }).done(function(response) {
+    //     var json_data = JSON.parse(response);
+    //     for (key in json_data) {
+    //       document.getElementById('hsn4').value = json_data[key]['hsn'];
+    //       document.getElementById('description4').value = json_data[key]['description'];
+    //       document.getElementById('qty4').value = 0;
+    //       if (json_data[key]['initialqty'] == '' || json_data[key]['initialqty'] == undefined) {
+    //         document.getElementById('qtyspan3').innerHTML = '';
+    //       } else {
+    //         document.getElementById('qtyspan3').innerHTML = 'Available Quantity : ' + json_data[key]['initialqty'];
+    //       }
+    //       if (json_data[key]['item'] == 'bundle') {
+    //         document.getElementById('unit4').value = 0;
+    //         document.getElementById('unit4').style.display = 'none';
+    //         document.getElementById('tax4').style.display = 'none';
+    //         document.getElementById('total4').style.display = 'none';
+    //         if (json_data[key]['qty1'] == undefined || json_data[key]['qty1'] == 0) {
+    //           document.getElementById('bun13').style.display = 'none';
+    //         } else {
+    //           document.getElementById('bun13').style.display = 'table-row';
+    //           document.getElementById('product41').value = json_data[key]['product1'];
+    //           document.getElementById('hsn41').value = json_data[key]['hsn1'];
+    //           document.getElementById('description41').value = json_data[key]['description1'];
+    //           document.getElementById('qty41').value = json_data[key]['qty1'];
+    //           document.getElementById('qty411').value = json_data[key]['qty1'];
+    //           document.getElementById('unit41').value = json_data[key]['price1'];
+    //           document.getElementById('total41').value = json_data[key]['total1'];
+    //           document.getElementById('tax41').value = json_data[key]['tax1'];
+    //         }
+    //         if (json_data[key]['qty2'] == undefined || json_data[key]['qty2'] == 0) {
+    //           document.getElementById('bun14').style.display = 'none';
+    //         } else {
+    //           document.getElementById('bun14').style.display = 'table-row';
+    //           document.getElementById('product42').value = json_data[key]['product2'];
+    //           document.getElementById('hsn42').value = json_data[key]['hsn2'];
+    //           document.getElementById('description42').value = json_data[key]['description2'];
+    //           document.getElementById('qty42').value = json_data[key]['qty2'];
+    //           document.getElementById('qty421').value = json_data[key]['qty2'];
+    //           document.getElementById('unit42').value = json_data[key]['price2'];
+    //           document.getElementById('total42').value = json_data[key]['total2'];
+    //           document.getElementById('tax42').value = json_data[key]['tax2'];
+    //         }
+    //         if (json_data[key]['qty3'] == undefined || json_data[key]['qty3'] == 0) {
+    //           document.getElementById('bun15').style.display = 'none';
+    //         } else {
+    //           document.getElementById('bun15').style.display = 'table-row';
+    //           document.getElementById('product43').value = json_data[key]['product3'];
+    //           document.getElementById('hsn43').value = json_data[key]['hsn3'];
+    //           document.getElementById('description43').value = json_data[key]['description3'];
+    //           document.getElementById('qty43').value = json_data[key]['qty3'];
+    //           document.getElementById('qty431').value = json_data[key]['qty3'];
+    //           document.getElementById('unit43').value = json_data[key]['price3'];
+    //           document.getElementById('total43').value = json_data[key]['total3'];
+    //           document.getElementById('tax43').value = json_data[key]['tax3'];
+    //         }
+    //         if (json_data[key]['qty4'] == undefined || json_data[key]['qty4'] == 0) {
+    //           document.getElementById('bun16').style.display = 'none';
+    //         } else {
+    //           document.getElementById('bun16').style.display = 'table-row';
+    //           document.getElementById('product44').value = json_data[key]['product4'];
+    //           document.getElementById('hsn44').value = json_data[key]['hsn4'];
+    //           document.getElementById('description44').value = json_data[key]['description4'];
+    //           document.getElementById('qty44').value = json_data[key]['qty4'];
+    //           document.getElementById('qty441').value = json_data[key]['qty4'];
+    //           document.getElementById('unit44').value = json_data[key]['price4'];
+    //           document.getElementById('total44').value = json_data[key]['total4'];
+    //           document.getElementById('tax44').value = json_data[key]['tax4'];
+    //         }
+    //       } else {
+    //         document.getElementById('unit4').value = json_data[key]['salesprice'];
+    //         var place = document.getElementById('plosu').value;
+    //         if (place == '{{ cmp1.state }}') {
+    //           document.getElementById('unit4').style.display = 'block';
+    //           document.getElementById('tax4').style.display = 'block';
+    //           document.getElementById('total4').style.display = 'block';
+    //           document.getElementById('ta4').value = json_data[key]['tax'];
+    //           document.getElementById('ta4').innerHTML = json_data[key]['tax'] + ' % GST';
+    //         } else if (place != '{{ cmp1.state }}') {
+    //           document.getElementById('unit4').style.display = 'block';
+    //           document.getElementById('tax4').style.display = 'block';
+    //           document.getElementById('total4').style.display = 'block';
+    //           document.getElementById('ta8').value = json_data[key]['tax'];
+    //           document.getElementById('ta8').innerHTML = json_data[key]['tax'] + ' % IGST';
+    //         }
+    //         document.getElementById('bun13').style.display = 'none';
+    //         document.getElementById('product41').value = '';
+    //         document.getElementById('hsn41').value = '';
+    //         document.getElementById('description41').value = '';
+    //         document.getElementById('qty41').value = 0;
+    //         document.getElementById('qty411').value = 0;
+    //         document.getElementById('unit41').value = 0;
+    //         document.getElementById('total41').value = 0;
+    //         document.getElementById('tax41').value = 0;
 
-            document.getElementById('bun14').style.display = 'none';
-            document.getElementById('product42').value = '';
-            document.getElementById('hsn42').value = '';
-            document.getElementById('description42').value = '';
-            document.getElementById('qty42').value = 0;
-            document.getElementById('qty421').value = 0;
-            document.getElementById('unit42').value = 0;
-            document.getElementById('total42').value = 0;
-            document.getElementById('tax42').value = 0;
+    //         document.getElementById('bun14').style.display = 'none';
+    //         document.getElementById('product42').value = '';
+    //         document.getElementById('hsn42').value = '';
+    //         document.getElementById('description42').value = '';
+    //         document.getElementById('qty42').value = 0;
+    //         document.getElementById('qty421').value = 0;
+    //         document.getElementById('unit42').value = 0;
+    //         document.getElementById('total42').value = 0;
+    //         document.getElementById('tax42').value = 0;
 
-            document.getElementById('bun15').style.display = 'none';
-            document.getElementById('product43').value = '';
-            document.getElementById('hsn43').value = '';
-            document.getElementById('description43').value = '';
-            document.getElementById('qty43').value = 0;
-            document.getElementById('qty431').value = 0;
-            document.getElementById('unit43').value = 0;
-            document.getElementById('total43').value = 0;
-            document.getElementById('tax43').value = 0;
+    //         document.getElementById('bun15').style.display = 'none';
+    //         document.getElementById('product43').value = '';
+    //         document.getElementById('hsn43').value = '';
+    //         document.getElementById('description43').value = '';
+    //         document.getElementById('qty43').value = 0;
+    //         document.getElementById('qty431').value = 0;
+    //         document.getElementById('unit43').value = 0;
+    //         document.getElementById('total43').value = 0;
+    //         document.getElementById('tax43').value = 0;
 
-            document.getElementById('bun16').style.display = 'none';
-            document.getElementById('product44').value = '';
-            document.getElementById('hsn44').value = '';
-            document.getElementById('description44').value = '';
-            document.getElementById('qty44').value = 0;
-            document.getElementById('qty441').value = 0;
-            document.getElementById('unit44').value = 0;
-            document.getElementById('total44').value = 0;
-            document.getElementById('tax44').value = 0;
-          }
-        }
-      });
-    });
+    //         document.getElementById('bun16').style.display = 'none';
+    //         document.getElementById('product44').value = '';
+    //         document.getElementById('hsn44').value = '';
+    //         document.getElementById('description44').value = '';
+    //         document.getElementById('qty44').value = 0;
+    //         document.getElementById('qty441').value = 0;
+    //         document.getElementById('unit44').value = 0;
+    //         document.getElementById('total44').value = 0;
+    //         document.getElementById('tax44').value = 0;
+    //       }
+    //     }
+    //   });
+    // });
 
     $('#termadd').on('change', function() {
       select = $('#termadd').val();

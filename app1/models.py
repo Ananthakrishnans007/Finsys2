@@ -77,6 +77,9 @@ class customer(models.Model):
     
     status =models.CharField(max_length=150,choices=customer_status,default='Active')
 
+    receivables  = models.FloatField(null=True)
+
+    file = models.FileField(upload_to='Customer',default="default.jpg")
 
     class meta:
         db_table = "customer"

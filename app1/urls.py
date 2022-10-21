@@ -17,7 +17,7 @@ urlpatterns = [
     re_path(r'^gobankrecon$', views.gobankrecon, name='gobankrecon'),
     re_path(r'^gosalesrecords$', views.gosalesrecords, name='gosalesrecords'),
     
-    re_path(r'^gocustomers$', views.customers, name='gocustomers'),
+    # re_path(r'^gocustomers$', views.customers, name='gocustomers'),
 
     re_path(r'^gopands$', views.gopands, name='gopands'),
     re_path(r'^goexpences$', views.goexpences, name='goexpences'),
@@ -359,6 +359,8 @@ urlpatterns = [
     
     re_path(r'^gosearch',views.gosearch,name='gosearch'),
 
+    path('gocustomers',views.gocustomers,name='gocustomers'),
+
     path('gocustomers1',views.gocustomers1,name='gocustomers1'),
 
     path('gocustomers2',views.gocustomers2,name='gocustomers2'),
@@ -368,6 +370,8 @@ urlpatterns = [
     path('gstverification',views.gstverification,name='gstverification'),
 
     path('customer_profile/<int:id>',views.customer_profile,name='customer_profile'),
+
+     path('cust_add_file/<int:id>',views.cust_add_file,name='cust_add_file'),
 
     
 

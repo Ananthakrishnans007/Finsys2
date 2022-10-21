@@ -59,6 +59,9 @@ body{
 .table-row{
         cursor:pointer;
 }
+
+
+
       </style>
         <div class="page-content">
             <div class="card radius-15">
@@ -132,15 +135,28 @@ body{
                             
                        
 
-                        <div class="col-md-2">
+                        <!-- <div class="col-md-2">
                             <a href="{% url 'goaddcust' %}" >
-                                <button id="myBtn" class="btn btn-outline-info text-grey" style="margin-top: 8px;">Add Customer</button>
+                                <button >Add Customer</button>
                             </a>
+                        </div> -->
+
+                        <div class="btn-group col-md-2">
+                            <a href="{% url 'goaddcust' %}" id="myBtn" class="btn btn-outline-info text-grey" style="margin-top: 8px;" role="button">New</a>
+                            <button type="button"
+                                    class="btn btn-outline-info  dropdown-toggle dropdown-toggle-split"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-top: 8px;">
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <div class="dropdown-menu" style="margin-top: 8px;">
+                                <a class="dropdown-item" onclick="ExportToExcel('xlsx')">All Vendors</a>
+                                
+                            </div>
                         </div>
 
                     </div>
                     <div class="container-fluid">
-                        <table class="table table-responsive-md mt-4">
+                        <table class="table table-responsive-md mt-4" id="tbl_exporttable_to_xls">
                             <thead>
                             <tr>
                                 <th>CUSTOMER</th>
@@ -149,7 +165,7 @@ body{
                                 <th>PAN NO</th>
                                 <th>EMAIL ID</th>
                                 <th>MOBILE NO</th>
-                                <!-- <th>ACTION</th> -->
+                                <th style="text-transform: uppercase;">receivables</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -162,11 +178,8 @@ body{
                                         <td>{{ customer.panno }}</td>
                                         <td>{{ customer.email }}</td>
                                         <td>{{ customer.mobile }}</td>
-                                        <!-- <td><a href="editcustomer/{{ customer.customerid }}"
-                                               style="color: white; font-size: 15px;"><i class="bx bx-edit">EDIT</i></a><br>
-                                            <a href="deletecustomer/{{ customer.customerid }}"
-                                               style="color:white; font-size: 15px;"><i
-                                                    class="bx bx-trash">DELETE</i></a><br></td> -->
+                                        <td>{{customer.receivables}}</td>
+                                        
                                     </tr>
                                 {% endif %}
                             {% endfor %}
@@ -211,18 +224,15 @@ body{
                 });
             });
         </script>
-        <!-- <script>
-            const searchInput = document.getElementById("search");
-            const rows = document.querySelectorAll("tbody tr");
-            console.log(rows);
-            searchInput.addEventListener("keyup", function (event) {
-              const q = event.target.value.toLowerCase();
-              rows.forEach((row) => {
-                row.querySelector("td").textContent.toLowerCase().startsWith(q)
-                  ? (row.style.display = "table-row")
-                  : (row.style.display = "none");
-              });
-            });
-          </script> -->
+        <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+
+        <script type="text/javascript">function ExportToExcel(type, fn, dl) {
+               var elt = document.getElementById('tbl_exporttable_to_xls');
+               var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
+               return dl ?
+                 XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }):
+                 XLSX.writeFile(wb, fn || ('Customers.' + (type || 'xlsx')));
+            }
+            </script>
     {% endif %}
 {% endblock %}
